@@ -1,12 +1,12 @@
-import { Routes, Route } from 'react-router-dom'
-import { Header } from './components/Header'
-import { HomePage } from './pages/HomePage'
-import { MoviesPage } from './pages/MoviesPage'
-import { TVShowsPage } from './pages/TVShowsPage'
-import { MovieDetailPage } from './pages/MovieDetailPage'
-import { TVShowDetailPage } from './pages/TVShowDetailPage'
-import { MyListPage } from './pages/MyListPage'
-import './App.css'
+import { Routes, Route } from "react-router-dom";
+import { Header } from "./components/Header";
+import { HomePage } from "./pages/HomePage";
+import { MoviesPage } from "./pages/MoviesPage";
+import { TVShowsPage } from "./pages/TVShowsPage";
+import { MovieDetailPage } from "./pages/MovieDetailPage";
+import { TVShowDetailPage } from "./pages/TVShowDetailPage";
+import { MyListPage } from "./pages/MyListPage";
+import "./css/App.css";
 
 function App() {
   return (
@@ -23,7 +23,7 @@ function App() {
         </Routes>
       </main>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
