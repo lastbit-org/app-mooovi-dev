@@ -18,12 +18,14 @@ function StarIcon() {
 export function MovieCard({ posterPath, title, rating, voteCount }: MovieCardProps) {
   return (
     <div className="movie-card">
-      <img
-        src={getPosterUrl(posterPath)}
-        alt={title}
-        className="movie-card-poster"
-        loading="lazy"
-      />
+      <div className="movie-card-poster-wrap">
+        <img
+          src={getPosterUrl(posterPath)}
+          alt={title}
+          className="movie-card-poster"
+          loading="lazy"
+        />
+      </div>
       <div className="movie-card-rating">
         <StarIcon />
         <span>{rating.toFixed(1)}</span>

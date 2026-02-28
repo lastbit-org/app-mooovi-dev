@@ -33,3 +33,17 @@ export async function searchMovies(query: string, page = 1, language?: string) {
   });
   return data;
 }
+
+export async function getPopularTVShows(page = 1, language?: string) {
+  const { data } = await tmdbClient.get('/tv/popular', {
+    params: { page, language },
+  });
+  return data;
+}
+
+export async function getTrendingTVShows(timeWindow: 'day' | 'week' = 'week', language?: string) {
+  const { data } = await tmdbClient.get(`/trending/tv/${timeWindow}`, {
+    params: { language },
+  });
+  return data;
+}

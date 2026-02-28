@@ -2,6 +2,7 @@ import 'dotenv/config';
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import { moviesRoutes } from './routes/movies.js';
+import { tvRoutes } from './routes/tv.js';
 
 const PORT = parseInt(process.env.PORT ?? '3001', 10);
 
@@ -17,6 +18,7 @@ await fastify.register(cors, {
 });
 
 await fastify.register(moviesRoutes, { prefix: '/api/movies' });
+await fastify.register(tvRoutes, { prefix: '/api/tv' });
 
 try {
   await fastify.listen({ port: PORT, host: '0.0.0.0' });

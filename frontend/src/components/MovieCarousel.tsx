@@ -1,21 +1,22 @@
 import { useRef } from 'react';
 import { MovieCard } from './MovieCard';
 
-interface Movie {
+export interface CarouselItem {
   id: number;
-  title: string;
   poster_path: string | null;
   vote_average: number;
   vote_count: number;
+  title?: string;
+  name?: string;
 }
 
 interface MovieCarouselProps {
   title: string;
   icon: string;
-  movies: Movie[];
+  items: CarouselItem[];
 }
 
-export function MovieCarousel({ title, icon, movies }: MovieCarouselProps) {
+export function MovieCarousel({ title, icon, items }: MovieCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -44,13 +45,13 @@ export function MovieCarousel({ title, icon, movies }: MovieCarouselProps) {
         </div>
       </div>
       <div className="carousel-list" ref={scrollRef}>
-        {movies.map((movie) => (
+        {items.map((item) => (
           <MovieCard
-            key={movie.id}
-            posterPath={movie.poster_path}
-            title={movie.title}
-            rating={movie.vote_average}
-            voteCount={movie.vote_count}
+            key={item.id}
+            posterPath={item.poster_path}
+            title={item.title ?? item.name ?? ''}
+            rating={item.vote_average}
+            voteCount={item.vote_count}
           />
         ))}
       </div>
