@@ -1,0 +1,49 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches: [main]
+    paths: ["backend/**"] # só roda se mudar backend
+
+env:
+  PROJECT_ID: lastbit-prj-d-movieapi
+  REGION: us-central1
+  ARTIFACT_REGISTRY: movieapi
+  IMAGE_NAME: app-mooovi-backend
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker ${{ vars.REGION }}-docker.pkg.dev
+
+      - name: Gcloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+
+      - name: Build & Push
+        run: |
+          docker build -t ${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.ARTIFACT_REGISTRY }}/${{ vars.IMAGE_NAME }}:${{ github.sha }} ./backend
+          docker push ${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.ARTIFACT_REGISTRY }}/${{ vars.IMAGE_NAME }}:${{ github.sha }}
+
+      - name: Deploy Cloud Run
+        run: |
+          gcloud run deploy backend-service \
+            --image=${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.ARTIFACT_REGISTRY }}/${{ vars.IMAGE_NAME }}:${{ github.sha }} \
+            --region=${{ vars.REGION }} \
+            --platform=managed
