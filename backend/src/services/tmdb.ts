@@ -27,6 +27,12 @@ export async function getPopularMovies(page = 1, language?: string) {
   return data;
 }
 
+/**
+ * Get upcoming movies
+ * @param page - The page number
+ * @param language - The language of the movies
+ * @returns Upcoming movies
+ */
 export async function getUpcomingMovies(page = 1, language?: string) {
   const { data } = await tmdbClient.get("/movie/upcoming", {
     params: { page, language },
