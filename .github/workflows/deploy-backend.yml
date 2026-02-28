@@ -37,12 +37,19 @@ jobs:
       - name: Set up Docker
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
 
+      # FRONTEND_URL obrigatório: URL do frontend no Cloud Run (ex: https://run-frontend-xxx.us-central1.run.app)
+      - name: Validate FRONTEND_URL
+        run: |
+          if [ -z "${{ secrets.FRONTEND_URL }}" ]; then
+            echo "::error::Secret FRONTEND_URL is required. Set it to your frontend Cloud Run URL (e.g. https://run-frontend-xxx.us-central1.run.app)"
+            exit 1
+          fi
+
       - name: Build and Push
         run: |
           docker build -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} ./backend
           docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
-      # TMDB_API_KEY já configurado no Cloud Run (Secret Manager). Secret: FRONTEND_URL (URL do frontend)
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy ${{ env.RUN_SERVICE_NAME }} \
