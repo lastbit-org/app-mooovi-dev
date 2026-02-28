@@ -33,9 +33,9 @@ export async function moviesRoutes(
       }
       const language = parseLanguage(request.query.language);
       const data = await getPopularMovies(page, language);
-      return data;
+      return reply.type("application/json").send(data);
     } catch (error) {
-      handleTmdbError(error, reply);
+      return handleTmdbError(error, reply);
     }
   });
 
@@ -55,9 +55,9 @@ export async function moviesRoutes(
       }
       const language = parseLanguage(request.query.language);
       const data = await getUpcomingMovies(page, language);
-      return data;
+      return reply.type("application/json").send(data);
     } catch (error) {
-      handleTmdbError(error, reply);
+      return handleTmdbError(error, reply);
     }
   });
 
@@ -83,9 +83,9 @@ export async function moviesRoutes(
       }
       const language = parseLanguage(request.query.language);
       const data = await searchMovies(q, page, language);
-      return data;
+      return reply.type("application/json").send(data);
     } catch (error) {
-      handleTmdbError(error, reply);
+      return handleTmdbError(error, reply);
     }
   });
 
@@ -105,9 +105,9 @@ export async function moviesRoutes(
         return reply.status(400).send({ error: "Invalid id" });
       }
       const data = await getMovieDetails(id);
-      return data;
+      return reply.type("application/json").send(data);
     } catch (error) {
-      handleTmdbError(error, reply);
+      return handleTmdbError(error, reply);
     }
   });
 }

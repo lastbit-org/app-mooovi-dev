@@ -32,9 +32,9 @@ export async function tvRoutes(
       }
       const language = parseLanguage(request.query.language);
       const data = await getPopularTVShows(page, language);
-      return data;
+      return reply.type("application/json").send(data);
     } catch (error) {
-      handleTmdbError(error, reply);
+      return handleTmdbError(error, reply);
     }
   });
 
@@ -51,9 +51,9 @@ export async function tvRoutes(
       const timeWindow = parseTimeWindow(request.query.time_window);
       const language = parseLanguage(request.query.language);
       const data = await getTrendingTVShows(timeWindow, language);
-      return data;
+      return reply.type("application/json").send(data);
     } catch (error) {
-      handleTmdbError(error, reply);
+      return handleTmdbError(error, reply);
     }
   });
 
@@ -74,9 +74,9 @@ export async function tvRoutes(
       }
       const language = parseLanguage(request.query.language);
       const data = await getTVShowDetails(id, language);
-      return data;
+      return reply.type("application/json").send(data);
     } catch (error) {
-      handleTmdbError(error, reply);
+      return handleTmdbError(error, reply);
     }
   });
 }

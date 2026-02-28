@@ -34,6 +34,13 @@ await fastify.register(cors, {
       ],
 });
 
+// Desabilita cache para evitar 304 e respostas vazias em APIs
+fastify.addHook("onSend", async (_request, reply, payload) => {
+  reply.header("Cache-Control", "no-store, no-cache, must-revalidate");
+  reply.header("Pragma", "no-cache");
+  return payload;
+});
+
 await fastify.register(moviesRoutes, { prefix: "/api/movies" });
 await fastify.register(tvRoutes, { prefix: "/api/tv" });
 
