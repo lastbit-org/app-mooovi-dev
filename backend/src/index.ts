@@ -22,6 +22,7 @@ await fastify.register(rateLimit, {
   timeWindow: "1 minute",
 });
 
+// CORS para permitir requisições do frontend
 await fastify.register(cors, {
   origin: process.env.CORS_ORIGIN
     ? process.env.CORS_ORIGIN.split(",").map((o) => o.trim())
