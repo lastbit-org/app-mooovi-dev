@@ -42,7 +42,7 @@ jobs:
           docker build -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} ./backend
           docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
-      # Secrets necessários: TMDB_API_KEY, FRONTEND_URL (URL do frontend no Cloud Run, ex: https://run-frontend-xxx.run.app)
+      # TMDB_API_KEY já configurado no Cloud Run (Secret Manager). Secret: FRONTEND_URL (URL do frontend)
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy ${{ env.RUN_SERVICE_NAME }} \
@@ -51,4 +51,4 @@ jobs:
             --platform managed \
             --project ${{ env.PROJECT_ID }} \
             --allow-unauthenticated \
-            --set-env-vars="TMDB_API_KEY=${{ secrets.TMDB_API_KEY }},CORS_ORIGIN=${{ secrets.FRONTEND_URL }}"
+            --set-env-vars="CORS_ORIGIN=${{ secrets.FRONTEND_URL }}"
