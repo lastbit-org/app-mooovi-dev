@@ -176,7 +176,7 @@ export BACKEND_URL=https://app-mooovi-backend-xxx.run.app  # após primeiro depl
 
 ## CORS no backend
 
-**Comportamento:** Se `CORS_ORIGIN` não estiver definida, o backend permite qualquer origem (`origin: true`). Para restringir, defina `CORS_ORIGIN` com a URL do frontend (ex: `https://run-frontend-xxx.run.app`). Múltiplas origens podem ser separadas por vírgula.
+**Comportamento:** CORS restritivo. Sem `CORS_ORIGIN` definida, apenas localhost é permitido (dev local). **Em produção, CORS_ORIGIN é obrigatória** com a URL do frontend (ex: `https://run-frontend-xxx.run.app`). Múltiplas origens podem ser separadas por vírgula.
 
 ## Testar localmente com Docker
 

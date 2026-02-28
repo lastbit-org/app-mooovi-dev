@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
+import rateLimit from '@fastify/rate-limit';
 import { moviesRoutes } from './routes/movies.js';
 import { tvRoutes } from './routes/tv.js';
 
@@ -14,16 +15,29 @@ if (!process.env.TMDB_API_KEY) {
 
 const fastify = Fastify({ logger: true });
 
-// CORS: quando CORS_ORIGIN não está definido, permite qualquer origem (origin: true reflete o Origin da requisição)
-// Quando definido, usa whitelist (ex: https://run-frontend-xxx.run.app)
-const corsConfig = process.env.CORS_ORIGIN
-  ? { origin: process.env.CORS_ORIGIN.split(',').map((o) => o.trim()) }
-  : { origin: true };
+await fastify.register(rateLimit, {
+  max: 100,
+  timeWindow: '1 minute',
+});
 
-await fastify.register(cors, corsConfig);
+await fastify.register(cors, {
+  origin: process.env.CORS_ORIGIN
+    ? process.env.CORS_ORIGIN.split(',').map((o) => o.trim())
+    : [
+        'http://localhost:5173',
+        'http://127.0.0.1:5173',
+        'http://localhost',
+        'http://127.0.0.1',
+      ],
+});
 
 await fastify.register(moviesRoutes, { prefix: '/api/movies' });
 await fastify.register(tvRoutes, { prefix: '/api/tv' });
+
+fastify.setErrorHandler((error, request, reply) => {
+  fastify.log.error(error);
+  return reply.status(500).send({ error: 'Internal server error' });
+});
 
 try {
   await fastify.listen({ port: PORT, host: '0.0.0.0' });
