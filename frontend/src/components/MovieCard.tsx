@@ -1,4 +1,4 @@
-import { getPosterUrl } from '../utils/tmdb';
+import { getPosterUrl } from "../utils/tmdb";
 
 interface MovieCardProps {
   posterPath: string | null;
@@ -15,7 +15,12 @@ function StarIcon() {
   );
 }
 
-export function MovieCard({ posterPath, title, rating, voteCount }: MovieCardProps) {
+export function MovieCard({
+  posterPath,
+  title,
+  rating,
+  voteCount,
+}: MovieCardProps) {
   return (
     <div className="movie-card">
       <div className="movie-card-poster-wrap">
