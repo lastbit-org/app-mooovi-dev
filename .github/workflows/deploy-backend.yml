@@ -3,7 +3,7 @@ name: Deploy Backend
 on:
   push:
     branches: [main]
-    # paths: ["backend/**"] # só roda se mudar backend
+    paths: ["./backend/**"] # só roda se mudar backend
 
 env:
   PROJECT_ID: lastbit-prj-d-movieapi
@@ -13,7 +13,7 @@ env:
   RUN_SERVICE_NAME: run-backend
 
 jobs:
-  deploy:
+  deploy-backend:
     runs-on: ubuntu-latest
     permissions:
       contents: read

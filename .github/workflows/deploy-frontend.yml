@@ -13,7 +13,7 @@ env:
   RUN_SERVICE_NAME: run-frontend
 
 jobs:
-  deploy:
+  deploy-frontend:
     runs-on: ubuntu-latest
     permissions:
       contents: read
