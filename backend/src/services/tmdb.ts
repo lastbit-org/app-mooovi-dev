@@ -14,6 +14,12 @@ const tmdbClient = axios.create({
   params: { api_key: apiKey },
 });
 
+/**
+ * Get popular movies
+ * @param page - The page number
+ * @param language - The language of the movies
+ * @returns Popular movies
+ */
 export async function getPopularMovies(page = 1, language?: string) {
   const { data } = await tmdbClient.get("/movie/popular", {
     params: { page, language },
