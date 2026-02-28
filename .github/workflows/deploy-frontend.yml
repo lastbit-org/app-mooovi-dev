@@ -50,4 +50,5 @@ jobs:
           gcloud run deploy ${{ env.RUN_SERVICE_NAME }} \
             --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
             --region ${{ env.REGION }} \
-            --platform managed
+            --platform managed \
+            --allow-unauthenticated
