@@ -177,12 +177,57 @@
 }
 
 .movie-card-poster-wrap {
+  position: relative;
   max-height: 250px;
   max-width: 160px;
   aspect-ratio: 2/3;
   overflow: hidden;
   border-radius: 2px;
   background: var(--bg-secondary);
+}
+
+.movie-card-actions {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  gap: 0.35rem;
+}
+
+.movie-card-btn {
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s, opacity 0.15s;
+}
+
+.movie-card-btn svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.movie-card-btn:hover {
+  transform: scale(1.1);
+}
+
+.movie-card-btn:active {
+  transform: scale(0.95);
+}
+
+.movie-card-btn-watch-later {
+  background: var(--accent);
+  color: var(--text-primary);
+}
+
+.movie-card-btn-watched {
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--bg-primary);
 }
 
 .movie-card-poster {

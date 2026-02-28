@@ -48,14 +48,6 @@ export function Header() {
           Movies
         </NavLink>
         <NavLink
-          to="/new-popular"
-          className={({ isActive }) =>
-            isActive ? "header-nav-link active" : "header-nav-link"
-          }
-        >
-          New & Popular
-        </NavLink>
-        <NavLink
           to="/my-list"
           className={({ isActive }) =>
             isActive ? "header-nav-link active" : "header-nav-link"
