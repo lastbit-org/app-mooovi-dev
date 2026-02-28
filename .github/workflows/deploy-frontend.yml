@@ -37,7 +37,6 @@ jobs:
       - name: Set up Docker
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
 
-      # Configure BACKEND_URL em Settings > Secrets (ex: https://run-backend-226965473545.us-central1.run.app)
       - name: Build and Push
         run: |
           docker build \
