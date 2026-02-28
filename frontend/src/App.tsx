@@ -7,6 +7,7 @@ import { MovieDetailPage } from "./pages/MovieDetailPage";
 import { TVShowDetailPage } from "./pages/TVShowDetailPage";
 import { MyListPage } from "./pages/MyListPage";
 import "./css/App.css";
+// test
 
 function App() {
   return (
