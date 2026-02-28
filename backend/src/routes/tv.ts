@@ -72,6 +72,10 @@ export async function tvRoutes(
       if (id === null) {
         return reply.status(400).send({ error: "Invalid id" });
       }
+
+      if (id === null) {
+        return reply.status(400).send({ error: "Invalid id" });
+      }
       const language = parseLanguage(request.query.language);
       const data = await getTVShowDetails(id, language);
       return reply.type("application/json").send(data);
