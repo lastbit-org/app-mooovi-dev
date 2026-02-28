@@ -19,7 +19,7 @@ export function Header() {
   return (
     <header className="header">
       <Link to="/" className="header-logo">
-        #M<span>OOO</span>VI
+        #M<span>OOOOO</span>VI
       </Link>
       <nav className="header-nav">
         <NavLink

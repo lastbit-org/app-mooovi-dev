@@ -1,29 +1,35 @@
-import type { FastifyInstance, FastifyPluginOptions } from 'fastify';
+import type { FastifyInstance, FastifyPluginOptions } from "fastify";
 import {
   getPopularMovies,
   getMovieDetails,
   searchMovies,
   getUpcomingMovies,
-} from '../services/tmdb.js';
-import { handleTmdbError } from '../lib/errorHandler.js';
+} from "../services/tmdb.js";
+import { handleTmdbError } from "../lib/errorHandler.js";
 import {
   parsePage,
   parseId,
   parseSearchQuery,
   parseLanguage,
-} from '../lib/validation.js';
+} from "../lib/validation.js";
 
 export async function moviesRoutes(
   fastify: FastifyInstance,
-  _opts: FastifyPluginOptions
+  _opts: FastifyPluginOptions,
 ) {
+  /**
+   * Get popular movies
+   * @param request - Fastify request
+   * @param reply - Fastify reply
+   * @returns Popular movies
+   */
   fastify.get<{
     Querystring: { page?: string; language?: string };
-  }>('/popular', async (request, reply) => {
+  }>("/popular", async (request, reply) => {
     try {
       const page = parsePage(request.query.page);
       if (page === null) {
-        return reply.status(400).send({ error: 'Invalid page' });
+        return reply.status(400).send({ error: "Invalid page" });
       }
       const language = parseLanguage(request.query.language);
       const data = await getPopularMovies(page, language);
@@ -33,13 +39,19 @@ export async function moviesRoutes(
     }
   });
 
+  /**
+   * Get upcoming movies
+   * @param request - Fastify request
+   * @param reply - Fastify reply
+   * @returns Upcoming movies
+   */
   fastify.get<{
     Querystring: { page?: string; language?: string };
-  }>('/upcoming', async (request, reply) => {
+  }>("/upcoming", async (request, reply) => {
     try {
       const page = parsePage(request.query.page);
       if (page === null) {
-        return reply.status(400).send({ error: 'Invalid page' });
+        return reply.status(400).send({ error: "Invalid page" });
       }
       const language = parseLanguage(request.query.language);
       const data = await getUpcomingMovies(page, language);
@@ -49,9 +61,15 @@ export async function moviesRoutes(
     }
   });
 
+  /**
+   * Search for movies
+   * @param request - Fastify request
+   * @param reply - Fastify reply
+   * @returns Search results
+   */
   fastify.get<{
     Querystring: { q: string; page?: string; language?: string };
-  }>('/search', async (request, reply) => {
+  }>("/search", async (request, reply) => {
     try {
       const q = parseSearchQuery(request.query.q);
       if (q === null) {
@@ -61,7 +79,7 @@ export async function moviesRoutes(
       }
       const page = parsePage(request.query.page);
       if (page === null) {
-        return reply.status(400).send({ error: 'Invalid page' });
+        return reply.status(400).send({ error: "Invalid page" });
       }
       const language = parseLanguage(request.query.language);
       const data = await searchMovies(q, page, language);
@@ -71,14 +89,20 @@ export async function moviesRoutes(
     }
   });
 
+  /**
+   * Get movie details
+   * @param request - Fastify request
+   * @param reply - Fastify reply
+   * @returns Movie details
+   */
   fastify.get<{
     Params: { id: string };
     Querystring: { language?: string };
-  }>('/:id', async (request, reply) => {
+  }>("/:id", async (request, reply) => {
     try {
       const id = parseId(request.params.id);
       if (id === null) {
-        return reply.status(400).send({ error: 'Invalid id' });
+        return reply.status(400).send({ error: "Invalid id" });
       }
       const data = await getMovieDetails(id);
       return data;
