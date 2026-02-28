@@ -19,6 +19,7 @@ RUN npm ci --omit=dev
 
 COPY --from=builder /app/dist ./dist
 
-EXPOSE 3001
+# Cloud Run usa PORT=8080; localmente usamos 3001 via docker-compose
+EXPOSE 8080
 
 CMD ["node", "dist/index.js"]

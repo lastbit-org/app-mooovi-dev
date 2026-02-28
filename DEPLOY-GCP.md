@@ -176,9 +176,7 @@ export BACKEND_URL=https://app-mooovi-backend-xxx.run.app  # após primeiro depl
 
 ## CORS no backend
 
-Em produção, o backend precisa permitir requisições do domínio do frontend. Use a variável `CORS_ORIGIN` com a URL do frontend no Cloud Run (ex: `https://app-mooovi-frontend-xxx.run.app`). Múltiplas origens podem ser separadas por vírgula.
-
-**Ordem sugerida:** 1) Deploy do backend (pode usar `CORS_ORIGIN=*` temporariamente); 2) Deploy do frontend; 3) Obter a URL do frontend; 4) Redeploy do backend com `CORS_ORIGIN` apontando para a URL real do frontend (recomendado por segurança).
+**Comportamento:** Se `CORS_ORIGIN` não estiver definida, o backend permite qualquer origem (`origin: true`). Para restringir, defina `CORS_ORIGIN` com a URL do frontend (ex: `https://run-frontend-xxx.run.app`). Múltiplas origens podem ser separadas por vírgula.
 
 ## Testar localmente com Docker
 
@@ -191,3 +189,24 @@ docker compose up --build
 
 - Frontend: http://localhost
 - Backend: http://localhost:3001
+
+## Troubleshooting
+
+### "Container failed to start and listen on PORT=8080"
+
+**Backend – causa mais comum:** `TMDB_API_KEY` não foi passada no deploy. O backend sai imediatamente se a chave estiver ausente, antes de abrir a porta.
+
+**Frontend – causa:** O nginx estava fixo na porta 80. O frontend usa `nginx.conf.template` + `docker-entrypoint.sh` para ler `PORT` em runtime (Cloud Run usa 8080, local usa 80). Rebuild da imagem e redeploy.
+
+**Solução:** Garanta que `--set-env-vars` inclua a chave:
+
+```bash
+gcloud run deploy app-mooovi-backend \
+  --image=... \
+  --set-env-vars="TMDB_API_KEY=SUA_CHAVE_REAL"
+```
+
+**Outras causas:**
+- Verifique os logs no Cloud Logging para ver a mensagem exata de erro
+- O backend usa `process.env.PORT` automaticamente (Cloud Run injeta `PORT=8080`)
+- Se usar Secret Manager: `--set-secrets="TMDB_API_KEY=tmdb-key:latest"`
