@@ -37,6 +37,14 @@ jobs:
       - name: Set up Docker
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
 
+      # BACKEND_URL obrigatório: URL do backend no Cloud Run (ex: https://run-backend-xxx.us-central1.run.app)
+      - name: Validate BACKEND_URL
+        run: |
+          if [ -z "${{ secrets.BACKEND_URL }}" ]; then
+            echo "::error::Secret BACKEND_URL is required. Set it to your backend Cloud Run URL (e.g. https://run-backend-xxx.us-central1.run.app)"
+            exit 1
+          fi
+
       - name: Build and Push
         run: |
           docker build \
