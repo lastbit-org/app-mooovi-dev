@@ -1,5 +1,5 @@
 const PAGE_MIN = 1;
-const PAGE_MAX = 500;
+const PAGE_MAX = 300;
 const SEARCH_QUERY_MAX_LENGTH = 100;
 const LANGUAGE_MAX_LENGTH = 10;
 
@@ -8,7 +8,7 @@ const LANGUAGE_MAX_LENGTH = 10;
  * Retorna o valor validado ou null se inválido.
  */
 export function parsePage(value: string | undefined): number | null {
-  if (value === undefined || value === '') return PAGE_MIN;
+  if (value === undefined || value === "") return PAGE_MIN;
   const n = parseInt(value, 10);
   if (Number.isNaN(n) || n < PAGE_MIN || n > PAGE_MAX) return null;
   return n;
@@ -19,7 +19,7 @@ export function parsePage(value: string | undefined): number | null {
  * Retorna o valor ou null se inválido.
  */
 export function parseId(value: string | undefined): number | null {
-  if (value === undefined || value === '') return null;
+  if (value === undefined || value === "") return null;
   const n = parseInt(value, 10);
   if (Number.isNaN(n) || n < 1) return null;
   return n;
@@ -30,9 +30,10 @@ export function parseId(value: string | undefined): number | null {
  * Retorna o valor trimado ou null se inválido.
  */
 export function parseSearchQuery(value: string | undefined): string | null {
-  if (value === undefined || value === '') return null;
+  if (value === undefined || value === "") return null;
   const trimmed = value.trim();
-  if (trimmed.length === 0 || trimmed.length > SEARCH_QUERY_MAX_LENGTH) return null;
+  if (trimmed.length === 0 || trimmed.length > SEARCH_QUERY_MAX_LENGTH)
+    return null;
   return trimmed;
 }
 
@@ -41,7 +42,7 @@ export function parseSearchQuery(value: string | undefined): string | null {
  * Retorna o valor ou undefined se inválido (omitir na chamada).
  */
 export function parseLanguage(value: string | undefined): string | undefined {
-  if (value === undefined || value === '') return undefined;
+  if (value === undefined || value === "") return undefined;
   const trimmed = value.trim();
   if (trimmed.length > LANGUAGE_MAX_LENGTH) return undefined;
   return trimmed;
@@ -50,6 +51,6 @@ export function parseLanguage(value: string | undefined): string | undefined {
 /**
  * Valida time_window: 'day' ou 'week'.
  */
-export function parseTimeWindow(value: string | undefined): 'day' | 'week' {
-  return value === 'day' ? 'day' : 'week';
+export function parseTimeWindow(value: string | undefined): "day" | "week" {
+  return value === "day" ? "day" : "week";
 }
