@@ -28,22 +28,22 @@ jobs:
           workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
           service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
 
-      - name: Configure Docker
-        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
-
-      - name: Gcloud
+      - name: Set up Gcloud
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ env.PROJECT_ID }}
 
-      - name: Build & Push
+      - name: Set up Docker
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
+
+      - name: Build and Push
         run: |
           docker build -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} ./backend
           docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
-      - name: Deploy Cloud Run
-        run: |
-          gcloud run deploy backend-service \
-            --image=${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
-            --region=${{ env.REGION }} \
-            --platform=managed
+      # - name: Deploy
+      #   run: |
+      #     gcloud run deploy backend-service \
+      #       --image=${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
+      #       --region=${{ env.REGION }} \
+      #       --platform=managed
