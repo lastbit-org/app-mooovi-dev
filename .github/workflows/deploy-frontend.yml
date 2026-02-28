@@ -3,7 +3,7 @@ name: Deploy Frontend
 on:
   push:
     branches: [main]
-    paths: ["./frontend/**"] # só roda se mudar frontend
+    paths: ["frontend/**"] # só roda se mudar frontend
 
 env:
   PROJECT_ID: lastbit-prj-d-movieapi
@@ -37,7 +37,11 @@ jobs:
       - name: Set up Docker
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
 
+      # Configure BACKEND_URL em Settings > Secrets (ex: https://run-backend-226965473545.us-central1.run.app)
       - name: Build and Push
         run: |
-          docker build -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} ./backend
+          docker build \
+            --build-arg VITE_API_URL=${{ secrets.BACKEND_URL }} \
+            -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
+            ./frontend
           docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}

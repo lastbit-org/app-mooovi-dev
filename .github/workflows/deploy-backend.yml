@@ -3,7 +3,7 @@ name: Deploy Backend
 on:
   push:
     branches: [main]
-    paths: ["./backend/**"] # só roda se mudar backend
+    paths: ["backend/**"] # só roda se mudar backend
 
 env:
   PROJECT_ID: lastbit-prj-d-movieapi
