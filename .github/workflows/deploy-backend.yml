@@ -10,6 +10,7 @@ env:
   REGION: us-central1
   ARTIFACT_REGISTRY: movieapi
   IMAGE_NAME: app-mooovi-backend
+  RUN_SERVICE_NAME: run-backend
 
 jobs:
   deploy:
@@ -43,7 +44,7 @@ jobs:
 
       # - name: Deploy
       #   run: |
-      #     gcloud run deploy backend-service \
+      #     gcloud run deploy ${{ env.RUN_SERVICE_NAME }} \
       #       --image=${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
       #       --region=${{ env.REGION }} \
       #       --platform=managed
