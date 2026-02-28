@@ -11,3 +11,8 @@ export async function getTrendingTVShows(timeWindow: 'day' | 'week' = 'week') {
   });
   return data;
 }
+
+export async function getTVShowDetails(id: number | string) {
+  const { data } = await api.get(`/api/tv/${id}`);
+  return data;
+}

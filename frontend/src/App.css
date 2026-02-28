@@ -167,6 +167,8 @@
   align-self: flex-start;
   cursor: pointer;
   transition: transform 0.2s;
+  text-decoration: none;
+  color: inherit;
 }
 
 .movie-card:hover {
@@ -221,4 +223,137 @@
   text-align: center;
   padding: 2rem;
   color: var(--text-secondary);
+}
+
+/* Detail Page */
+.detail-page {
+  position: relative;
+  min-height: 50vh;
+  padding: 2rem;
+}
+
+.detail-backdrop {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.2;
+  z-index: 0;
+}
+
+.detail-backdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--bg-primary) 0%, transparent 50%);
+}
+
+.detail-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.detail-poster {
+  flex-shrink: 0;
+  width: 220px;
+  aspect-ratio: 2/3;
+  border-radius: 8px;
+  object-fit: cover;
+  background: var(--bg-secondary);
+}
+
+.detail-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.detail-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+}
+
+.detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.detail-meta span + span::before {
+  content: ' • ';
+  margin-right: 0.25rem;
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.detail-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.detail-rating svg {
+  color: var(--accent);
+}
+
+.detail-vote-count {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.detail-overview {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.detail-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.detail-btn {
+  padding: 0.6rem 1.25rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.detail-btn:active {
+  transform: scale(0.98);
+}
+
+.detail-btn-watch-later {
+  background: var(--accent);
+  color: var(--text-primary);
+  border: none;
+}
+
+.detail-btn-watch-later:hover {
+  filter: brightness(1.1);
+}
+
+.detail-btn-watched {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.detail-btn-watched:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
 }

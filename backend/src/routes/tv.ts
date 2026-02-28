@@ -3,6 +3,7 @@ import type { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import {
   getPopularTVShows,
   getTrendingTVShows,
+  getTVShowDetails,
 } from '../services/tmdb.js';
 
 export async function tvRoutes(
@@ -34,6 +35,25 @@ export async function tvRoutes(
       const timeWindow = (request.query.time_window === 'day' ? 'day' : 'week') as 'day' | 'week';
       const language = request.query.language;
       const data = await getTrendingTVShows(timeWindow, language);
+      return data;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        return reply
+          .status(error.response.status)
+          .send(error.response.data);
+      }
+      throw error;
+    }
+  });
+
+  fastify.get<{
+    Params: { id: string };
+    Querystring: { language?: string };
+  }>('/:id', async (request, reply) => {
+    try {
+      const { id } = request.params;
+      const language = request.query.language;
+      const data = await getTVShowDetails(id, language);
       return data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {

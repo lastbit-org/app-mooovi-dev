@@ -14,9 +14,10 @@ interface MovieCarouselProps {
   title: string;
   icon: string;
   items: CarouselItem[];
+  mediaType: 'movie' | 'tv';
 }
 
-export function MovieCarousel({ title, icon, items }: MovieCarouselProps) {
+export function MovieCarousel({ title, icon, items, mediaType }: MovieCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -48,6 +49,8 @@ export function MovieCarousel({ title, icon, items }: MovieCarouselProps) {
         {items.map((item) => (
           <MovieCard
             key={item.id}
+            id={item.id}
+            mediaType={mediaType}
             posterPath={item.poster_path}
             title={item.title ?? item.name ?? ''}
             rating={item.vote_average}

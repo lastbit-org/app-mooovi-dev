@@ -50,11 +50,13 @@ export function TVShowsPage() {
         title="Trending TV"
         icon="🔥"
         items={trendingShows}
+        mediaType="tv"
       />
       <MovieCarousel
         title="Popular TV Shows"
         icon="🌟"
         items={popularShows}
+        mediaType="tv"
       />
     </>
   )

@@ -1,0 +1,27 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: app-mooovi-backend
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - TMDB_API_KEY=${TMDB_API_KEY}
+      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost,http://127.0.0.1}
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        # Em produção, defina a URL do backend (ex: http://backend:3001 ou https://seu-backend.run.app)
+        - VITE_API_URL=${VITE_API_URL:-http://localhost:3001}
+    image: app-mooovi-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped

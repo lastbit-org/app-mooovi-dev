@@ -13,8 +13,12 @@ if (!process.env.TMDB_API_KEY) {
 
 const fastify = Fastify({ logger: true });
 
+const corsOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(',').map((o) => o.trim())
+  : ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost', 'http://127.0.0.1'];
+
 await fastify.register(cors, {
-  origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
+  origin: corsOrigins,
 });
 
 await fastify.register(moviesRoutes, { prefix: '/api/movies' });

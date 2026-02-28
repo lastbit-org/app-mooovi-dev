@@ -1,6 +1,9 @@
-import { getPosterUrl } from "../utils/tmdb";
+import { Link } from 'react-router-dom';
+import { getPosterUrl } from '../utils/tmdb';
 
 interface MovieCardProps {
+  id: number;
+  mediaType: 'movie' | 'tv';
   posterPath: string | null;
   title: string;
   rating: number;
@@ -16,13 +19,15 @@ function StarIcon() {
 }
 
 export function MovieCard({
+  id,
+  mediaType,
   posterPath,
   title,
   rating,
   voteCount,
 }: MovieCardProps) {
   return (
-    <div className="movie-card">
+    <Link to={mediaType === 'movie' ? `/movies/${id}` : `/tv/${id}`} className="movie-card">
       <div className="movie-card-poster-wrap">
         <img
           src={getPosterUrl(posterPath)}
@@ -37,6 +42,6 @@ export function MovieCard({
         <span>{voteCount} reviews</span>
       </div>
       <h3 className="movie-card-title">{title}</h3>
-    </div>
+    </Link>
   );
 }

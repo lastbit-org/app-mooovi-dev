@@ -47,3 +47,10 @@ export async function getTrendingTVShows(timeWindow: 'day' | 'week' = 'week', la
   });
   return data;
 }
+
+export async function getTVShowDetails(id: number | string, language?: string) {
+  const { data } = await tmdbClient.get(`/tv/${id}`, {
+    params: { language },
+  });
+  return data;
+}

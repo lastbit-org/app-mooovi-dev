@@ -50,11 +50,13 @@ export function MoviesPage() {
         title="Coming soon"
         icon="🌟"
         items={upcomingMovies}
+        mediaType="movie"
       />
       <MovieCarousel
         title="Trending Movies"
         icon="🔥"
         items={popularMovies}
+        mediaType="movie"
       />
     </>
   )
