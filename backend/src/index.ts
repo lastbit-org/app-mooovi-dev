@@ -18,7 +18,7 @@ if (!process.env.TMDB_API_KEY) {
 const fastify = Fastify({ logger: true });
 
 await fastify.register(rateLimit, {
-  max: 100,
+  max: 80,
   timeWindow: "1 minute",
 });
 
