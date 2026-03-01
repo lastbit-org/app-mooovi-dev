@@ -71,6 +71,17 @@ export async function searchMulti(
   return data;
 }
 
+export async function getTrendingAll(
+  timeWindow: "day" | "week" = "week",
+  page = 1,
+  language?: string,
+) {
+  const { data } = await tmdbClient.get(`/trending/all/${timeWindow}`, {
+    params: { page, language },
+  });
+  return data;
+}
+
 export async function getPopularTVShows(page = 1, language?: string) {
   const { data } = await tmdbClient.get("/tv/popular", {
     params: { page, language },

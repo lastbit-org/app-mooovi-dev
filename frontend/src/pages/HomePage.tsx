@@ -3,6 +3,7 @@ import { MovieCarousel } from "../components/MovieCarousel";
 import { MovieCard } from "../components/MovieCard";
 import { Hero } from "../components/Hero";
 import { getUpcomingMovies, getPopularMovies } from "../api/movies";
+import { getTrendingAll } from "../api/trending";
 
 interface Movie {
   id: number;
@@ -14,10 +15,20 @@ interface Movie {
   vote_count: number;
 }
 
+interface GridItem {
+  id: number;
+  media_type: "movie" | "tv";
+  poster_path: string | null;
+  vote_average: number;
+  vote_count: number;
+  title?: string;
+  name?: string;
+}
+
 export function HomePage() {
   const [upcomingMovies, setUpcomingMovies] = useState<Movie[]>([]);
   const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
-  const [gridMovies, setGridMovies] = useState<Movie[]>([]);
+  const [gridItems, setGridItems] = useState<GridItem[]>([]);
   const [gridPage, setGridPage] = useState(1);
   const [gridTotalPages, setGridTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -47,21 +58,25 @@ export function HomePage() {
   }, []);
 
   useEffect(() => {
-    async function fetchGridMovies() {
+    async function fetchGridItems() {
       try {
         setGridLoading(true);
-        const res = await getPopularMovies(gridPage);
-        setGridMovies(res.results ?? []);
+        const res = await getTrendingAll("week", gridPage);
+        const raw = res?.results ?? [];
+        const filtered = raw.filter(
+          (r: GridItem) => r.media_type === "movie" || r.media_type === "tv"
+        );
+        setGridItems(filtered);
         setGridTotalPages(Math.min(res.total_pages ?? 1, 500));
       } catch (err) {
         setError(
-          err instanceof Error ? err.message : "Falha ao carregar filmes",
+          err instanceof Error ? err.message : "Falha ao carregar conteúdo",
         );
       } finally {
         setGridLoading(false);
       }
     }
-    fetchGridMovies();
+    fetchGridItems();
   }, [gridPage]);
 
   if (loading) {
@@ -97,8 +112,8 @@ export function HomePage() {
         />
         <section className="home-grid-section">
           <h2 className="home-grid-title">
-            <span className="carousel-icon">🎬</span>
-            Catálogo de Filmes
+            <span className="carousel-icon">🔥</span>
+            Em Alta — Filmes e Séries
           </h2>
           {gridLoading ? (
             <div className="home-grid-loading">
@@ -108,15 +123,15 @@ export function HomePage() {
           ) : (
             <>
               <div className="home-grid">
-                {gridMovies.map((movie) => (
+                {gridItems.map((item) => (
                   <MovieCard
-                    key={movie.id}
-                    id={movie.id}
-                    mediaType="movie"
-                    posterPath={movie.poster_path}
-                    title={movie.title}
-                    rating={movie.vote_average}
-                    voteCount={movie.vote_count}
+                    key={`${item.media_type}-${item.id}`}
+                    id={item.id}
+                    mediaType={item.media_type}
+                    posterPath={item.poster_path}
+                    title={item.title ?? item.name ?? ""}
+                    rating={item.vote_average}
+                    voteCount={item.vote_count}
                   />
                 ))}
               </div>
