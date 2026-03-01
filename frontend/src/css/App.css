@@ -2,8 +2,46 @@
   min-height: 100vh;
 }
 
+/* Loading bar (estilo YouTube) */
+.loading-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 1001;
+  overflow: hidden;
+}
+
+.loading-bar-progress {
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+  transition: width 0.2s ease-out;
+  animation: loading-bar-progress 0.6s ease-out forwards;
+}
+
+.loading-bar-progress.loading-bar-complete {
+  animation: none;
+  width: 100%;
+  transition: width 0.12s ease-out;
+}
+
+@keyframes loading-bar-progress {
+  0% {
+    width: 0;
+  }
+  80% {
+    width: 85%;
+  }
+  100% {
+    width: 85%;
+  }
+}
+
 .main {
-  padding-top: 4rem;
+  padding-top: 5rem; /* Espaço para o header fixo (height: 4.5rem) */
   padding-bottom: 2rem;
 }
 
@@ -203,17 +241,14 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to right,
-    var(--bg-primary) 10%,
-    rgba(26, 26, 26, 0.4) 40%,
-    transparent 70%
-  ),
-  linear-gradient(
-    to top,
-    var(--bg-primary) 0%,
-    transparent 30%
-  );
+  background:
+    linear-gradient(
+      to right,
+      var(--bg-primary) 10%,
+      rgba(26, 26, 26, 0.4) 40%,
+      transparent 70%
+    ),
+    linear-gradient(to top, var(--bg-primary) 0%, transparent 30%);
 }
 
 .hero-content {
@@ -224,8 +259,14 @@
 }
 
 @keyframes hero-fade-in {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .hero-badge {
@@ -525,7 +566,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Detail Page */
@@ -554,8 +597,9 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, transparent 0%, var(--bg-primary) 80%),
-              linear-gradient(to top, var(--bg-primary) 0%, transparent 40%);
+  background:
+    radial-gradient(circle at center, transparent 0%, var(--bg-primary) 80%),
+    linear-gradient(to top, var(--bg-primary) 0%, transparent 40%);
 }
 
 .detail-content {
@@ -750,11 +794,11 @@
     max-width: 900px;
     padding: 2rem;
   }
-  
+
   .detail-poster {
     width: 240px;
   }
-  
+
   .detail-title {
     font-size: 2.5rem;
   }
@@ -812,7 +856,7 @@
     flex-wrap: wrap;
     width: 100%;
   }
-  
+
   .detail-btn {
     flex: 1;
     min-width: 140px;
@@ -831,7 +875,7 @@
   .detail-actions {
     flex-direction: column;
   }
-  
+
   .detail-btn {
     width: 100%;
   }
@@ -958,7 +1002,7 @@
 .mylist-card-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 60%);
   opacity: 0;
   transition: opacity 0.3s ease;
   display: flex;
@@ -1060,16 +1104,16 @@
   .mylist-page {
     padding: 1.5rem 1rem;
   }
-  
+
   .mylist-title {
     font-size: 2rem;
   }
-  
+
   .mylist-tabs {
     flex-wrap: wrap;
     width: 100%;
   }
-  
+
   .mylist-tab {
     flex: 1 1 calc(50% - 0.5rem);
     justify-content: center;
