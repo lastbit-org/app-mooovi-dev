@@ -128,12 +128,12 @@ export function MovieDetailPage() {
     async function fetchCredits() {
       try {
         const data = await getMovieCredits(id!);
-        const directors = (data.crew ?? [])
-          .filter((c: { job: string }) => c.job === "Director")
-          .map((c: { name: string }) => c.name);
-        const cast = (data.cast ?? [])
+        const directors = ((data.crew ?? []) as { job: string; name: string }[])
+          .filter((c) => c.job === "Director")
+          .map((c) => c.name);
+        const cast = ((data.cast ?? []) as { name: string }[])
           .slice(0, 8)
-          .map((c: { name: string }) => c.name);
+          .map((c) => c.name);
         setCredits({ directors: [...new Set(directors)], cast });
       } catch {
         setCredits(null);

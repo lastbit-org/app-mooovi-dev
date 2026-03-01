@@ -128,23 +128,23 @@ export function TVShowDetailPage() {
     async function fetchCredits() {
       try {
         const data = await getTVShowCredits(id!);
-        const crew = data.crew ?? [];
+        const crew = (data.crew ?? []) as { job: string; name: string }[];
         let directors = crew
-          .filter((c: { job: string }) => c.job === "Director")
-          .map((c: { name: string }) => c.name);
+          .filter((c) => c.job === "Director")
+          .map((c) => c.name);
         if (directors.length === 0) {
           directors = crew
-            .filter((c: { job: string }) => c.job === "Executive Producer")
-            .map((c: { name: string }) => c.name);
+            .filter((c) => c.job === "Executive Producer")
+            .map((c) => c.name);
         }
         if (directors.length === 0) {
           directors = crew
-            .filter((c: { job: string }) => c.job === "Creator")
-            .map((c: { name: string }) => c.name);
+            .filter((c) => c.job === "Creator")
+            .map((c) => c.name);
         }
-        const cast = (data.cast ?? [])
+        const cast = ((data.cast ?? []) as { name: string }[])
           .slice(0, 8)
-          .map((c: { name: string }) => c.name);
+          .map((c) => c.name);
         setCredits({
           directors: [...new Set(directors)],
           cast,
