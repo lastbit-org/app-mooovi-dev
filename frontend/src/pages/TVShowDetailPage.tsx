@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getTVShowDetails } from "../api/tv";
+import { getTVShowDetails, getTVShowCredits } from "../api/tv";
 import { getPosterUrl, getBackdropUrl } from "../utils/tmdb";
 import { TrailerSection } from "../components/TrailerSection";
 
@@ -92,9 +92,15 @@ function FilmIcon() {
   );
 }
 
+interface Credits {
+  directors: string[];
+  cast: string[];
+}
+
 export function TVShowDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [show, setShow] = useState<TVShowDetails | null>(null);
+  const [credits, setCredits] = useState<Credits | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -115,6 +121,39 @@ export function TVShowDetailPage() {
       }
     }
     fetchShow();
+  }, [id]);
+
+  useEffect(() => {
+    if (!id) return;
+    async function fetchCredits() {
+      try {
+        const data = await getTVShowCredits(id!);
+        const crew = data.crew ?? [];
+        let directors = crew
+          .filter((c: { job: string }) => c.job === "Director")
+          .map((c: { name: string }) => c.name);
+        if (directors.length === 0) {
+          directors = crew
+            .filter((c: { job: string }) => c.job === "Executive Producer")
+            .map((c: { name: string }) => c.name);
+        }
+        if (directors.length === 0) {
+          directors = crew
+            .filter((c: { job: string }) => c.job === "Creator")
+            .map((c: { name: string }) => c.name);
+        }
+        const cast = (data.cast ?? [])
+          .slice(0, 8)
+          .map((c: { name: string }) => c.name);
+        setCredits({
+          directors: [...new Set(directors)],
+          cast,
+        });
+      } catch {
+        setCredits(null);
+      }
+    }
+    fetchCredits();
   }, [id]);
 
   if (loading) {
@@ -192,6 +231,23 @@ export function TVShowDetailPage() {
           </div>
 
           {show.overview && <p className="detail-overview">{show.overview}</p>}
+
+          {(credits?.directors?.length || credits?.cast?.length) && (
+            <div className="detail-credits">
+              {credits.directors.length > 0 && (
+                <div className="detail-credits-row">
+                  <span className="detail-credits-label">Direção:</span>
+                  <span>{credits.directors.join(", ")}</span>
+                </div>
+              )}
+              {credits.cast.length > 0 && (
+                <div className="detail-credits-row">
+                  <span className="detail-credits-label">Elenco:</span>
+                  <span>{credits.cast.join(", ")}</span>
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="detail-actions">
             <button

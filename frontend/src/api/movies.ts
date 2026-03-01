@@ -20,6 +20,11 @@ export async function getMovieVideos(id: number | string) {
   return data;
 }
 
+export async function getMovieCredits(id: number | string) {
+  const { data } = await api.get(`/api/movies/${id}/credits`);
+  return data;
+}
+
 export async function searchMovies(query: string, page = 1) {
   const { data } = await api.get("/api/movies/search", {
     params: { q: query, page },

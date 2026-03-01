@@ -21,3 +21,8 @@ export async function getTVShowVideos(id: number | string) {
   const { data } = await api.get(`/api/tv/${id}/videos`);
   return data;
 }
+
+export async function getTVShowCredits(id: number | string) {
+  const { data } = await api.get(`/api/tv/${id}/credits`);
+  return data;
+}

@@ -944,8 +944,28 @@
   font-size: 1.125rem;
   line-height: 1.7;
   color: var(--text-secondary);
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.5rem;
   max-width: 60ch;
+}
+
+.detail-credits {
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.detail-credits-row {
+  margin-bottom: 0.5rem;
+}
+
+.detail-credits-row:last-child {
+  margin-bottom: 0;
+}
+
+.detail-credits-label {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-right: 0.5rem;
 }
 
 .detail-actions {
@@ -1088,9 +1108,14 @@
 
   .detail-overview {
     font-size: 1rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .detail-credits {
+    text-align: center;
+    margin-bottom: 1.5rem;
   }
 
   .detail-actions {

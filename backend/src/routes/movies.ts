@@ -3,6 +3,7 @@ import {
   getPopularMovies,
   getMovieDetails,
   getMovieVideos,
+  getMovieCredits,
   searchMovies,
   getUpcomingMovies,
 } from "../services/tmdb.js";
@@ -84,6 +85,29 @@ export async function moviesRoutes(
       }
       const language = parseLanguage(request.query.language);
       const data = await searchMovies(q, page, language);
+      return reply.type("application/json").send(data);
+    } catch (error) {
+      return handleTmdbError(error, reply);
+    }
+  });
+
+  /**
+   * Get movie credits (cast and crew)
+   * @param request - Fastify request
+   * @param reply - Fastify reply
+   * @returns Movie credits
+   */
+  fastify.get<{
+    Params: { id: string };
+    Querystring: { language?: string };
+  }>("/:id/credits", async (request, reply) => {
+    try {
+      const id = parseId(request.params.id);
+      if (id === null) {
+        return reply.status(400).send({ error: "Invalid id" });
+      }
+      const language = parseLanguage(request.query.language);
+      const data = await getMovieCredits(id, language);
       return reply.type("application/json").send(data);
     } catch (error) {
       return handleTmdbError(error, reply);
