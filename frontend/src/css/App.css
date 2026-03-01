@@ -204,7 +204,9 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 0.15s, opacity 0.15s;
+  transition:
+    transform 0.15s,
+    opacity 0.15s;
 }
 
 .movie-card-btn svg {
@@ -287,7 +289,7 @@
 }
 
 .detail-backdrop::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(to top, var(--bg-primary) 0%, transparent 50%);
@@ -333,7 +335,7 @@
 }
 
 .detail-meta span + span::before {
-  content: ' • ';
+  content: " • ";
   margin-right: 0.25rem;
   color: var(--text-secondary);
   opacity: 0.7;
@@ -375,7 +377,9 @@
   font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s, transform 0.1s;
+  transition:
+    background 0.2s,
+    transform 0.1s;
 }
 
 .detail-btn:active {
@@ -480,5 +484,261 @@
   .detail-btn {
     width: 100%;
     padding: 0.75rem 1rem;
+  }
+}
+
+/* My List Page */
+.mylist-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 2rem 4rem;
+}
+
+.mylist-header {
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.mylist-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(to right, #fff, #888);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.mylist-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+}
+
+.mylist-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 3rem;
+  padding: 4px;
+  background: rgba(255, 255, 255, 0.03);
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mylist-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mylist-tab:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.mylist-tab-active {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+}
+
+.mylist-tab-active:hover {
+  background: var(--accent);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.mylist-tab-icon {
+  font-size: 1.1rem;
+}
+
+/* Grid Layout */
+.mylist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 2rem 1.25rem;
+}
+
+.mylist-item-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.mylist-item-card:hover {
+  transform: translateY(-8px);
+}
+
+.mylist-card-poster-wrap {
+  position: relative;
+  aspect-ratio: 2/3;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  background: var(--bg-secondary);
+}
+
+.mylist-card-poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.mylist-item-card:hover .mylist-card-poster {
+  transform: scale(1.1);
+}
+
+.mylist-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1rem;
+}
+
+.mylist-item-card:hover .mylist-card-overlay {
+  opacity: 1;
+}
+
+.mylist-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mylist-card-btn {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mylist-card-btn-remove {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  backdrop-filter: blur(8px);
+}
+
+.mylist-card-btn-remove:hover {
+  background: #ef4444;
+}
+
+.mylist-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mylist-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.mylist-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.mylist-card-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Empty State */
+.mylist-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 20px;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.mylist-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.mylist-empty-text {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .mylist-page {
+    padding: 1.5rem 1rem;
+  }
+  
+  .mylist-title {
+    font-size: 2rem;
+  }
+  
+  .mylist-tabs {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  
+  .mylist-tab {
+    flex: 1 1 calc(50% - 0.5rem);
+    justify-content: center;
+    padding: 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .mylist-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1.5rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mylist-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .mylist-tab-label {
+    font-size: 0.75rem;
   }
 }

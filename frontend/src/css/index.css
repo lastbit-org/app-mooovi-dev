@@ -6,7 +6,13 @@
   --text-secondary: rgba(255, 255, 255, 0.7);
   --accent: #f97316;
 
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
   line-height: 1.5;
   font-weight: 400;
   color: var(--text-primary);
@@ -17,7 +23,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-* {
+*,
+*:before,
+*:after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -47,7 +55,9 @@ button {
   background-color: var(--bg-secondary);
   color: var(--text-primary);
   cursor: pointer;
-  transition: border-color 0.25s, background-color 0.25s;
+  transition:
+    border-color 0.25s,
+    background-color 0.25s;
 }
 button:hover {
   border-color: var(--accent);
