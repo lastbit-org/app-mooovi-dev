@@ -13,13 +13,17 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 4rem;
+  height: 4.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 2rem;
+  padding: 0 4rem;
   background: var(--bg-header);
-  z-index: 100;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  z-index: 1000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
 }
 
 .header-logo {
@@ -97,6 +101,77 @@
   justify-content: center;
   color: var(--text-primary);
   font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
+}
+
+.header-menu-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .header {
+    padding: 0 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-menu-btn {
+    display: block;
+    z-index: 1001;
+  }
+
+  .header-nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 70%;
+    height: 100vh;
+    background: var(--bg-primary);
+    flex-direction: column;
+    padding: 6rem 2rem;
+    gap: 2rem;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+  }
+
+  .header-nav.active {
+    right: 0;
+  }
+
+  .header-right {
+    gap: 0.5rem;
+  }
+
+  .search-bar {
+    min-width: unset;
+    width: 40px;
+    padding: 0.5rem;
+    overflow: hidden;
+    transition: width 0.3s ease;
+  }
+
+  .search-bar:focus-within {
+    width: 150px;
+  }
+
+  .search-bar input {
+    opacity: 0;
+  }
+
+  .search-bar:focus-within input {
+    opacity: 1;
+  }
 }
 
 /* Hero Section */
@@ -457,11 +532,11 @@
 .detail-page {
   position: relative;
   min-height: 100vh;
-  padding: 4rem 2rem;
+  padding: 0 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 .detail-backdrop {
