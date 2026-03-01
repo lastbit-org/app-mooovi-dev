@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { MovieCarousel } from "../components/MovieCarousel";
 import { MovieCard } from "../components/MovieCard";
 import { Hero } from "../components/Hero";
 import { getUpcomingMovies, getPopularMovies } from "../api/movies";
 import { getTrendingAll } from "../api/trending";
+
+const FEATURED_INTERVAL_MS = 6000;
+const FEATURED_MAX_ITEMS = 6;
 
 interface Movie {
   id: number;
@@ -38,6 +41,8 @@ export function HomePage() {
 
   const [upcomingMovies, setUpcomingMovies] = useState<Movie[]>([]);
   const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
+  const [featuredIndex, setFeaturedIndex] = useState(0);
+  const [featuredPaused, setFeaturedPaused] = useState(false);
   const [gridItems, setGridItems] = useState<GridItem[]>([]);
   const [gridTotalPages, setGridTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -65,6 +70,26 @@ export function HomePage() {
     }
     fetchMovies();
   }, []);
+
+  const featuredItems = popularMovies.slice(0, FEATURED_MAX_ITEMS);
+  const [intervalReset, setIntervalReset] = useState(0);
+
+  const goToFeatured = useCallback(
+    (index: number) => {
+      const len = featuredItems.length;
+      setFeaturedIndex(len > 0 ? index % len : 0);
+      setIntervalReset((r) => r + 1);
+    },
+    [featuredItems.length]
+  );
+
+  useEffect(() => {
+    if (featuredItems.length <= 1 || featuredPaused) return;
+    const id = setInterval(() => {
+      setFeaturedIndex((i) => (i + 1) % featuredItems.length);
+    }, FEATURED_INTERVAL_MS);
+    return () => clearInterval(id);
+  }, [featuredItems.length, featuredPaused, intervalReset]);
 
   useEffect(() => {
     async function fetchGridItems() {
@@ -101,11 +126,48 @@ export function HomePage() {
     return <p className="error">❌ {error}</p>;
   }
 
-  const featuredMovie = popularMovies[0];
+  const featuredMovie = featuredItems[featuredIndex];
 
   return (
     <div className="home-page">
-      {featuredMovie && <Hero movie={featuredMovie} mediaType="movie" />}
+      {featuredMovie && (
+        <div
+          className={`hero-carousel ${featuredPaused ? "hero-carousel-paused" : ""}`}
+          onMouseEnter={() => setFeaturedPaused(true)}
+          onMouseLeave={() => setFeaturedPaused(false)}
+        >
+          <Hero key={featuredMovie.id} movie={featuredMovie} mediaType="movie" />
+          {featuredItems.length > 1 && (
+            <div
+              className={`hero-dots ${featuredPaused ? "hero-dots-paused" : ""}`}
+              role="tablist"
+              aria-label="Destaques"
+            >
+              {featuredItems.map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  role="tab"
+                  aria-selected={i === featuredIndex}
+                  aria-label={`Destaque ${i + 1} de ${featuredItems.length}`}
+                  className={`hero-dot ${i === featuredIndex ? "hero-dot-active" : ""}`}
+                  onClick={() => goToFeatured(i)}
+                >
+                  {i === featuredIndex && (
+                    <span className="hero-dot-track">
+                      <span
+                        key={featuredIndex}
+                        className="hero-dot-fill"
+                        style={{ animationDuration: `${FEATURED_INTERVAL_MS}ms` }}
+                      />
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
       <div className="main">
         <MovieCarousel
           title="Em Breve nos Cinemas"
