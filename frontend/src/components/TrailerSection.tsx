@@ -14,15 +14,17 @@ interface TrailerSectionProps {
   mediaType: 'movie' | 'tv';
 }
 
-function getTrailerKey(videos: VideoResult[]): string | null {
-  const trailer = videos.find(
-    (v) => v.site === 'YouTube' && (v.type === 'Trailer' || v.type === 'Teaser')
-  );
-  return trailer?.key ?? null;
+function getTrailerKeys(videos: VideoResult[]): string[] {
+  return videos
+    .filter(
+      (v) => v.site === 'YouTube' && (v.type === 'Trailer' || v.type === 'Teaser')
+    )
+    .map((v) => v.key);
 }
 
 export function TrailerSection({ id, mediaType }: TrailerSectionProps) {
-  const [trailerKey, setTrailerKey] = useState<string | null>(null);
+  const [trailerKeys, setTrailerKeys] = useState<string[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -35,9 +37,10 @@ export function TrailerSection({ id, mediaType }: TrailerSectionProps) {
             ? await getMovieVideos(id)
             : await getTVShowVideos(id);
         const results = data?.results ?? [];
-        setTrailerKey(getTrailerKey(results));
+        setTrailerKeys(getTrailerKeys(results));
+        setCurrentIndex(0);
       } catch {
-        setTrailerKey(null);
+        setTrailerKeys([]);
       } finally {
         setLoading(false);
       }
@@ -45,14 +48,43 @@ export function TrailerSection({ id, mediaType }: TrailerSectionProps) {
     fetchVideos();
   }, [id, mediaType]);
 
-  if (loading || !trailerKey) return null;
+  if (loading || trailerKeys.length === 0) return null;
+
+  const currentKey = trailerKeys[currentIndex];
+  const hasPrev = currentIndex > 0;
+  const hasNext = currentIndex < trailerKeys.length - 1;
 
   return (
     <section className="detail-trailer">
-      <h2 className="detail-trailer-title">Trailer</h2>
+      <div className="detail-trailer-header">
+        <h2 className="detail-trailer-title">Trailer</h2>
+        <div className="detail-trailer-nav">
+          {hasPrev && (
+            <button
+              type="button"
+              className="detail-trailer-nav-btn"
+              onClick={() => setCurrentIndex((i) => i - 1)}
+              aria-label="Trailer anterior"
+            >
+              ← Anterior
+            </button>
+          )}
+          {hasNext && (
+            <button
+              type="button"
+              className="detail-trailer-nav-btn"
+              onClick={() => setCurrentIndex((i) => i + 1)}
+              aria-label="Próximo trailer"
+            >
+              Próximo →
+            </button>
+          )}
+        </div>
+      </div>
       <div className="detail-trailer-wrap">
         <iframe
-          src={`https://www.youtube.com/embed/${trailerKey}?rel=0`}
+          key={currentKey}
+          src={`https://www.youtube.com/embed/${currentKey}?rel=0`}
           title="Trailer"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
