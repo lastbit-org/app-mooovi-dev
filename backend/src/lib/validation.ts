@@ -1,5 +1,7 @@
 const PAGE_MIN = 1;
 const PAGE_MAX = 300;
+const ID_MIN = 1;
+const ID_MAX = 2_147_483_647;
 const SEARCH_QUERY_MAX_LENGTH = 100;
 const LANGUAGE_MAX_LENGTH = 10;
 
@@ -15,13 +17,13 @@ export function parsePage(value: string | undefined): number | null {
 }
 
 /**
- * Valida id: inteiro positivo.
+ * Valida id: inteiro entre ID_MIN e ID_MAX (evita overflow/abuso).
  * Retorna o valor ou null se inválido.
  */
 export function parseId(value: string | undefined): number | null {
   if (value === undefined || value === "") return null;
   const n = parseInt(value, 10);
-  if (Number.isNaN(n) || n < 1) return null;
+  if (Number.isNaN(n) || n < ID_MIN || n > ID_MAX) return null;
   return n;
 }
 

@@ -58,4 +58,4 @@ jobs:
             --platform managed \
             --project ${{ env.PROJECT_ID }} \
             --allow-unauthenticated \
-            --set-env-vars="CORS_ORIGIN=${{ secrets.FRONTEND_URL }}"
+            --set-env-vars="NODE_ENV=production,CORS_ORIGIN=${{ secrets.FRONTEND_URL }}"

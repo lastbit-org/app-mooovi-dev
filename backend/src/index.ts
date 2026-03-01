@@ -1,6 +1,7 @@
 import "dotenv/config";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
+import helmet from "@fastify/helmet";
 import rateLimit from "@fastify/rate-limit";
 import { moviesRoutes } from "./routes/movies.js";
 import { tvRoutes } from "./routes/tv.js";
@@ -19,8 +20,15 @@ if (!process.env.TMDB_API_KEY) {
 
 const fastify = Fastify({ logger: true });
 
+const isProduction = process.env.NODE_ENV === "production";
+
+await fastify.register(helmet, {
+  contentSecurityPolicy: false,
+  crossOriginEmbedderPolicy: false,
+});
+
 await fastify.register(rateLimit, {
-  max: 79,
+  max: isProduction ? 60 : 120,
   timeWindow: "1 minute",
 });
 
