@@ -1,12 +1,12 @@
-import { api } from './client';
+import { api } from "./client";
 
 export async function getUpcomingMovies(page = 1) {
-  const { data } = await api.get('/api/movies/upcoming', { params: { page } });
+  const { data } = await api.get("/api/movies/upcoming", { params: { page } });
   return data;
 }
 
 export async function getPopularMovies(page = 1) {
-  const { data } = await api.get('/api/movies/popular', { params: { page } });
+  const { data } = await api.get("/api/movies/popular", { params: { page } });
   return data;
 }
 
@@ -21,7 +21,7 @@ export async function getMovieVideos(id: number | string) {
 }
 
 export async function searchMovies(query: string, page = 1) {
-  const { data } = await api.get('/api/movies/search', {
+  const { data } = await api.get("/api/movies/search", {
     params: { q: query, page },
   });
   return data;
