@@ -16,3 +16,8 @@ export async function getTVShowDetails(id: number | string) {
   const { data } = await api.get(`/api/tv/${id}`);
   return data;
 }
+
+export async function getTVShowVideos(id: number | string) {
+  const { data } = await api.get(`/api/tv/${id}/videos`);
+  return data;
+}

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getMovieDetails } from "../api/movies";
 import { getPosterUrl, getBackdropUrl } from "../utils/tmdb";
+import { TrailerSection } from "../components/TrailerSection";
 
 interface MovieDetails {
   id: number;
@@ -210,6 +211,9 @@ export function MovieDetailPage() {
             </button>
           </div>
         </div>
+        {id && (
+          <TrailerSection id={id} mediaType="movie" />
+        )}
       </div>
     </div>
   );

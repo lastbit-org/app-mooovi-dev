@@ -45,6 +45,13 @@ export async function getMovieDetails(id: number | string) {
   return data;
 }
 
+export async function getMovieVideos(id: number | string, language?: string) {
+  const { data } = await tmdbClient.get(`/movie/${id}/videos`, {
+    params: { language },
+  });
+  return data;
+}
+
 export async function searchMovies(query: string, page = 1, language?: string) {
   const { data } = await tmdbClient.get("/search/movie", {
     params: { query, page, language },
@@ -71,6 +78,13 @@ export async function getTrendingTVShows(
 
 export async function getTVShowDetails(id: number | string, language?: string) {
   const { data } = await tmdbClient.get(`/tv/${id}`, {
+    params: { language },
+  });
+  return data;
+}
+
+export async function getTVShowVideos(id: number | string, language?: string) {
+  const { data } = await tmdbClient.get(`/tv/${id}/videos`, {
     params: { language },
   });
   return data;

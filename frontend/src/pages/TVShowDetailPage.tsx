@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getTVShowDetails } from "../api/tv";
 import { getPosterUrl, getBackdropUrl } from "../utils/tmdb";
+import { TrailerSection } from "../components/TrailerSection";
 
 interface TVShowDetails {
   id: number;
@@ -209,6 +210,9 @@ export function TVShowDetailPage() {
             </button>
           </div>
         </div>
+        {id && (
+          <TrailerSection id={id} mediaType="tv" />
+        )}
       </div>
     </div>
   );

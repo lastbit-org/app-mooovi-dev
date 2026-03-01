@@ -3,6 +3,7 @@ import {
   getPopularTVShows,
   getTrendingTVShows,
   getTVShowDetails,
+  getTVShowVideos,
 } from "../services/tmdb.js";
 import { handleTmdbError } from "../lib/errorHandler.js";
 import {
@@ -51,6 +52,29 @@ export async function tvRoutes(
       const timeWindow = parseTimeWindow(request.query.time_window);
       const language = parseLanguage(request.query.language);
       const data = await getTrendingTVShows(timeWindow, language);
+      return reply.type("application/json").send(data);
+    } catch (error) {
+      return handleTmdbError(error, reply);
+    }
+  });
+
+  /**
+   * Get TV show videos (trailers, teasers, etc.)
+   * @param request - Fastify request
+   * @param reply - Fastify reply
+   * @returns TV show videos
+   */
+  fastify.get<{
+    Params: { id: string };
+    Querystring: { language?: string };
+  }>("/:id/videos", async (request, reply) => {
+    try {
+      const id = parseId(request.params.id);
+      if (id === null) {
+        return reply.status(400).send({ error: "Invalid id" });
+      }
+      const language = parseLanguage(request.query.language);
+      const data = await getTVShowVideos(id, language);
       return reply.type("application/json").send(data);
     } catch (error) {
       return handleTmdbError(error, reply);
