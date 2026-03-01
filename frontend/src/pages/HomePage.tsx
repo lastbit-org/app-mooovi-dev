@@ -113,12 +113,6 @@ export function HomePage() {
           items={upcomingMovies}
           mediaType="movie"
         />
-        <MovieCarousel
-          title="Filmes em Alta"
-          icon="🔥"
-          items={popularMovies.slice(1)}
-          mediaType="movie"
-        />
         <section className="home-grid-section">
           <h2 className="home-grid-title">
             <span className="carousel-icon">🔥</span>

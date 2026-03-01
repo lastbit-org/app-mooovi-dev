@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { MovieCarousel } from "../components/MovieCarousel";
 import { MovieCard } from "../components/MovieCard";
-import { getUpcomingMovies, getPopularMovies } from "../api/movies";
+import { getPopularMovies } from "../api/movies";
 
 interface Movie {
   id: number;
@@ -22,7 +22,6 @@ export function MoviesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const gridPage = parsePageParam(searchParams.get("page"));
 
-  const [upcomingMovies, setUpcomingMovies] = useState<Movie[]>([]);
   const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
   const [gridMovies, setGridMovies] = useState<Movie[]>([]);
   const [gridTotalPages, setGridTotalPages] = useState(1);
@@ -35,11 +34,7 @@ export function MoviesPage() {
       try {
         setLoading(true);
         setError(null);
-        const [upcomingRes, popularRes] = await Promise.all([
-          getUpcomingMovies(1),
-          getPopularMovies(1),
-        ]);
-        setUpcomingMovies(upcomingRes.results ?? []);
+        const popularRes = await getPopularMovies(1);
         setPopularMovies(popularRes.results ?? []);
       } catch (err) {
         setError(
@@ -96,12 +91,6 @@ export function MoviesPage() {
           title="Em Destaque"
           icon="🌟"
           items={popularMovies}
-          mediaType="movie"
-        />
-        <MovieCarousel
-          title="Próximas Estreias"
-          icon="📅"
-          items={upcomingMovies}
           mediaType="movie"
         />
         <section className="home-grid-section">

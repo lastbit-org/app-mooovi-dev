@@ -23,7 +23,6 @@ export function TVShowsPage() {
   const gridPage = parsePageParam(searchParams.get("page"));
 
   const [trendingShows, setTrendingShows] = useState<TVShow[]>([]);
-  const [popularShows, setPopularShows] = useState<TVShow[]>([]);
   const [gridShows, setGridShows] = useState<TVShow[]>([]);
   const [gridTotalPages, setGridTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -35,12 +34,8 @@ export function TVShowsPage() {
       try {
         setLoading(true);
         setError(null);
-        const [trendingRes, popularRes] = await Promise.all([
-          getTrendingTVShows("week"),
-          getPopularTVShows(1),
-        ]);
+        const trendingRes = await getTrendingTVShows("week");
         setTrendingShows(trendingRes.results ?? []);
-        setPopularShows(popularRes.results ?? []);
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "Falha ao carregar séries",
@@ -79,7 +74,7 @@ export function TVShowsPage() {
     );
   }
 
-  if (error && popularShows.length === 0) {
+  if (error && trendingShows.length === 0) {
     return <p className="error">❌ {error}</p>;
   }
 
@@ -94,12 +89,6 @@ export function TVShowsPage() {
           title="Bombando na Semana"
           icon="⚡"
           items={trendingShows}
-          mediaType="tv"
-        />
-        <MovieCarousel
-          title="Séries Populares"
-          icon="📺"
-          items={popularShows}
           mediaType="tv"
         />
         <section className="home-grid-section">
