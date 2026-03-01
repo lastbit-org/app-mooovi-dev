@@ -29,6 +29,68 @@ function StarIcon() {
   );
 }
 
+function ClockIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      width="1rem"
+      height="1rem"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 6 12 12 16 14" />
+    </svg>
+  );
+}
+
+function CalendarIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      width="1rem"
+      height="1rem"
+    >
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+      <line x1="16" y1="2" x2="16" y2="6" />
+      <line x1="8" y1="2" x2="8" y2="6" />
+      <line x1="3" y1="10" x2="21" y2="10" />
+    </svg>
+  );
+}
+
+function FilmIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      width="1rem"
+      height="1rem"
+    >
+      <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
+      <line x1="7" y1="2" x2="7" y2="22" />
+      <line x1="17" y1="2" x2="17" y2="22" />
+      <line x1="2" y1="12" x2="22" y2="12" />
+      <line x1="2" y1="7" x2="7" y2="7" />
+      <line x1="2" y1="17" x2="7" y2="17" />
+      <line x1="17" y1="17" x2="22" y2="17" />
+      <line x1="17" y1="7" x2="22" y2="7" />
+    </svg>
+  );
+}
+
 export function MovieDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [movie, setMovie] = useState<MovieDetails | null>(null);
@@ -55,11 +117,20 @@ export function MovieDetailPage() {
   }, [id]);
 
   if (loading) {
-    return <p className="loading">Carregando filme........</p>;
+    return (
+      <div className="loading">
+        <div className="spinner"></div>
+        <p>Preparando a sala de cinema...</p>
+      </div>
+    );
   }
 
   if (error || !movie) {
-    return <p className="error">{error ?? "Filme não encontrado"}</p>;
+    return (
+      <div className="error">
+        <p>🎬 {error ?? "Filme não encontrado"}</p>
+      </div>
+    );
   }
 
   const year = movie.release_date
@@ -70,54 +141,72 @@ export function MovieDetailPage() {
 
   return (
     <div className="detail-page">
-      {backdropUrl && (
-        <div
-          className="detail-backdrop"
-          style={{ backgroundImage: `url(${backdropUrl})` }}
-          aria-hidden
-        />
-      )}
+      <div
+        className="detail-backdrop"
+        style={{
+          backgroundImage: backdropUrl ? `url(${backdropUrl})` : "none",
+        }}
+        aria-hidden
+      />
       <div className="detail-content">
         <img
           src={getPosterUrl(movie.poster_path)}
           alt={movie.title}
           className="detail-poster"
+          loading="lazy"
         />
         <div className="detail-info">
           <h1 className="detail-title">{movie.title}</h1>
+
           <div className="detail-meta">
-            {year && <span>{year}</span>}
-            {genreNames && <span>{genreNames}</span>}
+            {year && (
+              <div className="detail-meta-item">
+                <CalendarIcon />
+                <span>{year}</span>
+              </div>
+            )}
+            {genreNames && (
+              <div className="detail-meta-item">
+                <FilmIcon />
+                <span>{genreNames}</span>
+              </div>
+            )}
             {movie.runtime && (
-              <span>
-                {Math.floor(movie.runtime / 60)}h {movie.runtime % 60}min
-              </span>
+              <div className="detail-meta-item">
+                <ClockIcon />
+                <span>
+                  {Math.floor(movie.runtime / 60)}h {movie.runtime % 60}min
+                </span>
+              </div>
             )}
           </div>
+
           <div className="detail-rating">
             <StarIcon />
             <span>{movie.vote_average.toFixed(1)}</span>
             <span className="detail-vote-count">
-              ({movie.vote_count} avaliações)
+              • {movie.vote_count.toLocaleString("pt-BR")} avaliações
             </span>
           </div>
+
           {movie.overview && (
             <p className="detail-overview">{movie.overview}</p>
           )}
+
           <div className="detail-actions">
             <button
               type="button"
               className="detail-btn detail-btn-watch-later"
               onClick={() => {}}
             >
-              Ver depois
+              <span>📌</span> Ver depois
             </button>
             <button
               type="button"
               className="detail-btn detail-btn-watched"
               onClick={() => {}}
             >
-              Já vi
+              <span>✅</span> Já vi
             </button>
           </div>
         </div>
