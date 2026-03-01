@@ -25,6 +25,13 @@ export async function getMovieCredits(id: number | string) {
   return data;
 }
 
+export async function getSimilarMovies(id: number | string, page = 1) {
+  const { data } = await api.get(`/api/movies/${id}/similar`, {
+    params: { page },
+  });
+  return data;
+}
+
 export async function searchMovies(query: string, page = 1) {
   const { data } = await api.get("/api/movies/search", {
     params: { q: query, page },

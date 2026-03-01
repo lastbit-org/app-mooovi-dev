@@ -26,3 +26,10 @@ export async function getTVShowCredits(id: number | string) {
   const { data } = await api.get(`/api/tv/${id}/credits`);
   return data;
 }
+
+export async function getSimilarTVShows(id: number | string, page = 1) {
+  const { data } = await api.get(`/api/tv/${id}/similar`, {
+    params: { page },
+  });
+  return data;
+}

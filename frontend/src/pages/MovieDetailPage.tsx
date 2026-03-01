@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Star, Clock, Calendar, Film, BookmarkPlus, Check } from "lucide-react";
-import { getMovieDetails, getMovieCredits } from "../api/movies";
+import { getMovieDetails, getMovieCredits, getSimilarMovies } from "../api/movies";
 import { getPosterUrl, getBackdropUrl } from "../utils/tmdb";
 import { TrailerSection } from "../components/TrailerSection";
+import { MovieCarousel } from "../components/MovieCarousel";
 
 interface MovieDetails {
   id: number;
@@ -27,6 +28,9 @@ export function MovieDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [movie, setMovie] = useState<MovieDetails | null>(null);
   const [credits, setCredits] = useState<Credits | null>(null);
+  const [similarMovies, setSimilarMovies] = useState<
+    { id: number; poster_path: string | null; vote_average: number; vote_count: number; title?: string }[]
+  >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -66,6 +70,27 @@ export function MovieDetailPage() {
       }
     }
     fetchCredits();
+  }, [id]);
+
+  useEffect(() => {
+    if (!id) return;
+    const currentId = id;
+    async function fetchSimilar() {
+      try {
+        const data = await getSimilarMovies(currentId);
+        const results = (data?.results ?? []) as {
+          id: number;
+          poster_path: string | null;
+          vote_average: number;
+          vote_count: number;
+          title?: string;
+        }[];
+        setSimilarMovies(results);
+      } catch {
+        setSimilarMovies([]);
+      }
+    }
+    fetchSimilar();
   }, [id]);
 
   if (loading) {
@@ -181,6 +206,16 @@ export function MovieDetailPage() {
         </div>
         {id && (
           <TrailerSection id={id} mediaType="movie" />
+        )}
+        {similarMovies.length > 0 && (
+          <div className="detail-similar">
+            <MovieCarousel
+              title="Títulos Similares"
+              icon="🎬"
+              items={similarMovies}
+              mediaType="movie"
+            />
+          </div>
         )}
       </div>
     </div>

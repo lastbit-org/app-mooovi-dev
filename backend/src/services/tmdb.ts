@@ -59,6 +59,17 @@ export async function getMovieCredits(id: number | string, language?: string) {
   return data;
 }
 
+export async function getSimilarMovies(
+  id: number | string,
+  page = 1,
+  language?: string,
+) {
+  const { data } = await tmdbClient.get(`/movie/${id}/similar`, {
+    params: { page, language },
+  });
+  return data;
+}
+
 export async function searchMovies(query: string, page = 1, language?: string) {
   const { data } = await tmdbClient.get("/search/movie", {
     params: { query, page, language },
@@ -126,6 +137,17 @@ export async function getTVShowCredits(
 ) {
   const { data } = await tmdbClient.get(`/tv/${id}/credits`, {
     params: { language },
+  });
+  return data;
+}
+
+export async function getSimilarTVShows(
+  id: number | string,
+  page = 1,
+  language?: string,
+) {
+  const { data } = await tmdbClient.get(`/tv/${id}/similar`, {
+    params: { page, language },
   });
   return data;
 }

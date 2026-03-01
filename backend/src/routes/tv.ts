@@ -5,6 +5,7 @@ import {
   getTVShowDetails,
   getTVShowVideos,
   getTVShowCredits,
+  getSimilarTVShows,
 } from "../services/tmdb.js";
 import { handleTmdbError } from "../lib/errorHandler.js";
 import {
@@ -53,6 +54,33 @@ export async function tvRoutes(
       const timeWindow = parseTimeWindow(request.query.time_window);
       const language = parseLanguage(request.query.language);
       const data = await getTrendingTVShows(timeWindow, language);
+      return reply.type("application/json").send(data);
+    } catch (error) {
+      return handleTmdbError(error, reply);
+    }
+  });
+
+  /**
+   * Get similar TV shows
+   * @param request - Fastify request
+   * @param reply - Fastify reply
+   * @returns Similar TV shows
+   */
+  fastify.get<{
+    Params: { id: string };
+    Querystring: { page?: string; language?: string };
+  }>("/:id/similar", async (request, reply) => {
+    try {
+      const id = parseId(request.params.id);
+      if (id === null) {
+        return reply.status(400).send({ error: "Invalid id" });
+      }
+      const page = parsePage(request.query.page);
+      if (page === null) {
+        return reply.status(400).send({ error: "Invalid page" });
+      }
+      const language = parseLanguage(request.query.language);
+      const data = await getSimilarTVShows(id, page, language);
       return reply.type("application/json").send(data);
     } catch (error) {
       return handleTmdbError(error, reply);
@@ -117,10 +145,6 @@ export async function tvRoutes(
   }>("/:id", async (request, reply) => {
     try {
       const id = parseId(request.params.id);
-      if (id === null) {
-        return reply.status(400).send({ error: "Invalid id" });
-      }
-
       if (id === null) {
         return reply.status(400).send({ error: "Invalid id" });
       }

@@ -4,6 +4,7 @@ import {
   getMovieDetails,
   getMovieVideos,
   getMovieCredits,
+  getSimilarMovies,
   searchMovies,
   getUpcomingMovies,
 } from "../services/tmdb.js";
@@ -85,6 +86,33 @@ export async function moviesRoutes(
       }
       const language = parseLanguage(request.query.language);
       const data = await searchMovies(q, page, language);
+      return reply.type("application/json").send(data);
+    } catch (error) {
+      return handleTmdbError(error, reply);
+    }
+  });
+
+  /**
+   * Get similar movies
+   * @param request - Fastify request
+   * @param reply - Fastify reply
+   * @returns Similar movies
+   */
+  fastify.get<{
+    Params: { id: string };
+    Querystring: { page?: string; language?: string };
+  }>("/:id/similar", async (request, reply) => {
+    try {
+      const id = parseId(request.params.id);
+      if (id === null) {
+        return reply.status(400).send({ error: "Invalid id" });
+      }
+      const page = parsePage(request.query.page);
+      if (page === null) {
+        return reply.status(400).send({ error: "Invalid page" });
+      }
+      const language = parseLanguage(request.query.language);
+      const data = await getSimilarMovies(id, page, language);
       return reply.type("application/json").send(data);
     } catch (error) {
       return handleTmdbError(error, reply);

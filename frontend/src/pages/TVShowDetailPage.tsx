@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Star, Calendar, Tv, Film, BookmarkPlus, Check } from "lucide-react";
-import { getTVShowDetails, getTVShowCredits } from "../api/tv";
+import { getTVShowDetails, getTVShowCredits, getSimilarTVShows } from "../api/tv";
 import { getPosterUrl, getBackdropUrl } from "../utils/tmdb";
 import { TrailerSection } from "../components/TrailerSection";
+import { MovieCarousel } from "../components/MovieCarousel";
 
 interface TVShowDetails {
   id: number;
@@ -27,6 +28,9 @@ export function TVShowDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [show, setShow] = useState<TVShowDetails | null>(null);
   const [credits, setCredits] = useState<Credits | null>(null);
+  const [similarShows, setSimilarShows] = useState<
+    { id: number; poster_path: string | null; vote_average: number; vote_count: number; title?: string; name?: string }[]
+  >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -80,6 +84,28 @@ export function TVShowDetailPage() {
       }
     }
     fetchCredits();
+  }, [id]);
+
+  useEffect(() => {
+    if (!id) return;
+    const currentId = id;
+    async function fetchSimilar() {
+      try {
+        const data = await getSimilarTVShows(currentId);
+        const results = (data?.results ?? []) as {
+          id: number;
+          poster_path: string | null;
+          vote_average: number;
+          vote_count: number;
+          title?: string;
+          name?: string;
+        }[];
+        setSimilarShows(results);
+      } catch {
+        setSimilarShows([]);
+      }
+    }
+    fetchSimilar();
   }, [id]);
 
   if (loading) {
@@ -194,6 +220,16 @@ export function TVShowDetailPage() {
         </div>
         {id && (
           <TrailerSection id={id} mediaType="tv" />
+        )}
+        {similarShows.length > 0 && (
+          <div className="detail-similar">
+            <MovieCarousel
+              title="Séries Similares"
+              icon="📺"
+              items={similarShows}
+              mediaType="tv"
+            />
+          </div>
         )}
       </div>
     </div>

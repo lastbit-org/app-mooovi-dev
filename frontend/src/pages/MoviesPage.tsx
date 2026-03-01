@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { MovieCarousel } from "../components/MovieCarousel";
 import { MovieCard } from "../components/MovieCard";
 import { getPopularMovies } from "../api/movies";
+import { getTrendingAll } from "../api/trending";
 
 interface Movie {
   id: number;
@@ -10,6 +11,16 @@ interface Movie {
   poster_path: string | null;
   vote_average: number;
   vote_count: number;
+}
+
+interface TrendingItem {
+  id: number;
+  media_type: string;
+  poster_path: string | null;
+  vote_average: number;
+  vote_count: number;
+  title?: string;
+  name?: string;
 }
 
 function parsePageParam(value: string | null): number {
@@ -22,7 +33,7 @@ export function MoviesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const gridPage = parsePageParam(searchParams.get("page"));
 
-  const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
+  const [trendingMovies, setTrendingMovies] = useState<Movie[]>([]);
   const [gridMovies, setGridMovies] = useState<Movie[]>([]);
   const [gridTotalPages, setGridTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -30,12 +41,22 @@ export function MoviesPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchMovies() {
+    async function fetchFeatured() {
       try {
         setLoading(true);
         setError(null);
-        const popularRes = await getPopularMovies(1);
-        setPopularMovies(popularRes.results ?? []);
+        const res = await getTrendingAll("week", 1);
+        const raw = (res?.results ?? []) as TrendingItem[];
+        const filtered = raw
+          .filter((r) => r.media_type === "movie")
+          .map(({ id, poster_path, vote_average, vote_count, title, name }) => ({
+            id,
+            poster_path,
+            vote_average,
+            vote_count,
+            title: title ?? name ?? "",
+          }));
+        setTrendingMovies(filtered);
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "Falha ao carregar filmes",
@@ -44,7 +65,7 @@ export function MoviesPage() {
         setLoading(false);
       }
     }
-    fetchMovies();
+    fetchFeatured();
   }, []);
 
   useEffect(() => {
@@ -74,7 +95,7 @@ export function MoviesPage() {
     );
   }
 
-  if (error && popularMovies.length === 0) {
+  if (error && trendingMovies.length === 0) {
     return <p className="error">❌ {error}</p>;
   }
 
@@ -90,7 +111,7 @@ export function MoviesPage() {
         <MovieCarousel
           title="Em Destaque"
           icon="🌟"
-          items={popularMovies}
+          items={trendingMovies}
           mediaType="movie"
         />
         <section className="home-grid-section">

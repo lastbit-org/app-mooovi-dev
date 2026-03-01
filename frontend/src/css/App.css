@@ -1116,6 +1116,17 @@
   margin-top: 0.5rem;
 }
 
+.detail-similar {
+  flex: 1 1 100%;
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.detail-similar .carousel-section {
+  padding: 0;
+  margin-bottom: 0;
+}
+
 .detail-trailer-header {
   display: flex;
   align-items: center;
