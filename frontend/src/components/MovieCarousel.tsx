@@ -1,5 +1,5 @@
-import { useRef } from 'react';
-import { MovieCard } from './MovieCard';
+import { useRef } from "react";
+import { MovieCard } from "./MovieCard";
 
 export interface CarouselItem {
   id: number;
@@ -14,18 +14,23 @@ interface MovieCarouselProps {
   title: string;
   icon: string;
   items: CarouselItem[];
-  mediaType: 'movie' | 'tv';
+  mediaType: "movie" | "tv";
 }
 
-export function MovieCarousel({ title, icon, items, mediaType }: MovieCarouselProps) {
+export function MovieCarousel({
+  title,
+  icon,
+  items,
+  mediaType,
+}: MovieCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const scroll = (direction: 'left' | 'right') => {
+  const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
-    const scrollAmount = 340;
+    const scrollAmount = 600;
     scrollRef.current.scrollBy({
-      left: direction === 'left' ? -scrollAmount : scrollAmount,
-      behavior: 'smooth',
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
     });
   };
 
@@ -37,11 +42,41 @@ export function MovieCarousel({ title, icon, items, mediaType }: MovieCarouselPr
           {title}
         </h2>
         <div className="carousel-nav">
-          <button type="button" onClick={() => scroll('left')} aria-label="Scroll left">
-            ←
+          <button
+            type="button"
+            onClick={() => scroll("left")}
+            aria-label="Anterior"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              width="1.2rem"
+              height="1.2rem"
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
           </button>
-          <button type="button" onClick={() => scroll('right')} aria-label="Scroll right">
-            →
+          <button
+            type="button"
+            onClick={() => scroll("right")}
+            aria-label="Próximo"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              width="1.2rem"
+              height="1.2rem"
+            >
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
           </button>
         </div>
       </div>
@@ -52,7 +87,7 @@ export function MovieCarousel({ title, icon, items, mediaType }: MovieCarouselPr
             id={item.id}
             mediaType={mediaType}
             posterPath={item.poster_path}
-            title={item.title ?? item.name ?? ''}
+            title={item.title ?? item.name ?? ""}
             rating={item.vote_average}
             voteCount={item.vote_count}
           />

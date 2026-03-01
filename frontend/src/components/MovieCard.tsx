@@ -1,9 +1,9 @@
-import { Link } from 'react-router-dom';
-import { getPosterUrl } from '../utils/tmdb';
+import { Link } from "react-router-dom";
+import { getPosterUrl } from "../utils/tmdb";
 
 interface MovieCardProps {
   id: number;
-  mediaType: 'movie' | 'tv';
+  mediaType: "movie" | "tv";
   posterPath: string | null;
   title: string;
   rating: number;
@@ -43,7 +43,10 @@ export function MovieCard({
   voteCount,
 }: MovieCardProps) {
   return (
-    <Link to={mediaType === 'movie' ? `/movies/${id}` : `/tv/${id}`} className="movie-card">
+    <Link
+      to={mediaType === "movie" ? `/movies/${id}` : `/tv/${id}`}
+      className="movie-card"
+    >
       <div className="movie-card-poster-wrap">
         <img
           src={getPosterUrl(posterPath)}
@@ -54,7 +57,7 @@ export function MovieCard({
         <div className="movie-card-actions">
           <button
             type="button"
-            className="movie-card-btn movie-card-btn-watch-later"
+            className="movie-card-btn"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -65,7 +68,7 @@ export function MovieCard({
           </button>
           <button
             type="button"
-            className="movie-card-btn movie-card-btn-watched"
+            className="movie-card-btn"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -79,7 +82,7 @@ export function MovieCard({
       <div className="movie-card-rating">
         <StarIcon />
         <span>{rating.toFixed(1)}</span>
-        <span>{voteCount} reviews</span>
+        <span>• {voteCount.toLocaleString("pt-BR")} avaliações</span>
       </div>
       <h3 className="movie-card-title">{title}</h3>
     </Link>
