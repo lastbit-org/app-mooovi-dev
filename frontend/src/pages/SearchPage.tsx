@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { Search } from "lucide-react";
 import { searchMulti } from "../api/search";
 import { MovieCard } from "../components/MovieCard";
 
@@ -11,22 +12,6 @@ interface SearchResult {
   vote_count: number;
   title?: string;
   name?: string;
-}
-
-function SearchIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      width="1.25rem"
-      height="1.25rem"
-    >
-      <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.35-4.35" />
-    </svg>
-  );
 }
 
 function parsePageParam(value: string | null): number {
@@ -115,7 +100,7 @@ export function SearchPage() {
         <h1 className="search-title">Buscar</h1>
         <form className="search-form" onSubmit={handleSubmit}>
           <div className="search-input-wrap">
-            <SearchIcon />
+            <Search size={20} />
             <input
               type="search"
               value={inputValue}
@@ -135,7 +120,7 @@ export function SearchPage() {
       <div className="search-content">
         {!searchQuery && (
           <div className="search-empty-state">
-            <SearchIcon />
+            <Search size={20} />
             <p>Digite algo para buscar filmes e séries</p>
           </div>
         )}

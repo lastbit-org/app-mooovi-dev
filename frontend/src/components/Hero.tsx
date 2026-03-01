@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Play, Info } from "lucide-react";
 import { getBackdropUrl } from "../utils/tmdb";
 
 interface HeroProps {
@@ -10,33 +11,6 @@ interface HeroProps {
     backdrop_path: string | null;
   };
   mediaType: "movie" | "tv";
-}
-
-function PlayIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" width="1.5rem" height="1.5rem">
-      <path d="M8 5v14l11-7z" />
-    </svg>
-  );
-}
-
-function InfoIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      width="1.5rem"
-      height="1.5rem"
-    >
-      <circle cx="12" cy="12" r="10" />
-      <line x1="12" y1="16" x2="12" y2="12" />
-      <line x1="12" y1="8" x2="12.01" y2="8" />
-    </svg>
-  );
 }
 
 export function Hero({ movie, mediaType }: HeroProps) {
@@ -61,10 +35,10 @@ export function Hero({ movie, mediaType }: HeroProps) {
             }
             className="hero-btn hero-btn-primary"
           >
-            <PlayIcon /> Assistir Agora
+            <Play size={24} fill="currentColor" /> Assistir Agora
           </Link>
           <button type="button" className="hero-btn hero-btn-secondary">
-            <InfoIcon /> Detalhes
+            <Info size={24} /> Detalhes
           </button>
         </div>
       </div>

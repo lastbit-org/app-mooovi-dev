@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Star, Calendar, Tv, Film, BookmarkPlus, Check } from "lucide-react";
 import { getTVShowDetails, getTVShowCredits } from "../api/tv";
 import { getPosterUrl, getBackdropUrl } from "../utils/tmdb";
 import { TrailerSection } from "../components/TrailerSection";
@@ -15,81 +16,6 @@ interface TVShowDetails {
   vote_count: number;
   number_of_seasons: number;
   genres: { id: number; name: string }[];
-}
-
-function StarIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      width="1.25rem"
-      height="1.25rem"
-    >
-      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-    </svg>
-  );
-}
-
-function CalendarIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      width="1rem"
-      height="1rem"
-    >
-      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-      <line x1="16" y1="2" x2="16" y2="6" />
-      <line x1="8" y1="2" x2="8" y2="6" />
-      <line x1="3" y1="10" x2="21" y2="10" />
-    </svg>
-  );
-}
-
-function TVIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      width="1rem"
-      height="1rem"
-    >
-      <rect x="2" y="7" width="20" height="15" rx="2" ry="2" />
-      <polyline points="17 2 12 7 7 2" />
-    </svg>
-  );
-}
-
-function FilmIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      width="1rem"
-      height="1rem"
-    >
-      <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
-      <line x1="7" y1="2" x2="7" y2="22" />
-      <line x1="17" y1="2" x2="17" y2="22" />
-      <line x1="2" y1="12" x2="22" y2="12" />
-      <line x1="2" y1="7" x2="7" y2="7" />
-      <line x1="2" y1="17" x2="7" y2="17" />
-      <line x1="17" y1="17" x2="22" y2="17" />
-      <line x1="17" y1="7" x2="22" y2="7" />
-    </svg>
-  );
 }
 
 interface Credits {
@@ -201,19 +127,19 @@ export function TVShowDetailPage() {
           <div className="detail-meta">
             {year && (
               <div className="detail-meta-item">
-                <CalendarIcon />
+                <Calendar size={16} />
                 <span>{year}</span>
               </div>
             )}
             {genreNames && (
               <div className="detail-meta-item">
-                <FilmIcon />
+                <Film size={16} />
                 <span>{genreNames}</span>
               </div>
             )}
             {show.number_of_seasons > 0 && (
               <div className="detail-meta-item">
-                <TVIcon />
+                <Tv size={16} />
                 <span>
                   {show.number_of_seasons} temporada
                   {show.number_of_seasons !== 1 ? "s" : ""}
@@ -223,7 +149,7 @@ export function TVShowDetailPage() {
           </div>
 
           <div className="detail-rating">
-            <StarIcon />
+            <Star size={20} fill="currentColor" />
             <span>{show.vote_average.toFixed(1)}</span>
             <span className="detail-vote-count">
               • {show.vote_count.toLocaleString("pt-BR")} avaliações
@@ -255,14 +181,14 @@ export function TVShowDetailPage() {
               className="detail-btn detail-btn-watch-later"
               onClick={() => {}}
             >
-              <span>📌</span> Ver depois
+              <BookmarkPlus size={18} /> Ver depois
             </button>
             <button
               type="button"
               className="detail-btn detail-btn-watched"
               onClick={() => {}}
             >
-              <span>✅</span> Já vi
+              <Check size={18} /> Já vi
             </button>
           </div>
         </div>

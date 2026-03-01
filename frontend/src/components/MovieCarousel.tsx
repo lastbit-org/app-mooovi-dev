@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { MovieCard } from "./MovieCard";
 
 export interface CarouselItem {
@@ -47,36 +48,14 @@ export function MovieCarousel({
             onClick={() => scroll("left")}
             aria-label="Anterior"
           >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              width="1.2rem"
-              height="1.2rem"
-            >
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
+            <ChevronLeft size={20} strokeWidth={3} />
           </button>
           <button
             type="button"
             onClick={() => scroll("right")}
             aria-label="Próximo"
           >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              width="1.2rem"
-              height="1.2rem"
-            >
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
+            <ChevronRight size={20} strokeWidth={3} />
           </button>
         </div>
       </div>

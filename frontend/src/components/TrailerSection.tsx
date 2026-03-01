@@ -59,26 +59,24 @@ export function TrailerSection({ id, mediaType }: TrailerSectionProps) {
       <div className="detail-trailer-header">
         <h2 className="detail-trailer-title">Trailer</h2>
         <div className="detail-trailer-nav">
-          {hasPrev && (
-            <button
-              type="button"
-              className="detail-trailer-nav-btn"
-              onClick={() => setCurrentIndex((i) => i - 1)}
-              aria-label="Trailer anterior"
-            >
-              ← Anterior
-            </button>
-          )}
-          {hasNext && (
-            <button
-              type="button"
-              className="detail-trailer-nav-btn"
-              onClick={() => setCurrentIndex((i) => i + 1)}
-              aria-label="Próximo trailer"
-            >
-              Próximo →
-            </button>
-          )}
+          <button
+            type="button"
+            className="detail-trailer-nav-btn"
+            disabled={!hasPrev}
+            onClick={() => setCurrentIndex((i) => i - 1)}
+            aria-label="Trailer anterior"
+          >
+            ← Anterior
+          </button>
+          <button
+            type="button"
+            className="detail-trailer-nav-btn"
+            disabled={!hasNext}
+            onClick={() => setCurrentIndex((i) => i + 1)}
+            aria-label="Próximo trailer"
+          >
+            Próximo →
+          </button>
         </div>
       </div>
       <div className="detail-trailer-wrap">

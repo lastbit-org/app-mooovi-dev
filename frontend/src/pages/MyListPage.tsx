@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { Star, Search } from "lucide-react";
 import { getPosterUrl } from "../utils/tmdb";
 
 interface ListItem {
@@ -214,14 +215,6 @@ const TAB_DATA: Record<
   "watched-tv": { items: WATCHED_TV, mediaType: "tv" },
 };
 
-function StarIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" width="1rem" height="1rem">
-      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-    </svg>
-  );
-}
-
 export function MyListPage() {
   const [activeTab, setActiveTab] = useState<TabId>("watch-later-movies");
   const { items, mediaType } = TAB_DATA[activeTab];
@@ -292,7 +285,7 @@ export function MyListPage() {
                 </Link>
                 <div className="mylist-card-meta">
                   <span className="mylist-card-rating">
-                    <StarIcon />
+                    <Star size={14} fill="currentColor" />
                     {item.vote_average.toFixed(1)}
                   </span>
                   <span className="mylist-card-year">
@@ -306,7 +299,7 @@ export function MyListPage() {
       ) : (
         <div className="mylist-empty">
           <span className="mylist-empty-icon" aria-hidden>
-            🔍
+            <Search size={48} strokeWidth={1.5} />
           </span>
           <p className="mylist-empty-text">
             Sua lista está vazia por enquanto.

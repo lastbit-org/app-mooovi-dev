@@ -1,57 +1,6 @@
 import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-
-function SearchIcon() {
-  return (
-    <svg
-      className="search-icon"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-    >
-      <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.35-4.35" />
-    </svg>
-  );
-}
-
-function MenuIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      width="24"
-      height="24"
-    >
-      <line x1="3" y1="12" x2="21" y2="12" />
-      <line x1="3" y1="6" x2="21" y2="6" />
-      <line x1="3" y1="18" x2="21" y2="18" />
-    </svg>
-  );
-}
-
-function CloseIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      width="24"
-      height="24"
-    >
-      <line x1="18" y1="6" x2="6" y2="18" />
-      <line x1="6" y1="6" x2="18" y2="18" />
-    </svg>
-  );
-}
+import { Search, Menu, X } from "lucide-react";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -78,7 +27,7 @@ export function Header() {
         onClick={() => setIsMenuOpen(!isMenuOpen)}
         aria-label={isMenuOpen ? "Fechar menu" : "Abrir menu"}
       >
-        {isMenuOpen ? <CloseIcon /> : <MenuIcon />}
+        {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
       <nav className={`header-nav ${isMenuOpen ? "active" : ""}`}>
@@ -123,7 +72,7 @@ export function Header() {
 
       <div className="header-right">
         <form className="search-bar" onSubmit={handleSearchSubmit}>
-          <SearchIcon />
+          <Search className="search-icon" size={20} />
           <input
             type="search"
             placeholder="Buscar..."

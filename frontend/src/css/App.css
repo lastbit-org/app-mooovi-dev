@@ -1054,9 +1054,14 @@
   transition: color 0.2s, background 0.2s;
 }
 
-.detail-trailer-nav-btn:hover {
+.detail-trailer-nav-btn:hover:not(:disabled) {
   color: var(--text-primary);
   background: rgba(255, 255, 255, 0.1);
+}
+
+.detail-trailer-nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .detail-trailer-wrap {
