@@ -59,6 +59,18 @@ export async function searchMovies(query: string, page = 1, language?: string) {
   return data;
 }
 
+export async function searchMulti(
+  query: string,
+  page = 1,
+  language?: string,
+  includeAdult = false,
+) {
+  const { data } = await tmdbClient.get("/search/multi", {
+    params: { query, page, language, include_adult: includeAdult },
+  });
+  return data;
+}
+
 export async function getPopularTVShows(page = 1, language?: string) {
   const { data } = await tmdbClient.get("/tv/popular", {
     params: { page, language },

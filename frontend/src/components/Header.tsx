@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 function SearchIcon() {
   return (
@@ -55,6 +55,17 @@ function CloseIcon() {
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = searchInput.trim();
+    if (q) {
+      navigate(`/search?q=${encodeURIComponent(q)}`);
+      setIsMenuOpen(false);
+    }
+  };
 
   return (
     <header className="header">
@@ -111,10 +122,16 @@ export function Header() {
       </nav>
 
       <div className="header-right">
-        <div className="search-bar">
+        <form className="search-bar" onSubmit={handleSearchSubmit}>
           <SearchIcon />
-          <input type="search" placeholder="Buscar..." aria-label="Buscar" />
-        </div>
+          <input
+            type="search"
+            placeholder="Buscar..."
+            aria-label="Buscar"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+          />
+        </form>
         <div className="avatar">U</div>
       </div>
     </header>
