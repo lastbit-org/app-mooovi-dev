@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { MovieCarousel } from "../components/MovieCarousel";
 import { MovieCard } from "../components/MovieCard";
 import { getUpcomingMovies, getPopularMovies } from "../api/movies";
@@ -11,11 +12,19 @@ interface Movie {
   vote_count: number;
 }
 
+function parsePageParam(value: string | null): number {
+  if (!value) return 1;
+  const n = parseInt(value, 10);
+  return Number.isNaN(n) || n < 1 ? 1 : Math.min(n, 500);
+}
+
 export function MoviesPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const gridPage = parsePageParam(searchParams.get("page"));
+
   const [upcomingMovies, setUpcomingMovies] = useState<Movie[]>([]);
   const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
   const [gridMovies, setGridMovies] = useState<Movie[]>([]);
-  const [gridPage, setGridPage] = useState(1);
   const [gridTotalPages, setGridTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [gridLoading, setGridLoading] = useState(false);
@@ -126,7 +135,10 @@ export function MoviesPage() {
                     type="button"
                     className="home-grid-page-btn"
                     disabled={gridPage <= 1}
-                    onClick={() => setGridPage((p) => p - 1)}
+                    onClick={() => {
+                      const next = gridPage - 1;
+                      setSearchParams(next === 1 ? {} : { page: String(next) });
+                    }}
                     aria-label="Página anterior"
                   >
                     Anterior
@@ -138,7 +150,9 @@ export function MoviesPage() {
                     type="button"
                     className="home-grid-page-btn"
                     disabled={gridPage >= gridTotalPages}
-                    onClick={() => setGridPage((p) => p + 1)}
+                    onClick={() =>
+                      setSearchParams({ page: String(gridPage + 1) })
+                    }
                     aria-label="Próxima página"
                   >
                     Próxima

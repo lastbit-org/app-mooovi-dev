@@ -29,15 +29,21 @@ function SearchIcon() {
   );
 }
 
+function parsePageParam(value: string | null): number {
+  if (!value) return 1;
+  const n = parseInt(value, 10);
+  return Number.isNaN(n) || n < 1 ? 1 : Math.min(n, 500);
+}
+
 export function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const queryFromUrl = searchParams.get("q") ?? "";
+  const currentPage = parsePageParam(searchParams.get("page"));
   const [inputValue, setInputValue] = useState(queryFromUrl);
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [totalPages, setTotalPages] = useState(1);
-  const [currentPage, setCurrentPage] = useState(1);
 
   const searchQuery = queryFromUrl.trim();
 
@@ -80,7 +86,18 @@ export function SearchPage() {
     e.preventDefault();
     const q = inputValue.trim();
     setSearchParams(q ? { q } : {});
-    setCurrentPage(1);
+  };
+
+  const setPage = (page: number) => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      if (page === 1) {
+        next.delete("page");
+      } else {
+        next.set("page", String(page));
+      }
+      return next;
+    });
   };
 
   const mediaItems = results.map((item) => ({
@@ -165,7 +182,7 @@ export function SearchPage() {
                   type="button"
                   className="search-page-btn"
                   disabled={currentPage <= 1}
-                  onClick={() => setCurrentPage((p) => p - 1)}
+                  onClick={() => setPage(currentPage - 1)}
                 >
                   Anterior
                 </button>
@@ -176,7 +193,7 @@ export function SearchPage() {
                   type="button"
                   className="search-page-btn"
                   disabled={currentPage >= totalPages}
-                  onClick={() => setCurrentPage((p) => p + 1)}
+                  onClick={() => setPage(currentPage + 1)}
                 >
                   Próxima
                 </button>
