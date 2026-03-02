@@ -101,21 +101,11 @@ export function Hero({ movie, mediaType }: HeroProps) {
             type="button"
             className={`hero-btn hero-btn-secondary ${isWatched ? "active" : ""}`}
             onClick={handleWatched}
-            title={isWatched ? "Remover dos Já Vistos" : "Já Vi"}
+            title={isWatched ? "Remover dos Já Vistos" : "Visto"}
           >
             {isWatched ? <Trash2 size={24} /> : <Check size={24} />}
-            <span>{isWatched ? "Já Vi" : "Marcar como visto"}</span>
+            <span>{isWatched ? "Já Vi" : "Visto"}</span>
           </button>
-
-          <Link
-            to={
-              mediaType === "movie" ? `/movies/${movie.id}` : `/tv/${movie.id}`
-            }
-            className="hero-btn hero-btn-secondary"
-          >
-            <Info size={24} />
-            <span>Detalhes</span>
-          </Link>
         </div>
       </div>
     </section>

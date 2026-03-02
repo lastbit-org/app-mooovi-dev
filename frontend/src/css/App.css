@@ -159,7 +159,8 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.login-btn, .logout-btn {
+.login-btn,
+.logout-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -354,6 +355,7 @@
 
 .hero-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 1.25rem;
 }
 
@@ -363,7 +365,7 @@
   gap: 0.75rem;
   padding: 1rem 2rem;
   border-radius: 12px;
-  font-size: 1.1rem;
+  font-size: .9rem;
   font-weight: 700;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -443,12 +445,95 @@
   background: transparent;
   cursor: pointer;
   padding: 0;
-  transition: width 0.25s ease, height 0.25s ease, border-radius 0.25s ease;
+  transition:
+    width 0.25s ease,
+    height 0.25s ease,
+    border-radius 0.25s ease;
 }
 
 .hero-dot:hover {
   background: rgba(255, 255, 255, 0.3);
   border-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Responsive Hero & General */
+@media (max-width: 768px) {
+  .hero {
+    padding: 0 2rem;
+  }
+
+  .hero-title {
+    font-size: 3rem;
+  }
+
+  .hero-description {
+    font-size: 1rem;
+    max-width: 100%;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+  }
+
+  .hero-actions {
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    border-radius: 10px;
+  }
+
+  .hero-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 0 1.5rem;
+  }
+
+  .hero-title {
+    font-size: 2.25rem;
+  }
+
+  .hero-actions {
+    gap: 0.5rem;
+  }
+
+  .hero-btn {
+    padding: 0.6rem 1rem;
+  }
+
+  /* Esconde texto nos botões secundários para caber mais ícones */
+  .hero-btn-secondary span,
+  .login-btn span {
+    display: none;
+  }
+
+  .hero-btn-primary {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 0.25rem;
+  }
+
+  .hero-btn-secondary {
+    flex: 1;
+    justify-content: center;
+    padding: 0.75rem;
+  }
+
+  .login-btn {
+    padding: 0.5rem;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+  }
 }
 
 .hero-dot-active {
@@ -640,12 +725,44 @@
 
 @media (max-width: 768px) {
   .home-grid-section {
-    padding: 0 1rem 3rem;
+    padding: 0 1.25rem 3rem;
   }
 
   .home-grid {
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+  }
+
+  .carousel-nav {
+    display: none; /* Mobile usa touch scroll */
+  }
+
+  .carousel-header, .home-grid-title {
+    margin-bottom: 1.25rem;
+  }
+
+  .carousel-title, .home-grid-title {
+    font-size: 1.25rem;
+  }
+
+  .carousel-section {
+    padding: 0 1.25rem;
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 0 1rem;
+    gap: 0.5rem;
+  }
+
+  .header-logo {
+    font-size: 1.2rem;
+  }
+
+  .search-bar:focus-within {
+    width: 120px;
   }
 }
 
@@ -976,7 +1093,8 @@
   line-height: 1.3;
   display: -webkit-box;
   -webkit-line-clamp: 2;
-  -webkit-box-orien: vertical;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
@@ -1252,7 +1370,9 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 6px;
   cursor: pointer;
-  transition: color 0.2s, background 0.2s;
+  transition:
+    color 0.2s,
+    background 0.2s;
 }
 
 .detail-trailer-nav-btn:hover:not(:disabled) {
@@ -1384,7 +1504,9 @@
 }
 
 /* My List Page – legacy classes kept for safety */
-.mylist-page { display: none; }
+.mylist-page {
+  display: none;
+}
 
 /* ============================================================
    My List Page  – TABLE-BASED REDESIGN
@@ -1653,7 +1775,9 @@
   overflow: hidden;
   flex-shrink: 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .ml-poster-link:hover {
