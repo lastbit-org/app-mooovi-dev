@@ -8,7 +8,6 @@ import { MovieDetailPage } from "./pages/MovieDetailPage";
 import { TVShowDetailPage } from "./pages/TVShowDetailPage";
 import { MyListPage } from "./pages/MyListPage";
 import { SearchPage } from "./pages/SearchPage";
-import { NewPopularPage } from "./pages/NewPopularPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { MovieProvider } from "./context/MovieContext";
 import { AuthProvider } from "./context/AuthContext";
@@ -29,7 +28,6 @@ function App() {
               <Route path="/tv" element={<TVShowsPage />} />
               <Route path="/tv/:id" element={<TVShowDetailPage />} />
               <Route path="/my-list" element={<MyListPage />} />
-              <Route path="/new-popular" element={<NewPopularPage />} />
               <Route path="/search" element={<SearchPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
