@@ -231,16 +231,12 @@ function ProgressRing({ watched, total }: ProgressRingProps) {
           style={{ transition: "stroke-dashoffset 0.6s ease" }}
         />
         {/* Label */}
-        <text x="50" y="46" textAnchor="middle" className="ml-progress-pct">
-          {pct}
-        </text>
-        <text
-          x="50"
-          y="58"
-          textAnchor="middle"
-          className="ml-progress-pct-sign"
-        >
-          %
+        {/* Number + % side by side, sharing the same text baseline */}
+        <text x="50" y="54" textAnchor="middle" dominantBaseline="auto">
+          <tspan className="ml-progress-pct">{pct}</tspan>
+          <tspan className="ml-progress-pct-sign" dx="2">
+            %
+          </tspan>
         </text>
       </svg>
       <div className="ml-progress-legend">
