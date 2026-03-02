@@ -1,70 +1,36 @@
 import { Link } from "react-router-dom";
 import { Play, Info, Plus, Check, BookmarkMinus, Trash2 } from "lucide-react";
 import { getBackdropUrl } from "../utils/tmdb";
-import { useMovieContext, type MovieItem } from "../context/MovieContext";
+import { type MovieItem } from "../context/MovieContext";
+import { useWatchActions } from "../hooks/useWatchActions";
+import type { SimpleMediaItem } from "../types/tmdb";
 
 interface HeroProps {
-  movie: {
-    id: number;
-    title?: string;
-    name?: string;
-    overview: string;
-    backdrop_path: string | null;
-    poster_path: string | null;
-    vote_average: number;
-    vote_count: number;
-  };
+  movie: SimpleMediaItem;
   mediaType: "movie" | "tv";
 }
 
 export function Hero({ movie, mediaType }: HeroProps) {
-  const {
-    isInWatchLater,
-    isInWatched,
-    addToWatchLater,
-    removeFromWatchLater,
-    addToWatched,
-    removeFromWatched,
-  } = useMovieContext();
+  const { isInWatchLater, isInWatched, toggleWatchLater, toggleWatched } =
+    useWatchActions();
 
   const title = movie.title ?? movie.name;
   const backdropUrl = getBackdropUrl(movie.backdrop_path);
   const isLater = isInWatchLater(movie.id, mediaType);
   const isWatched = isInWatched(movie.id, mediaType);
 
-  const handleWatchLater = () => {
-    if (isLater) {
-      removeFromWatchLater(movie.id, mediaType);
-    } else {
-      const item: MovieItem = {
-        id: movie.id,
-        mediaType,
-        poster_path: movie.poster_path,
-        title: movie.title,
-        name: movie.name,
-        vote_average: movie.vote_average,
-        vote_count: movie.vote_count,
-      };
-      addToWatchLater(item);
-    }
+  const item: MovieItem = {
+    id: movie.id,
+    mediaType,
+    poster_path: movie.poster_path,
+    title: movie.title,
+    name: movie.name,
+    vote_average: movie.vote_average,
+    vote_count: movie.vote_count,
   };
 
-  const handleWatched = () => {
-    if (isWatched) {
-      removeFromWatched(movie.id, mediaType);
-    } else {
-      const item: MovieItem = {
-        id: movie.id,
-        mediaType,
-        poster_path: movie.poster_path,
-        title: movie.title,
-        name: movie.name,
-        vote_average: movie.vote_average,
-        vote_count: movie.vote_count,
-      };
-      addToWatched(item);
-    }
-  };
+  const handleWatchLater = () => toggleWatchLater(item);
+  const handleWatched = () => toggleWatched(item);
 
   return (
     <section className="hero">

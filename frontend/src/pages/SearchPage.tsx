@@ -3,22 +3,8 @@ import { useSearchParams } from "react-router-dom";
 import { Search } from "lucide-react";
 import { searchMulti } from "../api/search";
 import { MovieCard } from "../components/MovieCard";
-
-interface SearchResult {
-  id: number;
-  media_type: "movie" | "tv" | "person";
-  poster_path: string | null;
-  vote_average: number;
-  vote_count: number;
-  title?: string;
-  name?: string;
-}
-
-function parsePageParam(value: string | null): number {
-  if (!value) return 1;
-  const n = parseInt(value, 10);
-  return Number.isNaN(n) || n < 1 ? 1 : Math.min(n, 500);
-}
+import { parsePageParam } from "../utils/tmdb";
+import type { SearchResult } from "../types/tmdb";
 
 export function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -50,13 +36,14 @@ export function SearchPage() {
         const data = await searchMulti(searchQuery, currentPage);
         const raw = data?.results ?? [];
         const filtered = raw.filter(
-          (r: SearchResult) => r.media_type === "movie" || r.media_type === "tv"
+          (r: SearchResult) =>
+            r.media_type === "movie" || r.media_type === "tv",
         );
         setResults(filtered);
         setTotalPages(Math.min(data?.total_pages ?? 1, 500));
       } catch (err) {
         setError(
-          err instanceof Error ? err.message : "Falha ao buscar resultados"
+          err instanceof Error ? err.message : "Falha ao buscar resultados",
         );
         setResults([]);
       } finally {

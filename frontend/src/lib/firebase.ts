@@ -12,12 +12,14 @@ const firebaseConfig = {
 
 let app: FirebaseApp | undefined;
 let auth: Auth | undefined;
+let googleProvider: GoogleAuthProvider | undefined;
 
 // Só inicializa se houver apiKey
 if (firebaseConfig.apiKey) {
   try {
     app = initializeApp(firebaseConfig);
     auth = getAuth(app);
+    googleProvider = new GoogleAuthProvider();
   } catch (error) {
     console.error("Erro ao inicializar Firebase:", error);
   }
@@ -27,5 +29,4 @@ if (firebaseConfig.apiKey) {
   );
 }
 
-export { auth };
-export const googleProvider = new GoogleAuthProvider();
+export { auth, googleProvider };

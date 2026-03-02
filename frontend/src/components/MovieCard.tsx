@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { Star, Plus, Check, BookmarkMinus, Trash2 } from "lucide-react";
 import { getPosterUrl } from "../utils/tmdb";
-import { useMovieContext, type MovieItem } from "../context/MovieContext";
+import { type MovieItem } from "../context/MovieContext";
+import { useWatchActions } from "../hooks/useWatchActions";
 
 interface MovieCardProps {
   id: number;
@@ -20,54 +21,32 @@ export function MovieCard({
   rating,
   voteCount,
 }: MovieCardProps) {
-  const {
-    isInWatchLater,
-    isInWatched,
-    addToWatchLater,
-    removeFromWatchLater,
-    addToWatched,
-    removeFromWatched,
-  } = useMovieContext();
+  const { isInWatchLater, isInWatched, toggleWatchLater, toggleWatched } =
+    useWatchActions();
 
   const isLater = isInWatchLater(id, mediaType);
   const isWatched = isInWatched(id, mediaType);
 
+  const item: MovieItem = {
+    id,
+    mediaType,
+    poster_path: posterPath,
+    title: mediaType === "movie" ? title : undefined,
+    name: mediaType === "tv" ? title : undefined,
+    vote_average: rating,
+    vote_count: voteCount,
+  };
+
   const handleWatchLater = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (isLater) {
-      removeFromWatchLater(id, mediaType);
-    } else {
-      const item: MovieItem = {
-        id,
-        mediaType,
-        poster_path: posterPath,
-        title: mediaType === "movie" ? title : undefined,
-        name: mediaType === "tv" ? title : undefined,
-        vote_average: rating,
-        vote_count: voteCount,
-      };
-      addToWatchLater(item);
-    }
+    toggleWatchLater(item);
   };
 
   const handleWatched = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (isWatched) {
-      removeFromWatched(id, mediaType);
-    } else {
-      const item: MovieItem = {
-        id,
-        mediaType,
-        poster_path: posterPath,
-        title: mediaType === "movie" ? title : undefined,
-        name: mediaType === "tv" ? title : undefined,
-        vote_average: rating,
-        vote_count: voteCount,
-      };
-      addToWatched(item);
-    }
+    toggleWatched(item);
   };
 
   return (

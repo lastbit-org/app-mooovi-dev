@@ -17,48 +17,24 @@ import {
 import { getPosterUrl, getBackdropUrl } from "../utils/tmdb";
 import { TrailerSection } from "../components/TrailerSection";
 import { MovieCarousel } from "../components/MovieCarousel";
-import { useMovieContext, type MovieItem } from "../context/MovieContext";
-
-interface MovieDetails {
-  id: number;
-  title: string;
-  overview: string;
-  poster_path: string | null;
-  backdrop_path: string | null;
-  release_date: string;
-  vote_average: number;
-  vote_count: number;
-  runtime: number | null;
-  genres: { id: number; name: string }[];
-}
-
-interface Credits {
-  directors: string[];
-  cast: string[];
-}
+import { type MovieItem } from "../context/MovieContext";
+import { useWatchActions } from "../hooks/useWatchActions";
+import type {
+  MovieDetails,
+  Credits,
+  CarouselCompatibleItem,
+} from "../types/tmdb";
 
 export function MovieDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const {
-    isInWatchLater,
-    isInWatched,
-    addToWatchLater,
-    removeFromWatchLater,
-    addToWatched,
-    removeFromWatched,
-  } = useMovieContext();
+  const { isInWatchLater, isInWatched, toggleWatchLater, toggleWatched } =
+    useWatchActions();
 
   const [movie, setMovie] = useState<MovieDetails | null>(null);
   const [credits, setCredits] = useState<Credits | null>(null);
-  const [similarMovies, setSimilarMovies] = useState<
-    {
-      id: number;
-      poster_path: string | null;
-      vote_average: number;
-      vote_count: number;
-      title?: string;
-    }[]
-  >([]);
+  const [similarMovies, setSimilarMovies] = useState<CarouselCompatibleItem[]>(
+    [],
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -147,41 +123,19 @@ export function MovieDetailPage() {
   const isLater = isInWatchLater(movie.id, "movie");
   const isWatched = isInWatched(movie.id, "movie");
 
-  const handleWatchLaterClick = () => {
-    if (isLater) {
-      removeFromWatchLater(movie.id, "movie");
-    } else {
-      const item: MovieItem = {
-        id: movie.id,
-        title: movie.title,
-        poster_path: movie.poster_path,
-        vote_average: movie.vote_average,
-        vote_count: movie.vote_count,
-        year: year || undefined,
-        genre: genreNames,
-        mediaType: "movie",
-      };
-      addToWatchLater(item);
-    }
+  const movieItem: MovieItem = {
+    id: movie.id,
+    title: movie.title,
+    poster_path: movie.poster_path,
+    vote_average: movie.vote_average,
+    vote_count: movie.vote_count,
+    mediaType: "movie",
+    year: year || undefined,
+    genre: genreNames,
   };
 
-  const handleWatchedClick = () => {
-    if (isWatched) {
-      removeFromWatched(movie.id, "movie");
-    } else {
-      const item: MovieItem = {
-        id: movie.id,
-        title: movie.title,
-        poster_path: movie.poster_path,
-        vote_average: movie.vote_average,
-        vote_count: movie.vote_count,
-        year: year || undefined,
-        genre: genreNames,
-        mediaType: "movie",
-      };
-      addToWatched(item);
-    }
-  };
+  const handleWatchLaterClick = () => toggleWatchLater(movieItem);
+  const handleWatchedClick = () => toggleWatched(movieItem);
 
   return (
     <div className="detail-page">

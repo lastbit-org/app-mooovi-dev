@@ -3,20 +3,8 @@ import { useSearchParams } from "react-router-dom";
 import { MovieCarousel } from "../components/MovieCarousel";
 import { MovieCard } from "../components/MovieCard";
 import { getPopularTVShows, getTrendingTVShows } from "../api/tv";
-
-interface TVShow {
-  id: number;
-  name: string;
-  poster_path: string | null;
-  vote_average: number;
-  vote_count: number;
-}
-
-function parsePageParam(value: string | null): number {
-  if (!value) return 1;
-  const n = parseInt(value, 10);
-  return Number.isNaN(n) || n < 1 ? 1 : Math.min(n, 500);
-}
+import { parsePageParam } from "../utils/tmdb";
+import type { TVShow } from "../types/tmdb";
 
 export function TVShowsPage() {
   const [searchParams, setSearchParams] = useSearchParams();

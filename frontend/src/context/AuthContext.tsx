@@ -41,15 +41,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const loginWithGoogle = async () => {
-    if (!auth) {
+    if (!auth || !googleProvider) {
       alert("Falha na configuração da autenticação.");
       return;
     }
 
     try {
       await signInWithPopup(auth, googleProvider);
-    } catch (error: any) {
-      if (error.code === "auth/unauthorized-domain") {
+    } catch (error: unknown) {
+      const firebaseError = error as { code?: string; message?: string };
+      if (firebaseError.code === "auth/unauthorized-domain") {
         alert(
           "Erro: Este domínio (127.0.0.1) não está autorizado no console do Firebase (Authentication > Settings > Authorized Domains).",
         );

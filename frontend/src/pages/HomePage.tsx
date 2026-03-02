@@ -5,35 +5,11 @@ import { MovieCard } from "../components/MovieCard";
 import { Hero } from "../components/Hero";
 import { getUpcomingMovies, getPopularMovies } from "../api/movies";
 import { getTrendingAll } from "../api/trending";
+import { parsePageParam } from "../utils/tmdb";
+import type { Movie, GridItem, TrendingItem } from "../types/tmdb";
 
 const FEATURED_INTERVAL_MS = 6000;
 const FEATURED_MAX_ITEMS = 6;
-
-interface Movie {
-  id: number;
-  title: string;
-  overview: string;
-  poster_path: string | null;
-  backdrop_path: string | null;
-  vote_average: number;
-  vote_count: number;
-}
-
-interface GridItem {
-  id: number;
-  media_type: "movie" | "tv";
-  poster_path: string | null;
-  vote_average: number;
-  vote_count: number;
-  title?: string;
-  name?: string;
-}
-
-function parsePageParam(value: string | null): number {
-  if (!value) return 1;
-  const n = parseInt(value, 10);
-  return Number.isNaN(n) || n < 1 ? 1 : Math.min(n, 500);
-}
 
 export function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -80,7 +56,7 @@ export function HomePage() {
       setFeaturedIndex(len > 0 ? index % len : 0);
       setIntervalReset((r) => r + 1);
     },
-    [featuredItems.length]
+    [featuredItems.length],
   );
 
   useEffect(() => {
@@ -98,7 +74,8 @@ export function HomePage() {
         const res = await getTrendingAll("week", gridPage);
         const raw = res?.results ?? [];
         const filtered = raw.filter(
-          (r: GridItem) => r.media_type === "movie" || r.media_type === "tv"
+          (r: TrendingItem) =>
+            r.media_type === "movie" || r.media_type === "tv",
         );
         setGridItems(filtered);
         setGridTotalPages(Math.min(res.total_pages ?? 1, 500));
@@ -136,7 +113,11 @@ export function HomePage() {
           onMouseEnter={() => setFeaturedPaused(true)}
           onMouseLeave={() => setFeaturedPaused(false)}
         >
-          <Hero key={featuredMovie.id} movie={featuredMovie} mediaType="movie" />
+          <Hero
+            key={featuredMovie.id}
+            movie={featuredMovie}
+            mediaType="movie"
+          />
           {featuredItems.length > 1 && (
             <div
               className={`hero-dots ${featuredPaused ? "hero-dots-paused" : ""}`}
@@ -158,7 +139,9 @@ export function HomePage() {
                       <span
                         key={featuredIndex}
                         className="hero-dot-fill"
-                        style={{ animationDuration: `${FEATURED_INTERVAL_MS}ms` }}
+                        style={{
+                          animationDuration: `${FEATURED_INTERVAL_MS}ms`,
+                        }}
                       />
                     </span>
                   )}

@@ -17,49 +17,24 @@ import {
 import { getPosterUrl, getBackdropUrl } from "../utils/tmdb";
 import { TrailerSection } from "../components/TrailerSection";
 import { MovieCarousel } from "../components/MovieCarousel";
-import { useMovieContext, type MovieItem } from "../context/MovieContext";
-
-interface TVShowDetails {
-  id: number;
-  name: string;
-  overview: string;
-  poster_path: string | null;
-  backdrop_path: string | null;
-  first_air_date: string;
-  vote_average: number;
-  vote_count: number;
-  number_of_seasons: number;
-  genres: { id: number; name: string }[];
-}
-
-interface Credits {
-  directors: string[];
-  cast: string[];
-}
+import { type MovieItem } from "../context/MovieContext";
+import { useWatchActions } from "../hooks/useWatchActions";
+import type {
+  TVShowDetails,
+  Credits,
+  CarouselCompatibleItem,
+} from "../types/tmdb";
 
 export function TVShowDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const {
-    isInWatchLater,
-    isInWatched,
-    addToWatchLater,
-    removeFromWatchLater,
-    addToWatched,
-    removeFromWatched,
-  } = useMovieContext();
+  const { isInWatchLater, isInWatched, toggleWatchLater, toggleWatched } =
+    useWatchActions();
 
   const [show, setShow] = useState<TVShowDetails | null>(null);
   const [credits, setCredits] = useState<Credits | null>(null);
-  const [similarShows, setSimilarShows] = useState<
-    {
-      id: number;
-      poster_path: string | null;
-      vote_average: number;
-      vote_count: number;
-      title?: string;
-      name?: string;
-    }[]
-  >([]);
+  const [similarShows, setSimilarShows] = useState<CarouselCompatibleItem[]>(
+    [],
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -163,41 +138,19 @@ export function TVShowDetailPage() {
   const isLater = isInWatchLater(show.id, "tv");
   const isWatched = isInWatched(show.id, "tv");
 
-  const handleWatchLaterClick = () => {
-    if (isLater) {
-      removeFromWatchLater(show.id, "tv");
-    } else {
-      const item: MovieItem = {
-        id: show.id,
-        name: show.name,
-        poster_path: show.poster_path,
-        vote_average: show.vote_average,
-        vote_count: show.vote_count,
-        year: year || undefined,
-        genre: genreNames,
-        mediaType: "tv",
-      };
-      addToWatchLater(item);
-    }
+  const showItem: MovieItem = {
+    id: show.id,
+    name: show.name,
+    poster_path: show.poster_path,
+    vote_average: show.vote_average,
+    vote_count: show.vote_count,
+    year: year || undefined,
+    genre: genreNames,
+    mediaType: "tv",
   };
 
-  const handleWatchedClick = () => {
-    if (isWatched) {
-      removeFromWatched(show.id, "tv");
-    } else {
-      const item: MovieItem = {
-        id: show.id,
-        name: show.name,
-        poster_path: show.poster_path,
-        vote_average: show.vote_average,
-        vote_count: show.vote_count,
-        year: year || undefined,
-        genre: genreNames,
-        mediaType: "tv",
-      };
-      addToWatched(item);
-    }
-  };
+  const handleWatchLaterClick = () => toggleWatchLater(showItem);
+  const handleWatchedClick = () => toggleWatched(showItem);
 
   return (
     <div className="detail-page">
