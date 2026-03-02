@@ -19,6 +19,7 @@ import { TrailerSection } from "../components/TrailerSection";
 import { MovieCarousel } from "../components/MovieCarousel";
 import { type MovieItem } from "../context/MovieContext";
 import { useWatchActions } from "../hooks/useWatchActions";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import type {
   MovieDetails,
   Credits,
@@ -37,6 +38,8 @@ export function MovieDetailPage() {
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  useDocumentTitle(movie?.title);
 
   useEffect(() => {
     if (!id) return;

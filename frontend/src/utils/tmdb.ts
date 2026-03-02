@@ -1,5 +1,5 @@
 export const TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
-export const TMDB_BACKDROP_BASE = "https://image.tmdb.org/t/p/w780";
+export const TMDB_BACKDROP_BASE = "https://image.tmdb.org/t/p/w1280";
 
 /** Must match backend PAGE_MAX in lib/validation.ts (currently 300). */
 const PAGE_MAX = 300;

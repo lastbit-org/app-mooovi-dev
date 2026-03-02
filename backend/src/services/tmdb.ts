@@ -40,8 +40,13 @@ export async function getUpcomingMovies(page = 1, language?: string) {
   return data;
 }
 
-export async function getMovieDetails(id: number | string) {
-  const { data } = await tmdbClient.get(`/movie/${id}`);
+export async function getMovieDetails(
+  id: number | string,
+  language?: string,
+) {
+  const { data } = await tmdbClient.get(`/movie/${id}`, {
+    params: { language },
+  });
   return data;
 }
 

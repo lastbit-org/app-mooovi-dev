@@ -4,6 +4,7 @@ import { Search } from "lucide-react";
 import { searchMulti } from "../api/search";
 import { MovieCard } from "../components/MovieCard";
 import { parsePageParam } from "../utils/tmdb";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import type { SearchResult } from "../types/tmdb";
 
 export function SearchPage() {
@@ -17,6 +18,8 @@ export function SearchPage() {
   const [totalPages, setTotalPages] = useState(1);
 
   const searchQuery = queryFromUrl.trim();
+
+  useDocumentTitle(searchQuery ? `Busca: "${searchQuery}"` : "Busca");
 
   useEffect(() => {
     setInputValue(queryFromUrl);

@@ -11,6 +11,7 @@ import {
   signOut,
   type User,
 } from "firebase/auth";
+import { FirebaseError } from "firebase/app";
 import { auth, googleProvider } from "../lib/firebase";
 
 interface AuthContextType {
@@ -48,9 +49,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     try {
       await signInWithPopup(auth, googleProvider);
-    } catch (error: unknown) {
-      const firebaseError = error as { code?: string; message?: string };
-      if (firebaseError.code === "auth/unauthorized-domain") {
+    } catch (error) {
+      if (
+        error instanceof FirebaseError &&
+        error.code === "auth/unauthorized-domain"
+      ) {
         alert(
           "Erro: Este domínio (127.0.0.1) não está autorizado no console do Firebase (Authentication > Settings > Authorized Domains).",
         );

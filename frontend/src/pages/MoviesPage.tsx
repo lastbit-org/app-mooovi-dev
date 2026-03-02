@@ -5,6 +5,7 @@ import { MovieCard } from "../components/MovieCard";
 import { getPopularMovies } from "../api/movies";
 import { getTrendingAll } from "../api/trending";
 import { parsePageParam } from "../utils/tmdb";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import type {
   Movie,
   TrendingItem,
@@ -12,6 +13,7 @@ import type {
 } from "../types/tmdb";
 
 export function MoviesPage() {
+  useDocumentTitle("Filmes");
   const [searchParams, setSearchParams] = useSearchParams();
   const gridPage = parsePageParam(searchParams.get("page"));
 

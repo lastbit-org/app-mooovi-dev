@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Star, Trash2, CheckCircle2, Eye } from "lucide-react";
 import { getPosterUrl } from "../utils/tmdb";
 import { useMovieContext, type MovieItem } from "../context/MovieContext";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 type SectionId = "movie" | "tv";
 
@@ -81,6 +82,7 @@ function ProgressRing({ watched, total }: ProgressRingProps) {
 // Main Page Component
 // -------------------------------------------------------
 export function MyListPage() {
+  useDocumentTitle("Minha Lista");
   const { watchLater, watched, removeFromWatchLater, removeFromWatched } =
     useMovieContext();
   const [section, setSection] = useState<SectionId>("movie");

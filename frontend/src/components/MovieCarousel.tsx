@@ -1,20 +1,14 @@
 import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { MovieCard } from "./MovieCard";
+import type { CarouselCompatibleItem } from "../types/tmdb";
 
-export interface CarouselItem {
-  id: number;
-  poster_path: string | null;
-  vote_average: number;
-  vote_count: number;
-  title?: string;
-  name?: string;
-}
+export type { CarouselCompatibleItem as CarouselItem };
 
 interface MovieCarouselProps {
   title: string;
   icon: string;
-  items: CarouselItem[];
+  items: CarouselCompatibleItem[];
   mediaType: "movie" | "tv";
 }
 

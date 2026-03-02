@@ -1,5 +1,6 @@
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
+
 export function NewPopularPage() {
-  return (
-    <p className="loading">New & Popular — coming soon</p>
-  )
+  useDocumentTitle("Em Alta");
+  return <p className="loading">New &amp; Popular — coming soon</p>;
 }

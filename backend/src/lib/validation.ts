@@ -6,7 +6,7 @@ const SEARCH_QUERY_MAX_LENGTH = 100;
 const LANGUAGE_MAX_LENGTH = 10;
 
 /**
- * Valida page: inteiro entre 1 e 500.
+ * Valida page: inteiro entre 1 e 300.
  * Retorna o valor validado ou null se inválido.
  */
 export function parsePage(value: string | undefined): number | null {

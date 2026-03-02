@@ -3,6 +3,7 @@ import {
   useContext,
   useState,
   useEffect,
+  useRef,
   type ReactNode,
 } from "react";
 import { useAuth } from "./AuthContext";
@@ -42,27 +43,31 @@ export function MovieProvider({ children }: { children: ReactNode }) {
   const WL_KEY = `mooovi_watchLater${storageSuffix}`;
   const W_KEY = `mooovi_watched${storageSuffix}`;
 
-  // Carregar do localStorage sempre que o usuário mudar
+  // Flag que impede o effect de save de sobrescrever o localStorage
+  // durante a fase de carregamento inicial (ou troca de usuário).
+  const isInitializedRef = useRef(false);
+
+  // Carregar do localStorage sempre que o usuário mudar.
+  // Reseta o flag para que o effect de save saiba que está em fase de init.
   useEffect(() => {
+    isInitializedRef.current = false;
     const savedWatchLater = localStorage.getItem(WL_KEY);
     const savedWatched = localStorage.getItem(W_KEY);
-
     setWatchLater(savedWatchLater ? JSON.parse(savedWatchLater) : []);
     setWatched(savedWatched ? JSON.parse(savedWatched) : []);
   }, [WL_KEY, W_KEY]);
 
-  // Salvar no localStorage sempre que mudar
+  // Salvar no localStorage após cada mudança de estado.
+  // Na primeira execução após um load (isInitializedRef = false), apenas
+  // marca como inicializado e retorna — evitando sobrescrever com estado vazio.
   useEffect(() => {
-    if (WL_KEY) {
-      localStorage.setItem(WL_KEY, JSON.stringify(watchLater));
+    if (!isInitializedRef.current) {
+      isInitializedRef.current = true;
+      return;
     }
-  }, [watchLater, WL_KEY]);
-
-  useEffect(() => {
-    if (W_KEY) {
-      localStorage.setItem(W_KEY, JSON.stringify(watched));
-    }
-  }, [watched, W_KEY]);
+    localStorage.setItem(WL_KEY, JSON.stringify(watchLater));
+    localStorage.setItem(W_KEY, JSON.stringify(watched));
+  }, [watchLater, watched, WL_KEY, W_KEY]);
 
   const addToWatchLater = (item: MovieItem) => {
     if (!isInWatchLater(item.id, item.mediaType)) {

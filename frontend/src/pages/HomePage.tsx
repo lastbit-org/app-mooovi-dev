@@ -6,12 +6,14 @@ import { Hero } from "../components/Hero";
 import { getUpcomingMovies, getPopularMovies } from "../api/movies";
 import { getTrendingAll } from "../api/trending";
 import { parsePageParam } from "../utils/tmdb";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import type { Movie, GridItem, TrendingItem } from "../types/tmdb";
 
 const FEATURED_INTERVAL_MS = 6000;
 const FEATURED_MAX_ITEMS = 6;
 
 export function HomePage() {
+  useDocumentTitle();
   const [searchParams, setSearchParams] = useSearchParams();
   const gridPage = parsePageParam(searchParams.get("page"));
 

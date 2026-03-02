@@ -180,7 +180,8 @@ export async function moviesRoutes(
       if (id === null) {
         return reply.status(400).send({ error: "Invalid id" });
       }
-      const data = await getMovieDetails(id);
+      const language = parseLanguage(request.query.language);
+      const data = await getMovieDetails(id, language);
       return reply.type("application/json").send(data);
     } catch (error) {
       return handleTmdbError(error, reply);

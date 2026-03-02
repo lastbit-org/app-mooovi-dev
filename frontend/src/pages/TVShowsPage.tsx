@@ -4,9 +4,11 @@ import { MovieCarousel } from "../components/MovieCarousel";
 import { MovieCard } from "../components/MovieCard";
 import { getPopularTVShows, getTrendingTVShows } from "../api/tv";
 import { parsePageParam } from "../utils/tmdb";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import type { TVShow } from "../types/tmdb";
 
 export function TVShowsPage() {
+  useDocumentTitle("Séries");
   const [searchParams, setSearchParams] = useSearchParams();
   const gridPage = parsePageParam(searchParams.get("page"));
 
