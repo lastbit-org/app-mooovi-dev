@@ -143,7 +143,7 @@ const WATCH_LATER_TV: ListItem[] = [
   {
     id: 82856,
     name: "The Mandalorian",
-    poster_path: "/eU1i6eHXlzMOlEq0ku1iwzNWqNM.jpg",
+    poster_path: "/sWgBv7LV2PRoQgkxwlibdGXKz1S.jpg",
     vote_average: 8.5,
     vote_count: 9500,
     year: 2019,
@@ -164,7 +164,7 @@ const WATCHED_TV: ListItem[] = [
   {
     id: 77169,
     name: "Chernobyl",
-    poster_path: "/hlLXt2tOPT6RRnjiUmoxyG1LTXR.jpg",
+    poster_path: "/6POBWybSBDBKjSs1VAQcnQC1qyt.jpg",
     vote_average: 9.2,
     vote_count: 6500,
     year: 2019,
