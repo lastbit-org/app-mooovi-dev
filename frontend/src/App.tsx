@@ -8,26 +8,28 @@ import { MovieDetailPage } from "./pages/MovieDetailPage";
 import { TVShowDetailPage } from "./pages/TVShowDetailPage";
 import { MyListPage } from "./pages/MyListPage";
 import { SearchPage } from "./pages/SearchPage";
+import { MovieProvider } from "./context/MovieContext";
 import "./css/App.css";
-// test
 
 function App() {
   return (
-    <div className="app">
-      <LoadingBar />
-      <Header />
-      <main className="main">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/movies" element={<MoviesPage />} />
-          <Route path="/movies/:id" element={<MovieDetailPage />} />
-          <Route path="/tv" element={<TVShowsPage />} />
-          <Route path="/tv/:id" element={<TVShowDetailPage />} />
-          <Route path="/my-list" element={<MyListPage />} />
-          <Route path="/search" element={<SearchPage />} />
-        </Routes>
-      </main>
-    </div>
+    <MovieProvider>
+      <div className="app">
+        <LoadingBar />
+        <Header />
+        <main className="main">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/movies" element={<MoviesPage />} />
+            <Route path="/movies/:id" element={<MovieDetailPage />} />
+            <Route path="/tv" element={<TVShowsPage />} />
+            <Route path="/tv/:id" element={<TVShowDetailPage />} />
+            <Route path="/my-list" element={<MyListPage />} />
+            <Route path="/search" element={<SearchPage />} />
+          </Routes>
+        </main>
+      </div>
+    </MovieProvider>
   );
 }
 

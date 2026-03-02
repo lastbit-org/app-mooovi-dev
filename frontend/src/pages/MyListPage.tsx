@@ -1,185 +1,10 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Star, Trash2, CheckCircle2, Eye } from "lucide-react";
 import { getPosterUrl } from "../utils/tmdb";
+import { useMovieContext, type MovieItem } from "../context/MovieContext";
 
-interface ListItem {
-  id: number;
-  poster_path: string | null;
-  vote_average: number;
-  vote_count: number;
-  title?: string;
-  name?: string;
-  year?: number;
-  genre?: string;
-}
-
-type SectionId = "movies" | "tv";
-
-const WATCH_LATER_MOVIES: ListItem[] = [
-  {
-    id: 27205,
-    title: "Inception",
-    poster_path: "/xlaY2zyzMfkhk0HSC5VUwzoZPU1.jpg",
-    vote_average: 8.4,
-    vote_count: 35000,
-    year: 2010,
-    genre: "Sci-Fi, Thriller",
-  },
-  {
-    id: 155,
-    title: "The Dark Knight",
-    poster_path: "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
-    vote_average: 9.0,
-    vote_count: 28000,
-    year: 2008,
-    genre: "Action, Crime, Drama",
-  },
-  {
-    id: 424,
-    title: "Schindler's List",
-    poster_path: "/sF1U4EUQS8YHUYjNl3pMGNIQyr0.jpg",
-    vote_average: 8.6,
-    vote_count: 15000,
-    year: 1993,
-    genre: "Drama, History",
-  },
-  {
-    id: 238,
-    title: "The Godfather",
-    poster_path: "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
-    vote_average: 8.7,
-    vote_count: 19000,
-    year: 1972,
-    genre: "Crime, Drama",
-  },
-  {
-    id: 278,
-    title: "The Shawshank Redemption",
-    poster_path: "/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",
-    vote_average: 8.7,
-    vote_count: 24000,
-    year: 1994,
-    genre: "Drama",
-  },
-  {
-    id: 424694,
-    title: "Bohemian Rhapsody",
-    poster_path: "/lHu1wtNaczFPGFDTrjCSzeLPTKN.jpg",
-    vote_average: 8.1,
-    vote_count: 12000,
-    year: 2018,
-    genre: "Music, Drama",
-  },
-];
-
-const WATCHED_MOVIES: ListItem[] = [
-  {
-    id: 550,
-    title: "Fight Club",
-    poster_path: "/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg",
-    vote_average: 8.4,
-    vote_count: 26000,
-    year: 1999,
-    genre: "Drama",
-  },
-  {
-    id: 680,
-    title: "Pulp Fiction",
-    poster_path: "/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg",
-    vote_average: 8.5,
-    vote_count: 25000,
-    year: 1994,
-    genre: "Crime, Drama",
-  },
-  {
-    id: 13,
-    title: "Forrest Gump",
-    poster_path: "/saHP97rTPS5eLmrLQEcANmKrsFl.jpg",
-    vote_average: 8.5,
-    vote_count: 24000,
-    year: 1994,
-    genre: "Drama, Romance",
-  },
-  {
-    id: 122,
-    title: "The Lord of the Rings: The Return of the King",
-    poster_path: "/rCzpDGLbOoPwLjy3OAm5NUPOTrC.jpg",
-    vote_average: 8.5,
-    vote_count: 22000,
-    year: 2003,
-    genre: "Adventure, Fantasy",
-  },
-];
-
-const WATCH_LATER_TV: ListItem[] = [
-  {
-    id: 1399,
-    name: "Game of Thrones",
-    poster_path: "/u3bZgnGQ9T01sWNhyveQz0wH0Hl.jpg",
-    vote_average: 8.4,
-    vote_count: 18000,
-    year: 2011,
-    genre: "Action, Adventure, Drama",
-  },
-  {
-    id: 60574,
-    name: "Peaky Blinders",
-    poster_path: "/vUUqzWa2LnHIVqkaKVlVGkVcZIW.jpg",
-    vote_average: 8.6,
-    vote_count: 8500,
-    year: 2013,
-    genre: "Crime, Drama",
-  },
-  {
-    id: 1396,
-    name: "Breaking Bad",
-    poster_path: "/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
-    vote_average: 8.9,
-    vote_count: 12000,
-    year: 2008,
-    genre: "Crime, Drama, Thriller",
-  },
-  {
-    id: 82856,
-    name: "The Mandalorian",
-    poster_path: "/sWgBv7LV2PRoQgkxwlibdGXKz1S.jpg",
-    vote_average: 8.5,
-    vote_count: 9500,
-    year: 2019,
-    genre: "Action, Adventure, Sci-Fi",
-  },
-];
-
-const WATCHED_TV: ListItem[] = [
-  {
-    id: 70785,
-    name: "The Witcher",
-    poster_path: "/7vjaCdMw15FEbXyLQTVa04URsPm.jpg",
-    vote_average: 8.2,
-    vote_count: 7500,
-    year: 2019,
-    genre: "Action, Adventure, Drama",
-  },
-  {
-    id: 77169,
-    name: "Chernobyl",
-    poster_path: "/6POBWybSBDBKjSs1VAQcnQC1qyt.jpg",
-    vote_average: 9.2,
-    vote_count: 6500,
-    year: 2019,
-    genre: "Drama, History, Thriller",
-  },
-  {
-    id: 71446,
-    name: "Money Heist",
-    poster_path: "/reEMJA1uzscCbkpeRJeTT2bjqUp.jpg",
-    vote_average: 8.3,
-    vote_count: 15000,
-    year: 2017,
-    genre: "Action, Crime, Mystery",
-  },
-];
+type SectionId = "movie" | "tv";
 
 // -------------------------------------------------------
 // Circular Progress Widget Component
@@ -231,7 +56,6 @@ function ProgressRing({ watched, total }: ProgressRingProps) {
           style={{ transition: "stroke-dashoffset 0.6s ease" }}
         />
         {/* Label */}
-        {/* Number + % side by side, sharing the same text baseline */}
         <text x="50" y="54" textAnchor="middle" dominantBaseline="auto">
           <tspan className="ml-progress-pct">{pct}</tspan>
           <tspan className="ml-progress-pct-sign" dx="2">
@@ -257,15 +81,25 @@ function ProgressRing({ watched, total }: ProgressRingProps) {
 // Main Page Component
 // -------------------------------------------------------
 export function MyListPage() {
-  const [section, setSection] = useState<SectionId>("movies");
+  const { watchLater, watched, removeFromWatchLater, removeFromWatched } =
+    useMovieContext();
+  const [section, setSection] = useState<SectionId>("movie");
 
-  const watchLaterList =
-    section === "movies" ? WATCH_LATER_MOVIES : WATCH_LATER_TV;
-  const watchedList = section === "movies" ? WATCHED_MOVIES : WATCHED_TV;
-  const basePath = section === "movies" ? "/movies" : "/tv";
+  const filteredWatchLater = useMemo(
+    () => watchLater.filter((item) => item.mediaType === section),
+    [watchLater, section],
+  );
 
-  const totalItems = watchLaterList.length + watchedList.length;
-  const watchedCount = watchedList.length;
+  const filteredWatched = useMemo(
+    () => watched.filter((item) => item.mediaType === section),
+    [watched, section],
+  );
+
+  const totalItemsInSection =
+    filteredWatchLater.length + filteredWatched.length;
+  const watchedCountInSection = filteredWatched.length;
+
+  const basePath = section === "movie" ? "/movies" : "/tv";
 
   return (
     <div className="ml-page">
@@ -278,15 +112,18 @@ export function MyListPage() {
           </p>
         </div>
 
-        <ProgressRing watched={watchedCount} total={totalItems} />
+        <ProgressRing
+          watched={watchedCountInSection}
+          total={totalItemsInSection}
+        />
       </div>
 
       {/* Section toggle */}
       <div className="ml-section-toggle">
         <button
           id="ml-toggle-movies"
-          className={`ml-toggle-btn ${section === "movies" ? "ml-toggle-active" : ""}`}
-          onClick={() => setSection("movies")}
+          className={`ml-toggle-btn ${section === "movie" ? "ml-toggle-active" : ""}`}
+          onClick={() => setSection("movie")}
         >
           📽️ Filmes
         </button>
@@ -302,19 +139,21 @@ export function MyListPage() {
       {/* ── WATCH LATER TABLE ── */}
       <MovieTable
         title="Quero Assistir"
-        items={watchLaterList}
+        items={filteredWatchLater}
         basePath={basePath}
         variant="watch-later"
         emptyMsg="Nenhum título na sua lista de desejos."
+        onRemove={(id) => removeFromWatchLater(id, section)}
       />
 
       {/* ── WATCHED TABLE ── */}
       <MovieTable
         title="Já Assisti"
-        items={watchedList}
+        items={filteredWatched}
         basePath={basePath}
         variant="watched"
         emptyMsg="Você ainda não marcou nenhum título como assistido."
+        onRemove={(id) => removeFromWatched(id, section)}
       />
     </div>
   );
@@ -325,10 +164,11 @@ export function MyListPage() {
 // -------------------------------------------------------
 interface MovieTableProps {
   title: string;
-  items: ListItem[];
+  items: MovieItem[];
   basePath: string;
   variant: "watch-later" | "watched";
   emptyMsg: string;
+  onRemove: (id: number) => void;
 }
 
 function MovieTable({
@@ -337,6 +177,7 @@ function MovieTable({
   basePath,
   variant,
   emptyMsg,
+  onRemove,
 }: MovieTableProps) {
   const isWatched = variant === "watched";
 
@@ -432,9 +273,7 @@ function MovieTable({
                       type="button"
                       className="ml-remove-btn"
                       title="Remover da lista"
-                      onClick={() => {
-                        /* TODO: integrate with real state */
-                      }}
+                      onClick={() => onRemove(item.id)}
                     >
                       <Trash2 size={15} />
                     </button>

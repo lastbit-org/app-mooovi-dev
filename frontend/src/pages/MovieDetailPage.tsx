@@ -1,10 +1,23 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Star, Clock, Calendar, Film, BookmarkPlus, Check } from "lucide-react";
-import { getMovieDetails, getMovieCredits, getSimilarMovies } from "../api/movies";
+import {
+  Star,
+  Clock,
+  Calendar,
+  Film,
+  BookmarkPlus,
+  Check,
+  Trash2,
+} from "lucide-react";
+import {
+  getMovieDetails,
+  getMovieCredits,
+  getSimilarMovies,
+} from "../api/movies";
 import { getPosterUrl, getBackdropUrl } from "../utils/tmdb";
 import { TrailerSection } from "../components/TrailerSection";
 import { MovieCarousel } from "../components/MovieCarousel";
+import { useMovieContext, type MovieItem } from "../context/MovieContext";
 
 interface MovieDetails {
   id: number;
@@ -26,10 +39,25 @@ interface Credits {
 
 export function MovieDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const {
+    isInWatchLater,
+    isInWatched,
+    addToWatchLater,
+    removeFromWatchLater,
+    addToWatched,
+    removeFromWatched,
+  } = useMovieContext();
+
   const [movie, setMovie] = useState<MovieDetails | null>(null);
   const [credits, setCredits] = useState<Credits | null>(null);
   const [similarMovies, setSimilarMovies] = useState<
-    { id: number; poster_path: string | null; vote_average: number; vote_count: number; title?: string }[]
+    {
+      id: number;
+      poster_path: string | null;
+      vote_average: number;
+      vote_count: number;
+      title?: string;
+    }[]
   >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -116,6 +144,45 @@ export function MovieDetailPage() {
   const genreNames = movie.genres?.map((g) => g.name).join(", ") ?? "";
   const backdropUrl = getBackdropUrl(movie.backdrop_path);
 
+  const isLater = isInWatchLater(movie.id, "movie");
+  const isWatched = isInWatched(movie.id, "movie");
+
+  const handleWatchLaterClick = () => {
+    if (isLater) {
+      removeFromWatchLater(movie.id, "movie");
+    } else {
+      const item: MovieItem = {
+        id: movie.id,
+        title: movie.title,
+        poster_path: movie.poster_path,
+        vote_average: movie.vote_average,
+        vote_count: movie.vote_count,
+        year: year || undefined,
+        genre: genreNames,
+        mediaType: "movie",
+      };
+      addToWatchLater(item);
+    }
+  };
+
+  const handleWatchedClick = () => {
+    if (isWatched) {
+      removeFromWatched(movie.id, "movie");
+    } else {
+      const item: MovieItem = {
+        id: movie.id,
+        title: movie.title,
+        poster_path: movie.poster_path,
+        vote_average: movie.vote_average,
+        vote_count: movie.vote_count,
+        year: year || undefined,
+        genre: genreNames,
+        mediaType: "movie",
+      };
+      addToWatched(item);
+    }
+  };
+
   return (
     <div className="detail-page">
       <div
@@ -190,23 +257,37 @@ export function MovieDetailPage() {
           <div className="detail-actions">
             <button
               type="button"
-              className="detail-btn detail-btn-watch-later"
-              onClick={() => {}}
+              className={`detail-btn ${isLater ? "detail-btn-watched" : "detail-btn-watch-later"}`}
+              onClick={handleWatchLaterClick}
             >
-              <BookmarkPlus size={18} /> Ver depois
+              {isLater ? (
+                <>
+                  <Trash2 size={18} /> Remover do Ver Depois
+                </>
+              ) : (
+                <>
+                  <BookmarkPlus size={18} /> Ver depois
+                </>
+              )}
             </button>
             <button
               type="button"
-              className="detail-btn detail-btn-watched"
-              onClick={() => {}}
+              className={`detail-btn ${isWatched ? "detail-btn-watch-later" : "detail-btn-watched"}`}
+              onClick={handleWatchedClick}
             >
-              <Check size={18} /> Já vi
+              {isWatched ? (
+                <>
+                  <Trash2 size={18} /> Remover dos Já Vistos
+                </>
+              ) : (
+                <>
+                  <Check size={18} /> Já vi
+                </>
+              )}
             </button>
           </div>
         </div>
-        {id && (
-          <TrailerSection id={id} mediaType="movie" />
-        )}
+        {id && <TrailerSection id={id} mediaType="movie" />}
         {similarMovies.length > 0 && (
           <div className="detail-similar">
             <MovieCarousel

@@ -1,10 +1,23 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Star, Calendar, Tv, Film, BookmarkPlus, Check } from "lucide-react";
-import { getTVShowDetails, getTVShowCredits, getSimilarTVShows } from "../api/tv";
+import {
+  Star,
+  Calendar,
+  Tv,
+  Film,
+  BookmarkPlus,
+  Check,
+  Trash2,
+} from "lucide-react";
+import {
+  getTVShowDetails,
+  getTVShowCredits,
+  getSimilarTVShows,
+} from "../api/tv";
 import { getPosterUrl, getBackdropUrl } from "../utils/tmdb";
 import { TrailerSection } from "../components/TrailerSection";
 import { MovieCarousel } from "../components/MovieCarousel";
+import { useMovieContext, type MovieItem } from "../context/MovieContext";
 
 interface TVShowDetails {
   id: number;
@@ -26,10 +39,26 @@ interface Credits {
 
 export function TVShowDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const {
+    isInWatchLater,
+    isInWatched,
+    addToWatchLater,
+    removeFromWatchLater,
+    addToWatched,
+    removeFromWatched,
+  } = useMovieContext();
+
   const [show, setShow] = useState<TVShowDetails | null>(null);
   const [credits, setCredits] = useState<Credits | null>(null);
   const [similarShows, setSimilarShows] = useState<
-    { id: number; poster_path: string | null; vote_average: number; vote_count: number; title?: string; name?: string }[]
+    {
+      id: number;
+      poster_path: string | null;
+      vote_average: number;
+      vote_count: number;
+      title?: string;
+      name?: string;
+    }[]
   >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -131,6 +160,45 @@ export function TVShowDetailPage() {
   const genreNames = show.genres?.map((g) => g.name).join(", ") ?? "";
   const backdropUrl = getBackdropUrl(show.backdrop_path);
 
+  const isLater = isInWatchLater(show.id, "tv");
+  const isWatched = isInWatched(show.id, "tv");
+
+  const handleWatchLaterClick = () => {
+    if (isLater) {
+      removeFromWatchLater(show.id, "tv");
+    } else {
+      const item: MovieItem = {
+        id: show.id,
+        name: show.name,
+        poster_path: show.poster_path,
+        vote_average: show.vote_average,
+        vote_count: show.vote_count,
+        year: year || undefined,
+        genre: genreNames,
+        mediaType: "tv",
+      };
+      addToWatchLater(item);
+    }
+  };
+
+  const handleWatchedClick = () => {
+    if (isWatched) {
+      removeFromWatched(show.id, "tv");
+    } else {
+      const item: MovieItem = {
+        id: show.id,
+        name: show.name,
+        poster_path: show.poster_path,
+        vote_average: show.vote_average,
+        vote_count: show.vote_count,
+        year: year || undefined,
+        genre: genreNames,
+        mediaType: "tv",
+      };
+      addToWatched(item);
+    }
+  };
+
   return (
     <div className="detail-page">
       <div
@@ -204,23 +272,37 @@ export function TVShowDetailPage() {
           <div className="detail-actions">
             <button
               type="button"
-              className="detail-btn detail-btn-watch-later"
-              onClick={() => {}}
+              className={`detail-btn ${isLater ? "detail-btn-watched" : "detail-btn-watch-later"}`}
+              onClick={handleWatchLaterClick}
             >
-              <BookmarkPlus size={18} /> Ver depois
+              {isLater ? (
+                <>
+                  <Trash2 size={18} /> Remover do Ver Depois
+                </>
+              ) : (
+                <>
+                  <BookmarkPlus size={18} /> Ver depois
+                </>
+              )}
             </button>
             <button
               type="button"
-              className="detail-btn detail-btn-watched"
-              onClick={() => {}}
+              className={`detail-btn ${isWatched ? "detail-btn-watch-later" : "detail-btn-watched"}`}
+              onClick={handleWatchedClick}
             >
-              <Check size={18} /> Já vi
+              {isWatched ? (
+                <>
+                  <Trash2 size={18} /> Remover dos Já Vistos
+                </>
+              ) : (
+                <>
+                  <Check size={18} /> Já vi
+                </>
+              )}
             </button>
           </div>
         </div>
-        {id && (
-          <TrailerSection id={id} mediaType="tv" />
-        )}
+        {id && <TrailerSection id={id} mediaType="tv" />}
         {similarShows.length > 0 && (
           <div className="detail-similar">
             <MovieCarousel
