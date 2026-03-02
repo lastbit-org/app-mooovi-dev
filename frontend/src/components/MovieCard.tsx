@@ -82,6 +82,19 @@ export function MovieCard({
           className="movie-card-poster"
           loading="lazy"
         />
+
+        {isLater && (
+          <div className="movie-card-badge badge-later">
+            <span>QUERO VER</span>
+          </div>
+        )}
+
+        {isWatched && (
+          <div className="movie-card-badge badge-watched">
+            <span>JÁ VI</span>
+          </div>
+        )}
+
         <div className="movie-card-actions">
           <button
             type="button"
