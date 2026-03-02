@@ -945,7 +945,7 @@
   gap: 3.5rem;
   max-width: 1100px;
   width: 100%;
-  margin: 0 auto;
+  margin: 2.5rem auto;
   padding: 2.5rem;
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(20px) saturate(180%);
@@ -1286,258 +1286,457 @@
   }
 }
 
-/* My List Page */
-.mylist-page {
-  max-width: 1400px;
+/* My List Page – legacy classes kept for safety */
+.mylist-page { display: none; }
+
+/* ============================================================
+   My List Page  – TABLE-BASED REDESIGN
+   ============================================================ */
+
+/* ── Page shell ── */
+.ml-page {
+  max-width: 1300px;
   margin: 0 auto;
-  padding: 2rem 2rem 4rem;
+  padding: 2rem 2.5rem 5rem;
 }
 
-.mylist-header {
+/* ── Hero header row ── */
+.ml-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
   margin-bottom: 2.5rem;
-  text-align: center;
+  flex-wrap: wrap;
 }
 
-.mylist-title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  letter-spacing: -0.03em;
-  margin-bottom: 0.5rem;
-  background: linear-gradient(to right, #fff, #888);
+.ml-hero-text {
+  flex: 1;
+}
+
+.ml-hero-title {
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  margin-bottom: 0.4rem;
+  background: linear-gradient(135deg, #fff 40%, #999);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.mylist-subtitle {
+.ml-hero-subtitle {
   font-size: 1.1rem;
   color: var(--text-secondary);
 }
 
-.mylist-tabs {
+/* ── Progress ring ── */
+.ml-progress-ring-wrap {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   gap: 0.75rem;
-  margin-bottom: 3rem;
+  cursor: default;
+}
+
+.ml-progress-svg {
+  filter: drop-shadow(0 0 16px rgba(249, 115, 22, 0.35));
+  flex-shrink: 0;
+}
+
+.ml-progress-pct {
+  font-size: 22px;
+  font-weight: 800;
+  fill: var(--text-primary);
+  font-family: inherit;
+}
+
+.ml-progress-pct-sign {
+  font-size: 11px;
+  font-weight: 600;
+  fill: var(--accent);
+  font-family: inherit;
+}
+
+.ml-progress-legend {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.ml-progress-legend-watched,
+.ml-progress-legend-total {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.ml-progress-legend-watched {
+  color: var(--accent);
+}
+
+.ml-progress-legend-total {
+  color: var(--text-secondary);
+}
+
+/* ── Section toggle ── */
+.ml-section-toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2.5rem;
   padding: 4px;
   background: rgba(255, 255, 255, 0.03);
   width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
-.mylist-tab {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.25rem;
-  border: none;
+.ml-toggle-btn {
+  padding: 0.6rem 1.4rem;
   border-radius: 8px;
+  border: none;
   background: transparent;
   color: var(--text-secondary);
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease;
 }
 
-.mylist-tab:hover {
+.ml-toggle-btn:hover {
   color: var(--text-primary);
   background: rgba(255, 255, 255, 0.05);
+  border-color: transparent;
 }
 
-.mylist-tab-active {
-  background: var(--accent);
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+.ml-toggle-active {
+  background: var(--accent) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 14px rgba(249, 115, 22, 0.35);
 }
 
-.mylist-tab-active:hover {
-  background: var(--accent);
-  color: #fff;
-  transform: translateY(-1px);
+/* ── Table section ── */
+.ml-table-section {
+  margin-bottom: 3.5rem;
 }
 
-.mylist-tab-icon {
-  font-size: 1.1rem;
-}
-
-/* Grid Layout */
-.mylist-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 2rem 1.25rem;
-}
-
-.mylist-item-card {
+.ml-table-heading {
   display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  position: relative;
-  transition: transform 0.3s ease;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.01em;
 }
 
-.mylist-item-card:hover {
-  transform: translateY(-8px);
+.ml-table-heading-icon {
+  flex-shrink: 0;
 }
 
-.mylist-card-poster-wrap {
-  position: relative;
-  aspect-ratio: 2/3;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-  background: var(--bg-secondary);
+.ml-icon-watched {
+  color: var(--accent);
 }
 
-.mylist-card-poster {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
+.ml-icon-later {
+  color: rgba(255, 255, 255, 0.5);
 }
 
-.mylist-item-card:hover .mylist-card-poster {
-  transform: scale(1.1);
-}
-
-.mylist-card-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 60%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 1rem;
-}
-
-.mylist-item-card:hover .mylist-card-overlay {
-  opacity: 1;
-}
-
-.mylist-card-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.mylist-card-btn {
-  width: 100%;
-  padding: 0.5rem;
-  border-radius: 6px;
+.ml-table-count {
+  margin-left: 0.4rem;
   font-size: 0.8rem;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.mylist-card-btn-remove {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+/* ── Scrollable table wrapper ── */
+.ml-table-wrap {
+  overflow-x: auto;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(8px);
 }
 
-.mylist-card-btn-remove:hover {
-  background: #ef4444;
+.ml-table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.mylist-card-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+/* ── Table header ── */
+.ml-table-header-row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
-.mylist-card-title {
-  font-size: 1rem;
+.ml-th {
+  padding: 0.8rem 1rem;
+  text-align: left;
+  font-size: 0.78rem;
   font-weight: 700;
-  color: var(--text-primary);
-  line-height: 1.2;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  white-space: nowrap;
 }
 
-.mylist-card-meta {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.85rem;
+.ml-th-rank {
+  width: 50px;
+  text-align: center;
+}
+
+.ml-th-poster {
+  width: 68px;
+}
+
+.ml-th-title {
+  min-width: 200px;
+}
+
+.ml-th-year {
+  width: 80px;
+}
+
+.ml-th-genre {
+  min-width: 160px;
+}
+
+.ml-th-rating {
+  width: 130px;
+}
+
+.ml-th-actions {
+  width: 54px;
+}
+
+/* ── Table body rows ── */
+.ml-table-row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  transition: background 0.2s ease;
+}
+
+.ml-table-row:last-child {
+  border-bottom: none;
+}
+
+.ml-table-row:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.ml-td {
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
+}
+
+/* Rank cell */
+.ml-td-rank {
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 700;
   color: var(--text-secondary);
 }
 
-.mylist-card-rating {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  color: var(--accent);
-  font-weight: 600;
+/* Poster thumbnail */
+.ml-td-poster {
+  padding: 0.5rem 0.75rem;
 }
 
-/* Empty State */
-.mylist-empty {
-  text-align: center;
-  padding: 4rem 2rem;
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: 20px;
-  border: 1px dashed rgba(255, 255, 255, 0.1);
+.ml-poster-link {
+  display: block;
+  width: 46px;
+  height: 68px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.mylist-empty-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+.ml-poster-link:hover {
+  transform: scale(1.06);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.55);
+}
+
+.ml-poster-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   display: block;
 }
 
-.mylist-empty-text {
-  color: var(--text-secondary);
-  font-size: 1.1rem;
+/* Title cell */
+.ml-td-title {
+  display: table-cell;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .mylist-page {
-    padding: 1.5rem 1rem;
+.ml-title-link {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  display: block;
+  line-height: 1.3;
+  transition: color 0.2s;
+}
+
+.ml-title-link:hover {
+  color: var(--accent);
+}
+
+.ml-watched-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(249, 115, 22, 0.12);
+  border: 1px solid rgba(249, 115, 22, 0.25);
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+  letter-spacing: 0.02em;
+}
+
+/* Year */
+.ml-td-year {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* Genre */
+.ml-td-genre {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+/* Rating */
+.ml-td-rating {
+  white-space: nowrap;
+}
+
+.ml-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.ml-vote-count {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: 0.2rem;
+}
+
+/* Actions */
+.ml-td-actions {
+  text-align: center;
+}
+
+.ml-remove-btn {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 0 auto;
+}
+
+.ml-remove-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #ef4444;
+  transform: scale(1.1);
+}
+
+/* Empty state */
+.ml-empty {
+  padding: 3rem 2rem;
+  border-radius: 14px;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.015);
+  text-align: center;
+}
+
+.ml-empty-text {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .ml-page {
+    padding: 2rem 1.5rem 4rem;
   }
 
-  .mylist-title {
+  .ml-hero-title {
+    font-size: 2.4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .ml-page {
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  .ml-hero {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .ml-hero-title {
     font-size: 2rem;
   }
 
-  .mylist-tabs {
-    flex-wrap: wrap;
-    width: 100%;
+  .ml-progress-ring-wrap {
+    flex-direction: row;
+    gap: 1rem;
   }
 
-  .mylist-tab {
-    flex: 1 1 calc(50% - 0.5rem);
-    justify-content: center;
-    padding: 0.6rem;
-    font-size: 0.8rem;
+  .ml-progress-legend {
+    align-items: flex-start;
   }
 
-  .mylist-grid {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 1.5rem 1rem;
+  .ml-th-genre,
+  .ml-td-genre {
+    display: none;
   }
 }
 
-@media (max-width: 480px) {
-  .mylist-grid {
-    grid-template-columns: repeat(2, 1fr);
+@media (max-width: 540px) {
+  .ml-th-year,
+  .ml-td-year {
+    display: none;
   }
 
-  .mylist-tab-label {
-    font-size: 0.75rem;
+  .ml-th-rating {
+    width: 90px;
+  }
+
+  .ml-section-toggle {
+    width: 100%;
+  }
+
+  .ml-toggle-btn {
+    flex: 1;
+    text-align: center;
   }
 }
