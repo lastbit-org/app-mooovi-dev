@@ -69,7 +69,7 @@ export async function getSimilarMovies(
   page = 1,
   language?: string,
 ) {
-  const { data } = await tmdbClient.get(`/movie/${id}/similar`, {
+  const { data } = await tmdbClient.get(`/movie/${id}/recommendations`, {
     params: { page, language },
   });
   return data;
@@ -151,7 +151,7 @@ export async function getSimilarTVShows(
   page = 1,
   language?: string,
 ) {
-  const { data } = await tmdbClient.get(`/tv/${id}/similar`, {
+  const { data } = await tmdbClient.get(`/tv/${id}/recommendations`, {
     params: { page, language },
   });
   return data;
