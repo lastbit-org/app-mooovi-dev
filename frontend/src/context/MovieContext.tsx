@@ -5,6 +5,7 @@ import {
   useEffect,
   type ReactNode,
 } from "react";
+import { useAuth } from "./AuthContext";
 
 export interface MovieItem {
   id: number;
@@ -32,26 +33,36 @@ interface MovieContextType {
 const MovieContext = createContext<MovieContextType | undefined>(undefined);
 
 export function MovieProvider({ children }: { children: ReactNode }) {
+  const { user } = useAuth();
   const [watchLater, setWatchLater] = useState<MovieItem[]>([]);
   const [watched, setWatched] = useState<MovieItem[]>([]);
 
-  // Carregar do localStorage ao iniciar
-  useEffect(() => {
-    const savedWatchLater = localStorage.getItem("mooovi_watchLater");
-    const savedWatched = localStorage.getItem("mooovi_watched");
+  // Define as chaves baseadas no usuário (ou 'guest' se deslogado)
+  const storageSuffix = user ? `_${user.uid}` : "_guest";
+  const WL_KEY = `mooovi_watchLater${storageSuffix}`;
+  const W_KEY = `mooovi_watched${storageSuffix}`;
 
-    if (savedWatchLater) setWatchLater(JSON.parse(savedWatchLater));
-    if (savedWatched) setWatched(JSON.parse(savedWatched));
-  }, []);
+  // Carregar do localStorage sempre que o usuário mudar
+  useEffect(() => {
+    const savedWatchLater = localStorage.getItem(WL_KEY);
+    const savedWatched = localStorage.getItem(W_KEY);
+
+    setWatchLater(savedWatchLater ? JSON.parse(savedWatchLater) : []);
+    setWatched(savedWatched ? JSON.parse(savedWatched) : []);
+  }, [WL_KEY, W_KEY]);
 
   // Salvar no localStorage sempre que mudar
   useEffect(() => {
-    localStorage.setItem("mooovi_watchLater", JSON.stringify(watchLater));
-  }, [watchLater]);
+    if (WL_KEY) {
+      localStorage.setItem(WL_KEY, JSON.stringify(watchLater));
+    }
+  }, [watchLater, WL_KEY]);
 
   useEffect(() => {
-    localStorage.setItem("mooovi_watched", JSON.stringify(watched));
-  }, [watched]);
+    if (W_KEY) {
+      localStorage.setItem(W_KEY, JSON.stringify(watched));
+    }
+  }, [watched, W_KEY]);
 
   const addToWatchLater = (item: MovieItem) => {
     if (!isInWatchLater(item.id, item.mediaType)) {

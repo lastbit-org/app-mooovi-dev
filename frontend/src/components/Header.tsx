@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { Search, Menu, X } from "lucide-react";
+import { Search, Menu, X, LogOut, User as UserIcon, LogIn } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 export function Header() {
+  const { user, loginWithGoogle, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const navigate = useNavigate();
@@ -81,7 +83,26 @@ export function Header() {
             onChange={(e) => setSearchInput(e.target.value)}
           />
         </form>
-        <div className="avatar">U</div>
+
+        {user ? (
+          <div className="header-user">
+            <div className="avatar" title={user.displayName || "Usuário"}>
+              {user.photoURL ? (
+                <img src={user.photoURL} alt="Avatar" className="avatar-img" />
+              ) : (
+                <UserIcon size={18} />
+              )}
+            </div>
+            <button className="logout-btn" onClick={logout} title="Sair">
+              <LogOut size={20} />
+            </button>
+          </div>
+        ) : (
+          <button className="login-btn" onClick={loginWithGoogle}>
+            <LogIn size={20} />
+            <span>Entrar</span>
+          </button>
+        )}
       </div>
     </header>
   );
