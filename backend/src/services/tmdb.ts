@@ -228,6 +228,29 @@ export async function getDiscoverMovies(
 }
 
 /**
+ * Get person details
+ */
+export async function getPersonDetails(id: number | string, language?: string) {
+  const { data } = await tmdbClient.get(`/person/${id}`, {
+    params: { language },
+  });
+  return data;
+}
+
+/**
+ * Get person movie credits (cast + crew)
+ */
+export async function getPersonMovieCredits(
+  id: number | string,
+  language?: string,
+) {
+  const { data } = await tmdbClient.get(`/person/${id}/movie_credits`, {
+    params: { language },
+  });
+  return data;
+}
+
+/**
  * Discover TV shows by genre
  */
 export async function getDiscoverTVShows(

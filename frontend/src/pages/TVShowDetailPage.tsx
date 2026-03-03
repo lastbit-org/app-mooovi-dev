@@ -68,27 +68,19 @@ export function TVShowDetailPage() {
     async function fetchCredits() {
       try {
         const data = await getTVShowCredits(id!);
-        const crew = (data.crew ?? []) as { job: string; name: string }[];
-        let directors = crew
-          .filter((c) => c.job === "Director")
-          .map((c) => c.name);
-        if (directors.length === 0) {
-          directors = crew
-            .filter((c) => c.job === "Executive Producer")
-            .map((c) => c.name);
+        const crew = (data.crew ?? []) as { id: number; job: string; name: string }[];
+        let directorList = crew.filter((c) => c.job === "Director");
+        if (directorList.length === 0) {
+          directorList = crew.filter((c) => c.job === "Executive Producer");
         }
-        if (directors.length === 0) {
-          directors = crew
-            .filter((c) => c.job === "Creator")
-            .map((c) => c.name);
+        if (directorList.length === 0) {
+          directorList = crew.filter((c) => c.job === "Creator");
         }
-        const cast = ((data.cast ?? []) as { name: string }[])
+        const directors = [...new Map(directorList.map((c) => [c.id, { id: c.id, name: c.name }])).values()];
+        const cast = ((data.cast ?? []) as { id: number; name: string }[])
           .slice(0, 8)
-          .map((c) => c.name);
-        setCredits({
-          directors: [...new Set(directors)],
-          cast,
-        });
+          .map((c) => ({ id: c.id, name: c.name }));
+        setCredits({ directors, cast });
       } catch {
         setCredits(null);
       }
@@ -230,13 +222,31 @@ export function TVShowDetailPage() {
               {credits.directors.length > 0 && (
                 <div className="detail-credits-row">
                   <span className="detail-credits-label">Direção:</span>
-                  <span>{credits.directors.join(", ")}</span>
+                  <span className="detail-credits-links">
+                    {credits.directors.map((p, i) => (
+                      <span key={p.id}>
+                        {i > 0 && ", "}
+                        <Link to={`/person/${p.id}`} className="credit-link">
+                          {p.name}
+                        </Link>
+                      </span>
+                    ))}
+                  </span>
                 </div>
               )}
               {credits.cast.length > 0 && (
                 <div className="detail-credits-row">
                   <span className="detail-credits-label">Elenco:</span>
-                  <span>{credits.cast.join(", ")}</span>
+                  <span className="detail-credits-links">
+                    {credits.cast.map((p, i) => (
+                      <span key={p.id}>
+                        {i > 0 && ", "}
+                        <Link to={`/person/${p.id}`} className="credit-link">
+                          {p.name}
+                        </Link>
+                      </span>
+                    ))}
+                  </span>
                 </div>
               )}
             </div>

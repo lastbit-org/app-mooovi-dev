@@ -67,13 +67,14 @@ export function MovieDetailPage() {
     async function fetchCredits() {
       try {
         const data = await getMovieCredits(id!);
-        const directors = ((data.crew ?? []) as { job: string; name: string }[])
-          .filter((c) => c.job === "Director")
-          .map((c) => c.name);
-        const cast = ((data.cast ?? []) as { name: string }[])
+        const crew = (data.crew ?? []) as { id: number; job: string; name: string }[];
+        const directors = [...new Map(
+          crew.filter((c) => c.job === "Director").map((c) => [c.id, { id: c.id, name: c.name }]),
+        ).values()];
+        const cast = ((data.cast ?? []) as { id: number; name: string }[])
           .slice(0, 8)
-          .map((c) => c.name);
-        setCredits({ directors: [...new Set(directors)], cast });
+          .map((c) => ({ id: c.id, name: c.name }));
+        setCredits({ directors, cast });
       } catch {
         setCredits(null);
       }
@@ -215,13 +216,31 @@ export function MovieDetailPage() {
               {credits.directors.length > 0 && (
                 <div className="detail-credits-row">
                   <span className="detail-credits-label">Direção:</span>
-                  <span>{credits.directors.join(", ")}</span>
+                  <span className="detail-credits-links">
+                    {credits.directors.map((p, i) => (
+                      <span key={p.id}>
+                        {i > 0 && ", "}
+                        <Link to={`/person/${p.id}`} className="credit-link">
+                          {p.name}
+                        </Link>
+                      </span>
+                    ))}
+                  </span>
                 </div>
               )}
               {credits.cast.length > 0 && (
                 <div className="detail-credits-row">
                   <span className="detail-credits-label">Elenco:</span>
-                  <span>{credits.cast.join(", ")}</span>
+                  <span className="detail-credits-links">
+                    {credits.cast.map((p, i) => (
+                      <span key={p.id}>
+                        {i > 0 && ", "}
+                        <Link to={`/person/${p.id}`} className="credit-link">
+                          {p.name}
+                        </Link>
+                      </span>
+                    ))}
+                  </span>
                 </div>
               )}
             </div>

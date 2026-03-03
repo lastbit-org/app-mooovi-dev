@@ -64,6 +64,15 @@ export function Header() {
           Filmes
         </NavLink>
         <NavLink
+          to="/search?type=person"
+          className={({ isActive }) =>
+            isActive ? "header-nav-link active" : "header-nav-link"
+          }
+          onClick={() => setIsMenuOpen(false)}
+        >
+          Pessoas
+        </NavLink>
+        <NavLink
           to="/my-list"
           className={({ isActive }) =>
             isActive ? "header-nav-link active" : "header-nav-link"

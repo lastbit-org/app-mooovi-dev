@@ -7,6 +7,7 @@ import { MoviesPage } from "./pages/MoviesPage";
 import { TVShowsPage } from "./pages/TVShowsPage";
 import { MovieDetailPage } from "./pages/MovieDetailPage";
 import { TVShowDetailPage } from "./pages/TVShowDetailPage";
+import { PersonDetailPage } from "./pages/PersonDetailPage";
 import { MyListPage } from "./pages/MyListPage";
 import { SearchPage } from "./pages/SearchPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
@@ -30,6 +31,7 @@ function App() {
               <Route path="/movies/:id" element={<MovieDetailPage />} />
               <Route path="/tv" element={<TVShowsPage />} />
               <Route path="/tv/:id" element={<TVShowDetailPage />} />
+              <Route path="/person/:id" element={<PersonDetailPage />} />
               <Route
                 path="/my-list"
                 element={

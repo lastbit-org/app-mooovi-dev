@@ -4,11 +4,12 @@ import { Search } from "lucide-react";
 import { searchMulti } from "../api/search";
 import { getGenreMovieList, getGenreTVList, type Genre } from "../api/genres";
 import { MovieCard } from "../components/MovieCard";
+import { PersonCard } from "../components/PersonCard";
 import { parsePageParam } from "../utils/tmdb";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import type { SearchResult } from "../types/tmdb";
 
-type MediaTypeFilter = "movie" | "tv";
+type MediaTypeFilter = "movie" | "tv" | "person";
 
 export function SearchPage() {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ export function SearchPage() {
 
   const [inputValue, setInputValue] = useState(queryFromUrl);
   const [mediaType, setMediaType] = useState<MediaTypeFilter>(
-    typeFromUrl === "tv" ? "tv" : "movie",
+    typeFromUrl === "tv" ? "tv" : typeFromUrl === "person" ? "person" : "movie",
   );
   const [selectedGenreId, setSelectedGenreId] = useState<number | "">(
     genreFromUrl ? parseInt(genreFromUrl, 10) || "" : "",
@@ -44,7 +45,7 @@ export function SearchPage() {
   }, [queryFromUrl]);
 
   useEffect(() => {
-    if (typeFromUrl === "tv" || typeFromUrl === "movie") {
+    if (typeFromUrl === "tv" || typeFromUrl === "movie" || typeFromUrl === "person") {
       setMediaType(typeFromUrl);
     }
   }, [typeFromUrl]);
@@ -89,10 +90,13 @@ export function SearchPage() {
         const data = await searchMulti(searchQuery, currentPage);
         const raw = (data?.results ?? []) as SearchResult[];
         let filtered = raw.filter(
-          (r) => r.media_type === "movie" || r.media_type === "tv",
+          (r) =>
+            r.media_type === "movie" ||
+            r.media_type === "tv" ||
+            r.media_type === "person",
         );
         filtered = filtered.filter((r) => r.media_type === mediaType);
-        if (genreIdForFilter != null) {
+        if (genreIdForFilter != null && mediaType !== "person") {
           filtered = filtered.filter(
             (r) =>
               Array.isArray(r.genre_ids) && r.genre_ids.includes(genreIdForFilter),
@@ -158,14 +162,27 @@ export function SearchPage() {
     }
   };
 
-  const mediaItems = results.map((item) => ({
-    id: item.id,
-    mediaType: item.media_type as "movie" | "tv",
-    posterPath: item.poster_path,
-    title: item.title ?? item.name ?? "",
-    rating: item.vote_average,
-    voteCount: item.vote_count,
-  }));
+  const showPersonResults = mediaType === "person";
+
+  const mediaItems = results
+    .filter((r) => r.media_type === "movie" || r.media_type === "tv")
+    .map((item) => ({
+      id: item.id,
+      mediaType: item.media_type as "movie" | "tv",
+      posterPath: item.poster_path,
+      title: item.title ?? item.name ?? "",
+      rating: item.vote_average,
+      voteCount: item.vote_count,
+    }));
+
+  const personItems = results
+    .filter((r) => r.media_type === "person")
+    .map((item) => ({
+      id: item.id,
+      name: item.name ?? "",
+      profilePath: (item as { profile_path?: string | null }).profile_path ?? null,
+      knownFor: (item as { known_for_department?: string }).known_for_department,
+    }));
 
   return (
     <div className="search-page">
@@ -225,13 +242,20 @@ export function SearchPage() {
               >
                 Séries
               </button>
+              <button
+                type="button"
+                className={`search-type-btn ${mediaType === "person" ? "active" : ""}`}
+                onClick={() => handleMediaTypeChange("person")}
+              >
+                Pessoas
+              </button>
             </div>
           </div>
           <div className="search-actions">
             <button type="submit" className="search-submit">
               Buscar
             </button>
-            {selectedGenreId !== "" && !inputValue.trim() && (
+            {selectedGenreId !== "" && !inputValue.trim() && mediaType !== "person" && (
               <button
                 type="button"
                 className="search-submit search-explore-btn"
@@ -248,7 +272,7 @@ export function SearchPage() {
         {!searchQuery && (
           <div className="search-empty-state">
             <Search size={20} />
-            <p>Digite algo para buscar filmes e séries</p>
+            <p>Digite algo para buscar filmes, séries ou pessoas</p>
           </div>
         )}
 
@@ -283,17 +307,27 @@ export function SearchPage() {
                 )}
             </p>
             <div className="search-grid">
-              {mediaItems.map((item) => (
-                <MovieCard
-                  key={`${item.mediaType}-${item.id}`}
-                  id={item.id}
-                  mediaType={item.mediaType}
-                  posterPath={item.posterPath}
-                  title={item.title}
-                  rating={item.rating}
-                  voteCount={item.voteCount}
-                />
-              ))}
+              {showPersonResults
+                ? personItems.map((item) => (
+                    <PersonCard
+                      key={`person-${item.id}`}
+                      id={item.id}
+                      name={item.name}
+                      profilePath={item.profilePath}
+                      knownFor={item.knownFor}
+                    />
+                  ))
+                : mediaItems.map((item) => (
+                    <MovieCard
+                      key={`${item.mediaType}-${item.id}`}
+                      id={item.id}
+                      mediaType={item.mediaType}
+                      posterPath={item.posterPath}
+                      title={item.title}
+                      rating={item.rating}
+                      voteCount={item.voteCount}
+                    />
+                  ))}
             </div>
             {totalPages > 1 && (
               <div className="search-pagination">

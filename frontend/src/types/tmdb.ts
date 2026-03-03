@@ -92,9 +92,36 @@ export interface TVSeasonDetails {
   episodes: TVEpisode[];
 }
 
+export interface CreditPerson {
+  id: number;
+  name: string;
+}
+
 export interface Credits {
-  directors: string[];
-  cast: string[];
+  directors: CreditPerson[];
+  cast: CreditPerson[];
+}
+
+export interface Person {
+  id: number;
+  name: string;
+  profile_path: string | null;
+  biography: string | null;
+  birthday: string | null;
+  deathday: string | null;
+  place_of_birth: string | null;
+  known_for_department: string | null;
+}
+
+export interface PersonMovieCredit {
+  id: number;
+  title: string;
+  poster_path: string | null;
+  release_date: string | null;
+  vote_average: number;
+  vote_count: number;
+  character?: string;
+  job?: string;
 }
 
 export interface SimpleMediaItem {
