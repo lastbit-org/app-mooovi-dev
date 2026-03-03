@@ -17,11 +17,31 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        # Em produção, defina a URL do backend (ex: http://backend:3001 ou https://seu-backend.run.app)
         - VITE_API_URL=${VITE_API_URL:-http://localhost:3001}
+      secrets:
+        - firebase_api_key
+        - firebase_auth_domain
+        - firebase_project_id
+        - firebase_storage_bucket
+        - firebase_messaging_sender_id
+        - firebase_app_id
     image: app-mooovi-frontend
     ports:
       - "80:80"
     depends_on:
       - backend
     restart: unless-stopped
+
+secrets:
+  firebase_api_key:
+    environment: VITE_FIREBASE_API_KEY
+  firebase_auth_domain:
+    environment: VITE_FIREBASE_AUTH_DOMAIN
+  firebase_project_id:
+    environment: VITE_FIREBASE_PROJECT_ID
+  firebase_storage_bucket:
+    environment: VITE_FIREBASE_STORAGE_BUCKET
+  firebase_messaging_sender_id:
+    environment: VITE_FIREBASE_MESSAGING_SENDER_ID
+  firebase_app_id:
+    environment: VITE_FIREBASE_APP_ID

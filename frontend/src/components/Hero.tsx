@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Play, Info, Plus, Check, BookmarkMinus, Trash2 } from "lucide-react";
+import { Play, Plus, Check, BookmarkMinus, Trash2 } from "lucide-react";
 import { getBackdropUrl } from "../utils/tmdb";
 import { type MovieItem } from "../context/MovieContext";
 import { useWatchActions } from "../hooks/useWatchActions";
