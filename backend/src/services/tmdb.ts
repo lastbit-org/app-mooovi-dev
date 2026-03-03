@@ -174,6 +174,21 @@ export async function getTVShowWatchProviders(id: number | string) {
 }
 
 /**
+ * Get TV season details (episodes list)
+ */
+export async function getTVSeasonDetails(
+  seriesId: number | string,
+  seasonNumber: number,
+  language?: string,
+) {
+  const { data } = await tmdbClient.get(
+    `/tv/${seriesId}/season/${seasonNumber}`,
+    { params: { language } },
+  );
+  return data;
+}
+
+/**
  * Get movie genre list
  */
 export async function getGenreMovieList(language?: string) {

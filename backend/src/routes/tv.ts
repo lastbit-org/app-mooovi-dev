@@ -8,6 +8,7 @@ import {
   getTVShowCredits,
   getSimilarTVShows,
   getTVShowWatchProviders,
+  getTVSeasonDetails,
 } from "../services/tmdb.js";
 import { handleTmdbError } from "../lib/errorHandler.js";
 import {
@@ -132,6 +133,33 @@ export async function tvRoutes(
         return reply.status(400).send({ error: "Invalid id" });
       }
       const data = await getTVShowWatchProviders(id);
+      return reply.type("application/json").send(data);
+    } catch (error) {
+      return handleTmdbError(error, reply);
+    }
+  });
+
+  /**
+   * Get TV season details (episodes)
+   * @param request - Fastify request
+   * @param reply - Fastify reply
+   * @returns Season with episodes
+   */
+  fastify.get<{
+    Params: { id: string; seasonNumber: string };
+    Querystring: { language?: string };
+  }>("/:id/season/:seasonNumber", async (request, reply) => {
+    try {
+      const id = parseId(request.params.id);
+      if (id === null) {
+        return reply.status(400).send({ error: "Invalid id" });
+      }
+      const seasonNum = parseInt(request.params.seasonNumber, 10);
+      if (Number.isNaN(seasonNum) || seasonNum < 0 || seasonNum > 999) {
+        return reply.status(400).send({ error: "Invalid season number" });
+      }
+      const language = parseLanguage(request.query.language);
+      const data = await getTVSeasonDetails(id, seasonNum, language);
       return reply.type("application/json").send(data);
     } catch (error) {
       return handleTmdbError(error, reply);

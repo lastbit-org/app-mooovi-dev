@@ -55,6 +55,41 @@ export interface TVShowDetails extends TVShow {
   first_air_date: string;
   number_of_seasons: number;
   genres: { id: number; name: string }[];
+  seasons?: TVSeasonSummary[];
+}
+
+export interface TVSeasonSummary {
+  id: number;
+  name: string;
+  overview: string | null;
+  season_number: number;
+  episode_count: number;
+  poster_path: string | null;
+  air_date: string | null;
+  vote_average?: number;
+}
+
+export interface TVEpisode {
+  id: number;
+  name: string;
+  overview: string | null;
+  episode_number: number;
+  season_number: number;
+  air_date: string | null;
+  runtime: number | null;
+  still_path: string | null;
+  vote_average: number;
+  vote_count: number;
+}
+
+export interface TVSeasonDetails {
+  id: number;
+  name: string;
+  overview: string | null;
+  season_number: number;
+  air_date: string | null;
+  poster_path: string | null;
+  episodes: TVEpisode[];
 }
 
 export interface Credits {

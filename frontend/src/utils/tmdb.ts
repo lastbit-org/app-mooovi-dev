@@ -1,6 +1,7 @@
 export const TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
 export const TMDB_BACKDROP_BASE = "https://image.tmdb.org/t/p/w1280";
 export const TMDB_PROVIDER_LOGO_BASE = "https://image.tmdb.org/t/p/w92";
+export const TMDB_STILL_BASE = "https://image.tmdb.org/t/p/w300";
 
 /** Must match backend PAGE_MAX in lib/validation.ts (currently 300). */
 const PAGE_MAX = 300;
@@ -15,6 +16,10 @@ export function getBackdropUrl(path: string | null): string {
 
 export function getProviderLogoUrl(path: string | null): string {
   return path ? `${TMDB_PROVIDER_LOGO_BASE}${path}` : "";
+}
+
+export function getStillUrl(path: string | null): string {
+  return path ? `${TMDB_STILL_BASE}${path}` : "/placeholder-poster.svg";
 }
 
 /**

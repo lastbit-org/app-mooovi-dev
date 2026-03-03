@@ -18,6 +18,7 @@ import {
 import { getPosterUrl, getBackdropUrl } from "../utils/tmdb";
 import { TrailerSection } from "../components/TrailerSection";
 import { WatchProvidersSection } from "../components/WatchProvidersSection";
+import { SeasonsSection } from "../components/SeasonsSection";
 import { MovieCarousel } from "../components/MovieCarousel";
 import { type MovieItem } from "../context/MovieContext";
 import { useWatchActions } from "../hooks/useWatchActions";
@@ -279,6 +280,27 @@ export function TVShowDetailPage() {
           <WatchProvidersSection
             id={id}
             fetchProviders={getTVShowWatchProviders}
+          />
+        )}
+        {id && (
+          <SeasonsSection
+            seriesId={id}
+            seasons={
+              show.seasons?.length
+                ? show.seasons
+                : Array.from(
+                    { length: show.number_of_seasons || 0 },
+                    (_, i) => ({
+                      id: -(i + 1),
+                      season_number: i + 1,
+                      episode_count: 1,
+                      name: `Temporada ${i + 1}`,
+                      poster_path: null,
+                      overview: null,
+                      air_date: null,
+                    }),
+                  )
+            }
           />
         )}
         {id && <TrailerSection id={id} mediaType="tv" />}

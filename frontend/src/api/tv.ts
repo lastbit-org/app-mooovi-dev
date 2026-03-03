@@ -40,3 +40,13 @@ export async function getTVShowWatchProviders(id: number | string) {
   const { data } = await api.get(`/api/tv/${id}/watch-providers`);
   return data;
 }
+
+export async function getTVSeasonDetails(
+  seriesId: number | string,
+  seasonNumber: number,
+) {
+  const { data } = await api.get(
+    `/api/tv/${seriesId}/season/${seasonNumber}`,
+  );
+  return data;
+}
