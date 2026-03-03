@@ -31,7 +31,7 @@ export function Header() {
   return (
     <header className="header">
       <Link to="/" className="header-logo" onClick={() => setIsMenuOpen(false)}>
-        #M<span>OoooO</span>VI
+        #M<span>OooO</span>VI
       </Link>
 
       <button

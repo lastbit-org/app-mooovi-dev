@@ -10,6 +10,9 @@ import { trendingRoutes } from "./routes/trending.js";
 import { genresRoutes } from "./routes/genres.js";
 import { personRoutes } from "./routes/person.js";
 
+let x = 1;
+console.log("Starting server... Attempt:", x++);
+
 // Cloud Run usa PORT=8080 por padrão; localmente usamos 3001
 const PORT = parseInt(process.env.PORT ?? "3001", 10);
 
