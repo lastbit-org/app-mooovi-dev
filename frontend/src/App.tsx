@@ -12,12 +12,14 @@ import { SearchPage } from "./pages/SearchPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { MovieProvider } from "./context/MovieContext";
 import { AuthProvider } from "./context/AuthContext";
+import { ThemeProvider } from "./context/ThemeContext";
 import "./css/App.css";
 
 function App() {
   return (
-    <AuthProvider>
-      <MovieProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <MovieProvider>
         <div className="app">
           <LoadingBar />
           <Header />
@@ -41,8 +43,9 @@ function App() {
             </Routes>
           </main>
         </div>
-      </MovieProvider>
-    </AuthProvider>
+        </MovieProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

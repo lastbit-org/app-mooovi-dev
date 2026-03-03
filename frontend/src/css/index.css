@@ -1,10 +1,14 @@
-:root {
+:root,
+[data-theme="dark"] {
   --bg-primary: #1a1a1a;
   --bg-secondary: #242424;
   --bg-header: rgba(26, 26, 26, 0.95);
+  --bg-hover: rgba(255, 255, 255, 0.06);
   --text-primary: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.7);
   --accent: #f97316;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --overlay-light: rgba(255, 255, 255, 0.04);
 
   font-family:
     system-ui,
@@ -36,6 +40,7 @@
 body {
   min-width: 320px;
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 a {
@@ -68,4 +73,17 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 2px solid var(--accent);
+}
+
+/* Tema claro */
+[data-theme="light"] {
+  --bg-primary: #f5f5f5;
+  --bg-secondary: #ffffff;
+  --bg-header: rgba(255, 255, 255, 0.95);
+  --bg-hover: rgba(0, 0, 0, 0.05);
+  --text-primary: #1a1a1a;
+  --text-secondary: rgba(0, 0, 0, 0.65);
+  --accent: #ea580c;
+  --border-subtle: rgba(0, 0, 0, 0.08);
+  --overlay-light: rgba(0, 0, 0, 0.04);
 }

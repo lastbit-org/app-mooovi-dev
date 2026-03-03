@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { Search, Menu, X, LogOut, User as UserIcon } from "lucide-react";
+import { Search, Menu, X, LogOut, User as UserIcon, Sun, Moon } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
 
 export function Header() {
   const { user, loginWithGoogle, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const navigate = useNavigate();
@@ -84,6 +86,15 @@ export function Header() {
           />
         </form>
 
+        <button
+          type="button"
+          className="header-theme-btn"
+          onClick={toggleTheme}
+          aria-label={theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro"}
+          title={theme === "dark" ? "Tema claro" : "Tema escuro"}
+        >
+          {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+        </button>
         <div className="header-user-wrap">
           {user ? (
             <div className="header-user">
