@@ -1,29 +1,79 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
 import { searchMulti } from "../api/search";
+import { getGenreMovieList, getGenreTVList, type Genre } from "../api/genres";
 import { MovieCard } from "../components/MovieCard";
 import { parsePageParam } from "../utils/tmdb";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import type { SearchResult } from "../types/tmdb";
 
+type MediaTypeFilter = "movie" | "tv";
+
 export function SearchPage() {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const queryFromUrl = searchParams.get("q") ?? "";
   const currentPage = parsePageParam(searchParams.get("page"));
+  const genreFromUrl = searchParams.get("genre");
+  const typeFromUrl = searchParams.get("type") as MediaTypeFilter | null;
+
   const [inputValue, setInputValue] = useState(queryFromUrl);
+  const [mediaType, setMediaType] = useState<MediaTypeFilter>(
+    typeFromUrl === "tv" ? "tv" : "movie",
+  );
+  const [selectedGenreId, setSelectedGenreId] = useState<number | "">(
+    genreFromUrl ? parseInt(genreFromUrl, 10) || "" : "",
+  );
+  const [movieGenres, setMovieGenres] = useState<Genre[]>([]);
+  const [tvGenres, setTvGenres] = useState<Genre[]>([]);
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [totalPages, setTotalPages] = useState(1);
 
   const searchQuery = queryFromUrl.trim();
+  const genres = mediaType === "movie" ? movieGenres : tvGenres;
+  const genreIdForFilter =
+    selectedGenreId !== "" ? selectedGenreId : null;
 
   useDocumentTitle(searchQuery ? `Busca: "${searchQuery}"` : "Busca");
 
   useEffect(() => {
     setInputValue(queryFromUrl);
   }, [queryFromUrl]);
+
+  useEffect(() => {
+    if (typeFromUrl === "tv" || typeFromUrl === "movie") {
+      setMediaType(typeFromUrl);
+    }
+  }, [typeFromUrl]);
+
+  useEffect(() => {
+    if (genreFromUrl) {
+      const id = parseInt(genreFromUrl, 10);
+      if (!Number.isNaN(id)) setSelectedGenreId(id);
+    } else {
+      setSelectedGenreId("");
+    }
+  }, [genreFromUrl]);
+
+  useEffect(() => {
+    async function loadGenres() {
+      try {
+        const [movieRes, tvRes] = await Promise.all([
+          getGenreMovieList(),
+          getGenreTVList(),
+        ]);
+        setMovieGenres(movieRes.genres ?? []);
+        setTvGenres(tvRes.genres ?? []);
+      } catch {
+        setMovieGenres([]);
+        setTvGenres([]);
+      }
+    }
+    loadGenres();
+  }, []);
 
   useEffect(() => {
     if (!searchQuery) {
@@ -37,11 +87,17 @@ export function SearchPage() {
         setLoading(true);
         setError(null);
         const data = await searchMulti(searchQuery, currentPage);
-        const raw = data?.results ?? [];
-        const filtered = raw.filter(
-          (r: SearchResult) =>
-            r.media_type === "movie" || r.media_type === "tv",
+        const raw = (data?.results ?? []) as SearchResult[];
+        let filtered = raw.filter(
+          (r) => r.media_type === "movie" || r.media_type === "tv",
         );
+        filtered = filtered.filter((r) => r.media_type === mediaType);
+        if (genreIdForFilter != null) {
+          filtered = filtered.filter(
+            (r) =>
+              Array.isArray(r.genre_ids) && r.genre_ids.includes(genreIdForFilter),
+          );
+        }
         setResults(filtered);
         setTotalPages(Math.min(data?.total_pages ?? 1, 500));
       } catch (err) {
@@ -55,12 +111,26 @@ export function SearchPage() {
     }
 
     fetchSearch();
-  }, [searchQuery, currentPage]);
+  }, [searchQuery, currentPage, mediaType, genreIdForFilter]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const q = inputValue.trim();
-    setSearchParams(q ? { q } : {});
+    if (q) {
+      const params: Record<string, string> = { q, type: mediaType };
+      if (selectedGenreId !== "") params.genre = String(selectedGenreId);
+      setSearchParams(params);
+    } else if (selectedGenreId !== "") {
+      const path = mediaType === "movie" ? "/movies" : "/tv";
+      navigate(`${path}?genre=${selectedGenreId}`);
+    }
+  };
+
+  const handleExploreGenre = () => {
+    if (selectedGenreId !== "") {
+      const path = mediaType === "movie" ? "/movies" : "/tv";
+      navigate(`${path}?genre=${selectedGenreId}`);
+    }
   };
 
   const setPage = (page: number) => {
@@ -73,6 +143,19 @@ export function SearchPage() {
       }
       return next;
     });
+  };
+
+  const handleMediaTypeChange = (type: MediaTypeFilter) => {
+    setMediaType(type);
+    setSelectedGenreId("");
+    if (searchQuery) {
+      setSearchParams((prev) => {
+        const next = new URLSearchParams(prev);
+        next.set("type", type);
+        next.delete("genre");
+        return next;
+      });
+    }
   };
 
   const mediaItems = results.map((item) => ({
@@ -101,9 +184,63 @@ export function SearchPage() {
               autoFocus
             />
           </div>
-          <button type="submit" className="search-submit">
-            Buscar
-          </button>
+          <div className="search-genre-filter">
+            <select
+              className="search-genre-select"
+              value={selectedGenreId}
+              onChange={(e) => {
+                const val = e.target.value === "" ? "" : Number(e.target.value);
+                setSelectedGenreId(val);
+                if (searchQuery) {
+                  setSearchParams((prev) => {
+                    const next = new URLSearchParams(prev);
+                    next.set("type", mediaType);
+                    if (val === "") next.delete("genre");
+                    else next.set("genre", String(val));
+                    return next;
+                  });
+                }
+              }}
+              aria-label="Filtrar por gênero"
+            >
+              <option value="">Todos os gêneros</option>
+              {genres.map((g) => (
+                <option key={g.id} value={g.id}>
+                  {g.name}
+                </option>
+              ))}
+            </select>
+            <div className="search-type-toggle">
+              <button
+                type="button"
+                className={`search-type-btn ${mediaType === "movie" ? "active" : ""}`}
+                onClick={() => handleMediaTypeChange("movie")}
+              >
+                Filmes
+              </button>
+              <button
+                type="button"
+                className={`search-type-btn ${mediaType === "tv" ? "active" : ""}`}
+                onClick={() => handleMediaTypeChange("tv")}
+              >
+                Séries
+              </button>
+            </div>
+          </div>
+          <div className="search-actions">
+            <button type="submit" className="search-submit">
+              Buscar
+            </button>
+            {selectedGenreId !== "" && !inputValue.trim() && (
+              <button
+                type="button"
+                className="search-submit search-explore-btn"
+                onClick={handleExploreGenre}
+              >
+                Explorar
+              </button>
+            )}
+          </div>
         </form>
       </header>
 
@@ -137,6 +274,13 @@ export function SearchPage() {
             <p className="search-results-count">
               {results.length} resultado{results.length !== 1 ? "s" : ""} para
               &quot;{searchQuery}&quot;
+              {genreIdForFilter != null &&
+                genres.find((g) => g.id === genreIdForFilter) && (
+                  <span className="search-genre-badge">
+                    {" "}
+                    · {genres.find((g) => g.id === genreIdForFilter)?.name}
+                  </span>
+                )}
             </p>
             <div className="search-grid">
               {mediaItems.map((item) => (

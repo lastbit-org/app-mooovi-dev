@@ -42,6 +42,7 @@ export interface SearchResult {
   vote_count: number;
   title?: string;
   name?: string;
+  genre_ids?: number[];
 }
 
 export interface MovieDetails extends Movie {

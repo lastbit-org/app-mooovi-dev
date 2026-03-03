@@ -5,8 +5,10 @@ export async function getUpcomingMovies(page = 1) {
   return data;
 }
 
-export async function getPopularMovies(page = 1) {
-  const { data } = await api.get("/api/movies/popular", { params: { page } });
+export async function getPopularMovies(page = 1, genreId?: number) {
+  const { data } = await api.get("/api/movies/popular", {
+    params: { page, ...(genreId != null && { genre: genreId }) },
+  });
   return data;
 }
 

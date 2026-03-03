@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   Star,
   Calendar,
@@ -136,6 +136,7 @@ export function TVShowDetailPage() {
     ? new Date(show.first_air_date).getFullYear()
     : null;
   const genreNames = show.genres?.map((g) => g.name).join(", ") ?? "";
+  const genres = show.genres ?? [];
   const backdropUrl = getBackdropUrl(show.backdrop_path);
 
   const isLater = isInWatchLater(show.id, "tv");
@@ -181,10 +182,20 @@ export function TVShowDetailPage() {
                 <span>{year}</span>
               </div>
             )}
-            {genreNames && (
-              <div className="detail-meta-item">
+            {genres.length > 0 && (
+              <div className="detail-meta-item detail-meta-genres">
                 <Film size={16} />
-                <span>{genreNames}</span>
+                <div className="genre-chips">
+                  {genres.map((g) => (
+                    <Link
+                      key={g.id}
+                      to={`/tv?genre=${g.id}`}
+                      className="genre-chip"
+                    >
+                      {g.name}
+                    </Link>
+                  ))}
+                </div>
               </div>
             )}
             {show.number_of_seasons > 0 && (

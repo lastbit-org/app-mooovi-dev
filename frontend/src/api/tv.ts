@@ -1,7 +1,9 @@
 import { api } from "./client";
 
-export async function getPopularTVShows(page = 1) {
-  const { data } = await api.get("/api/tv/popular", { params: { page } });
+export async function getPopularTVShows(page = 1, genreId?: number) {
+  const { data } = await api.get("/api/tv/popular", {
+    params: { page, ...(genreId != null && { genre: genreId }) },
+  });
   return data;
 }
 

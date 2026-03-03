@@ -56,3 +56,17 @@ export function parseLanguage(value: string | undefined): string | undefined {
 export function parseTimeWindow(value: string | undefined): "day" | "week" {
   return value === "day" ? "day" : "week";
 }
+
+const GENRE_MIN = 1;
+const GENRE_MAX = 999;
+
+/**
+ * Valida genre ID: inteiro entre 1 e 999 (TMDB genre IDs).
+ * Retorna o valor ou null se inválido.
+ */
+export function parseGenre(value: string | undefined): number | null {
+  if (value === undefined || value === "") return null;
+  const n = parseInt(value, 10);
+  if (Number.isNaN(n) || n < GENRE_MIN || n > GENRE_MAX) return null;
+  return n;
+}

@@ -33,9 +33,6 @@ export function Header() {
       </button>
 
       <nav className={`header-nav ${isMenuOpen ? "active" : ""}`}>
-        <Link to="/" className="header-nav-logo" onClick={() => setIsMenuOpen(false)}>
-          #M<span>OOO</span>VI
-        </Link>
         <NavLink
           to="/"
           className={({ isActive }) =>
@@ -92,7 +89,11 @@ export function Header() {
             <div className="header-user">
               <div className="avatar" title={user.displayName || "Usuário"}>
                 {user.photoURL ? (
-                  <img src={user.photoURL} alt="Avatar" className="avatar-img" />
+                  <img
+                    src={user.photoURL}
+                    alt="Avatar"
+                    className="avatar-img"
+                  />
                 ) : (
                   <UserIcon size={18} />
                 )}

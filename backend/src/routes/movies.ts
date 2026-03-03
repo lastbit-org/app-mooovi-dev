@@ -1,6 +1,7 @@
 import type { FastifyInstance, FastifyPluginOptions } from "fastify";
 import {
   getPopularMovies,
+  getDiscoverMovies,
   getMovieDetails,
   getMovieVideos,
   getMovieCredits,
@@ -14,6 +15,7 @@ import {
   parseId,
   parseSearchQuery,
   parseLanguage,
+  parseGenre,
 } from "../lib/validation.js";
 
 export async function moviesRoutes(
@@ -21,13 +23,13 @@ export async function moviesRoutes(
   _opts: FastifyPluginOptions,
 ) {
   /**
-   * Get popular movies
+   * Get popular movies (or discover by genre when genre param is present)
    * @param request - Fastify request
    * @param reply - Fastify reply
-   * @returns Popular movies
+   * @returns Popular or genre-filtered movies
    */
   fastify.get<{
-    Querystring: { page?: string; language?: string };
+    Querystring: { page?: string; language?: string; genre?: string };
   }>("/popular", async (request, reply) => {
     try {
       const page = parsePage(request.query.page);
@@ -35,7 +37,11 @@ export async function moviesRoutes(
         return reply.status(400).send({ error: "Invalid page" });
       }
       const language = parseLanguage(request.query.language);
-      const data = await getPopularMovies(page, language);
+      const genreId = parseGenre(request.query.genre);
+      const data =
+        genreId !== null
+          ? await getDiscoverMovies(genreId, page, language)
+          : await getPopularMovies(page, language);
       return reply.type("application/json").send(data);
     } catch (error) {
       return handleTmdbError(error, reply);

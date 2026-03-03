@@ -156,3 +156,61 @@ export async function getSimilarTVShows(
   });
   return data;
 }
+
+/**
+ * Get movie genre list
+ */
+export async function getGenreMovieList(language?: string) {
+  const { data } = await tmdbClient.get("/genre/movie/list", {
+    params: { language },
+  });
+  return data;
+}
+
+/**
+ * Get TV genre list
+ */
+export async function getGenreTVList(language?: string) {
+  const { data } = await tmdbClient.get("/genre/tv/list", {
+    params: { language },
+  });
+  return data;
+}
+
+/**
+ * Discover movies by genre
+ */
+export async function getDiscoverMovies(
+  genreId: number,
+  page = 1,
+  language?: string,
+) {
+  const { data } = await tmdbClient.get("/discover/movie", {
+    params: {
+      with_genres: genreId,
+      page,
+      language,
+      sort_by: "popularity.desc",
+    },
+  });
+  return data;
+}
+
+/**
+ * Discover TV shows by genre
+ */
+export async function getDiscoverTVShows(
+  genreId: number,
+  page = 1,
+  language?: string,
+) {
+  const { data } = await tmdbClient.get("/discover/tv", {
+    params: {
+      with_genres: genreId,
+      page,
+      language,
+      sort_by: "popularity.desc",
+    },
+  });
+  return data;
+}

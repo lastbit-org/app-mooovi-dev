@@ -7,6 +7,7 @@ import { moviesRoutes } from "./routes/movies.js";
 import { tvRoutes } from "./routes/tv.js";
 import { searchRoutes } from "./routes/search.js";
 import { trendingRoutes } from "./routes/trending.js";
+import { genresRoutes } from "./routes/genres.js";
 
 // Cloud Run usa PORT=8080 por padrão; localmente usamos 3001
 const PORT = parseInt(process.env.PORT ?? "3001", 10);
@@ -53,6 +54,7 @@ fastify.addHook("onSend", async (_request, reply, payload) => {
 
 await fastify.register(moviesRoutes, { prefix: "/api/movies" });
 await fastify.register(tvRoutes, { prefix: "/api/tv" });
+await fastify.register(genresRoutes, { prefix: "/api/genres" });
 await fastify.register(searchRoutes, { prefix: "/api/search" });
 await fastify.register(trendingRoutes, { prefix: "/api/trending" });
 
