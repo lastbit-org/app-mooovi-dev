@@ -3,6 +3,8 @@ import axios from "axios";
 const apiKey = process.env.TMDB_API_KEY;
 const baseURL = "https://api.themoviedb.org/3";
 
+console.log("[TMDB] API client initialized with baseURL:", baseURL);
+
 /**
  * TMDB API client
  * @param baseURL - The base URL of the TMDB API
@@ -40,10 +42,7 @@ export async function getUpcomingMovies(page = 1, language?: string) {
   return data;
 }
 
-export async function getMovieDetails(
-  id: number | string,
-  language?: string,
-) {
+export async function getMovieDetails(id: number | string, language?: string) {
   const { data } = await tmdbClient.get(`/movie/${id}`, {
     params: { language },
   });
@@ -144,10 +143,7 @@ export async function getTVShowVideos(id: number | string, language?: string) {
   return data;
 }
 
-export async function getTVShowCredits(
-  id: number | string,
-  language?: string,
-) {
+export async function getTVShowCredits(id: number | string, language?: string) {
   const { data } = await tmdbClient.get(`/tv/${id}/credits`, {
     params: { language },
   });

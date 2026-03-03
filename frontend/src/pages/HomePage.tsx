@@ -12,6 +12,8 @@ import type { Movie, GridItem, TrendingItem } from "../types/tmdb";
 const FEATURED_INTERVAL_MS = 6000;
 const FEATURED_MAX_ITEMS = 6;
 
+console.log("HomePage render");
+
 export function HomePage() {
   useDocumentTitle();
   const [searchParams, setSearchParams] = useSearchParams();
