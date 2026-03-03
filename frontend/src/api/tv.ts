@@ -35,3 +35,8 @@ export async function getSimilarTVShows(id: number | string, page = 1) {
   });
   return data;
 }
+
+export async function getTVShowWatchProviders(id: number | string) {
+  const { data } = await api.get(`/api/tv/${id}/watch-providers`);
+  return data;
+}

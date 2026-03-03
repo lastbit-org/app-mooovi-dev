@@ -13,9 +13,11 @@ import {
   getTVShowDetails,
   getTVShowCredits,
   getSimilarTVShows,
+  getTVShowWatchProviders,
 } from "../api/tv";
 import { getPosterUrl, getBackdropUrl } from "../utils/tmdb";
 import { TrailerSection } from "../components/TrailerSection";
+import { WatchProvidersSection } from "../components/WatchProvidersSection";
 import { MovieCarousel } from "../components/MovieCarousel";
 import { type MovieItem } from "../context/MovieContext";
 import { useWatchActions } from "../hooks/useWatchActions";
@@ -166,13 +168,16 @@ export function TVShowDetailPage() {
         aria-hidden
       />
       <div className="detail-content">
-        <img
-          src={getPosterUrl(show.poster_path)}
-          alt={show.name}
-          className="detail-poster"
-          loading="lazy"
-        />
-        <div className="detail-info">
+        <div className="detail-header">
+          <div className="detail-poster-wrap">
+            <img
+              src={getPosterUrl(show.poster_path)}
+              alt={show.name}
+              className="detail-poster"
+              loading="lazy"
+            />
+          </div>
+          <div className="detail-info">
           <h1 className="detail-title">{show.name}</h1>
 
           <div className="detail-meta">
@@ -269,6 +274,13 @@ export function TVShowDetailPage() {
             </button>
           </div>
         </div>
+        </div>
+        {id && (
+          <WatchProvidersSection
+            id={id}
+            fetchProviders={getTVShowWatchProviders}
+          />
+        )}
         {id && <TrailerSection id={id} mediaType="tv" />}
         {similarShows.length > 0 && (
           <div className="detail-similar">

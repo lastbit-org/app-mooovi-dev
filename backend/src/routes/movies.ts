@@ -6,6 +6,7 @@ import {
   getMovieVideos,
   getMovieCredits,
   getSimilarMovies,
+  getMovieWatchProviders,
   searchMovies,
   getUpcomingMovies,
 } from "../services/tmdb.js";
@@ -142,6 +143,27 @@ export async function moviesRoutes(
       }
       const language = parseLanguage(request.query.language);
       const data = await getMovieCredits(id, language);
+      return reply.type("application/json").send(data);
+    } catch (error) {
+      return handleTmdbError(error, reply);
+    }
+  });
+
+  /**
+   * Get movie watch providers (streaming, rent, buy)
+   * @param request - Fastify request
+   * @param reply - Fastify reply
+   * @returns Watch providers by country
+   */
+  fastify.get<{
+    Params: { id: string };
+  }>("/:id/watch-providers", async (request, reply) => {
+    try {
+      const id = parseId(request.params.id);
+      if (id === null) {
+        return reply.status(400).send({ error: "Invalid id" });
+      }
+      const data = await getMovieWatchProviders(id);
       return reply.type("application/json").send(data);
     } catch (error) {
       return handleTmdbError(error, reply);

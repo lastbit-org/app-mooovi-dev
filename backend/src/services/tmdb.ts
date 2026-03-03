@@ -75,6 +75,14 @@ export async function getSimilarMovies(
   return data;
 }
 
+/**
+ * Get movie watch providers (streaming, rent, buy) by country
+ */
+export async function getMovieWatchProviders(id: number | string) {
+  const { data } = await tmdbClient.get(`/movie/${id}/watch/providers`);
+  return data;
+}
+
 export async function searchMovies(query: string, page = 1, language?: string) {
   const { data } = await tmdbClient.get("/search/movie", {
     params: { query, page, language },
@@ -154,6 +162,14 @@ export async function getSimilarTVShows(
   const { data } = await tmdbClient.get(`/tv/${id}/recommendations`, {
     params: { page, language },
   });
+  return data;
+}
+
+/**
+ * Get TV show watch providers (streaming, rent, buy) by country
+ */
+export async function getTVShowWatchProviders(id: number | string) {
+  const { data } = await tmdbClient.get(`/tv/${id}/watch/providers`);
   return data;
 }
 

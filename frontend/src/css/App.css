@@ -1264,8 +1264,8 @@
   position: relative;
   z-index: 1;
   display: flex;
-  flex-wrap: wrap;
-  gap: 3.5rem;
+  flex-direction: column;
+  gap: 2.5rem;
   max-width: 1100px;
   width: 100%;
   margin: 2.5rem auto;
@@ -1278,19 +1278,33 @@
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
-.detail-poster {
+.detail-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3.5rem;
+  width: 100%;
+}
+
+.detail-poster-wrap {
   flex-shrink: 0;
   width: 300px;
-  aspect-ratio: 2/3;
+  height: 450px;
   border-radius: 16px;
-  object-fit: cover;
+  overflow: hidden;
   background: var(--bg-secondary);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
   transition: transform 0.3s ease;
 }
 
-.detail-poster:hover {
+.detail-poster-wrap:hover {
   transform: scale(1.02);
+}
+
+.detail-poster {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 .detail-info {
@@ -1423,6 +1437,107 @@
   gap: 1.25rem;
 }
 
+/* Watch Providers (Onde assistir) */
+.watch-providers-section {
+  width: 100%;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.watch-providers-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.watch-providers-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.watch-providers-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.watch-providers-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.watch-providers-logos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.watch-provider-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.watch-provider-item img,
+.watch-provider-fallback {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.watch-provider-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(249, 115, 22, 0.2);
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.watch-provider-name {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.watch-providers-link {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.watch-providers-link:hover {
+  text-decoration: underline;
+}
+
+.watch-providers-attribution {
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+.watch-providers-attribution a {
+  color: var(--text-secondary);
+}
+
+.watch-providers-attribution a:hover {
+  color: var(--accent);
+}
+
 .detail-btn {
   display: flex;
   align-items: center;
@@ -1549,13 +1664,18 @@
 /* Detail Page - Responsive */
 @media (max-width: 1024px) {
   .detail-content {
-    gap: 2.5rem;
+    gap: 2rem;
     max-width: 900px;
     padding: 2rem;
   }
 
-  .detail-poster {
+  .detail-header {
+    gap: 2.5rem;
+  }
+
+  .detail-poster-wrap {
     width: 240px;
+    height: 360px;
   }
 
   .detail-title {
@@ -1570,7 +1690,6 @@
   }
 
   .detail-content {
-    flex-direction: column;
     align-items: center;
     text-align: center;
     gap: 2rem;
@@ -1582,8 +1701,14 @@
     box-shadow: none;
   }
 
-  .detail-poster {
+  .detail-header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .detail-poster-wrap {
     width: 200px;
+    height: 300px;
   }
 
   .detail-info {

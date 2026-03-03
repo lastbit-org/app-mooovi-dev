@@ -34,6 +34,11 @@ export async function getSimilarMovies(id: number | string, page = 1) {
   return data;
 }
 
+export async function getMovieWatchProviders(id: number | string) {
+  const { data } = await api.get(`/api/movies/${id}/watch-providers`);
+  return data;
+}
+
 export async function searchMovies(query: string, page = 1) {
   const { data } = await api.get("/api/movies/search", {
     params: { q: query, page },

@@ -13,9 +13,11 @@ import {
   getMovieDetails,
   getMovieCredits,
   getSimilarMovies,
+  getMovieWatchProviders,
 } from "../api/movies";
 import { getPosterUrl, getBackdropUrl } from "../utils/tmdb";
 import { TrailerSection } from "../components/TrailerSection";
+import { WatchProvidersSection } from "../components/WatchProvidersSection";
 import { MovieCarousel } from "../components/MovieCarousel";
 import { type MovieItem } from "../context/MovieContext";
 import { useWatchActions } from "../hooks/useWatchActions";
@@ -151,13 +153,16 @@ export function MovieDetailPage() {
         aria-hidden
       />
       <div className="detail-content">
-        <img
-          src={getPosterUrl(movie.poster_path)}
-          alt={movie.title}
-          className="detail-poster"
-          loading="lazy"
-        />
-        <div className="detail-info">
+        <div className="detail-header">
+          <div className="detail-poster-wrap">
+            <img
+              src={getPosterUrl(movie.poster_path)}
+              alt={movie.title}
+              className="detail-poster"
+              loading="lazy"
+            />
+          </div>
+          <div className="detail-info">
           <h1 className="detail-title">{movie.title}</h1>
 
           <div className="detail-meta">
@@ -255,6 +260,13 @@ export function MovieDetailPage() {
             </button>
           </div>
         </div>
+        </div>
+        {id && (
+          <WatchProvidersSection
+            id={id}
+            fetchProviders={getMovieWatchProviders}
+          />
+        )}
         {id && <TrailerSection id={id} mediaType="movie" />}
         {similarMovies.length > 0 && (
           <div className="detail-similar">
