@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { Search, Menu, X, LogOut, User as UserIcon, Sun, Moon } from "lucide-react";
+import {
+  Search,
+  Menu,
+  X,
+  LogOut,
+  User as UserIcon,
+  Sun,
+  Moon,
+} from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 
@@ -23,7 +31,7 @@ export function Header() {
   return (
     <header className="header">
       <Link to="/" className="header-logo" onClick={() => setIsMenuOpen(false)}>
-        #M<span>OOO</span>VI
+        #M<span>OoooO</span>VI
       </Link>
 
       <button
@@ -99,7 +107,9 @@ export function Header() {
           type="button"
           className="header-theme-btn"
           onClick={toggleTheme}
-          aria-label={theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro"}
+          aria-label={
+            theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro"
+          }
           title={theme === "dark" ? "Tema claro" : "Tema escuro"}
         >
           {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}

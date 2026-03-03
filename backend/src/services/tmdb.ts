@@ -3,8 +3,6 @@ import axios from "axios";
 const apiKey = process.env.TMDB_API_KEY;
 const baseURL = "https://api.themoviedb.org/3";
 
-console.log("[TMDB] API client initialized with baseURL:", baseURL);
-
 /**
  * TMDB API client
  * @param baseURL - The base URL of the TMDB API
