@@ -1427,8 +1427,13 @@
   gap: 0.35rem;
 }
 
+.detail-meta-item svg {
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
 .detail-meta-genres {
-  align-items: flex-start;
+  align-items: center;
   flex-wrap: wrap;
 }
 
