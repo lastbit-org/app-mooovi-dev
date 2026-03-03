@@ -17,6 +17,7 @@ import { auth, googleProvider } from "../lib/firebase";
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  authAvailable: boolean;
   loginWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -74,7 +75,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, loginWithGoogle, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        authAvailable: !!auth,
+        loginWithGoogle,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

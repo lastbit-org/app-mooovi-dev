@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { Header } from "./components/Header";
 import { LoadingBar } from "./components/LoadingBar";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 import { HomePage } from "./pages/HomePage";
 import { MoviesPage } from "./pages/MoviesPage";
 import { TVShowsPage } from "./pages/TVShowsPage";
@@ -27,7 +28,14 @@ function App() {
               <Route path="/movies/:id" element={<MovieDetailPage />} />
               <Route path="/tv" element={<TVShowsPage />} />
               <Route path="/tv/:id" element={<TVShowDetailPage />} />
-              <Route path="/my-list" element={<MyListPage />} />
+              <Route
+                path="/my-list"
+                element={
+                  <ProtectedRoute>
+                    <MyListPage />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/search" element={<SearchPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
