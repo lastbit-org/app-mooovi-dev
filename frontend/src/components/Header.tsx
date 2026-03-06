@@ -42,53 +42,67 @@ export function Header() {
         {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
+      {/* Overlay do menu mobile */}
+      {isMenuOpen && (
+        <div 
+          className="header-mobile-overlay" 
+          onClick={() => setIsMenuOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
       <nav className={`header-nav ${isMenuOpen ? "active" : ""}`}>
-        <NavLink
-          to="/"
-          className={({ isActive }) =>
-            isActive ? "header-nav-link active" : "header-nav-link"
-          }
-          onClick={() => setIsMenuOpen(false)}
-          end
-        >
-          Início
-        </NavLink>
-        <NavLink
-          to="/tv"
-          className={({ isActive }) =>
-            isActive ? "header-nav-link active" : "header-nav-link"
-          }
-          onClick={() => setIsMenuOpen(false)}
-        >
-          Séries
-        </NavLink>
-        <NavLink
-          to="/movies"
-          className={({ isActive }) =>
-            isActive ? "header-nav-link active" : "header-nav-link"
-          }
-          onClick={() => setIsMenuOpen(false)}
-        >
-          Filmes
-        </NavLink>
-        <NavLink
-          to="/search?type=person"
-          className={({ isActive }) =>
-            isActive ? "header-nav-link active" : "header-nav-link"
-          }
-          onClick={() => setIsMenuOpen(false)}
-        >
-          Pessoas
-        </NavLink>
-        <NavLink
-          to="/my-list"
-          className={({ isActive }) =>
-            isActive ? "header-nav-link active" : "header-nav-link"
-          }
-          onClick={() => setIsMenuOpen(false)}
-        >
-          Minha Lista
-        </NavLink>
+        <div className="header-nav-logo">
+          #M<span>OooO</span>VI
+        </div>
+        <div className="header-nav-links">
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              isActive ? "header-nav-link active" : "header-nav-link"
+            }
+            onClick={() => setIsMenuOpen(false)}
+            end
+          >
+            Início
+          </NavLink>
+          <NavLink
+            to="/tv"
+            className={({ isActive }) =>
+              isActive ? "header-nav-link active" : "header-nav-link"
+            }
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Séries
+          </NavLink>
+          <NavLink
+            to="/movies"
+            className={({ isActive }) =>
+              isActive ? "header-nav-link active" : "header-nav-link"
+            }
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Filmes
+          </NavLink>
+          <NavLink
+            to="/search?type=person"
+            className={({ isActive }) =>
+              isActive ? "header-nav-link active" : "header-nav-link"
+            }
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Pessoas
+          </NavLink>
+          <NavLink
+            to="/my-list"
+            className={({ isActive }) =>
+              isActive ? "header-nav-link active" : "header-nav-link"
+            }
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Minha Lista
+          </NavLink>
+        </div>
       </nav>
 
       <div className="header-right">
