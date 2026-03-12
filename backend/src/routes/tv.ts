@@ -33,6 +33,7 @@ export async function tvRoutes(
     Querystring: { page?: string; language?: string; genre?: string };
   }>("/popular", async (request, reply) => {
     try {
+      console.log("Popular TV shows requested");
       const page = parsePage(request.query.page);
       if (page === null) {
         return reply.status(400).send({ error: "Invalid page" });
