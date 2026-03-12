@@ -10,7 +10,7 @@ env:
   REGION: us-central1
   ARTIFACT_REGISTRY: movieapi
   IMAGE_NAME: img-mooovi-backend
-  RUN_SERVICE_NAME: run-backend
+  RUN_SERVICE_NAME: run-mooovi-backend
 
 jobs:
   deploy-backend:
