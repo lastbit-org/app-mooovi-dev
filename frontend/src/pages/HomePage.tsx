@@ -124,7 +124,7 @@ export function HomePage() {
             <div
               className={`hero-dots ${featuredPaused ? "hero-dots-paused" : ""}`}
               role="tablist"
-              aria-label="Destaques"
+              aria-label="Destaques do Mooovi"
             >
               {featuredItems.map((_, i) => (
                 <button

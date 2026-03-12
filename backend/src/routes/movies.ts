@@ -58,6 +58,7 @@ export async function moviesRoutes(
   fastify.get<{
     Querystring: { page?: string; language?: string };
   }>("/upcoming", async (request, reply) => {
+    console.log("Upcoming movies requested");
     try {
       const page = parsePage(request.query.page);
       if (page === null) {
