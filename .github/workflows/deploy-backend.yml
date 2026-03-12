@@ -9,7 +9,7 @@ env:
   PROJECT_ID: lastbit-prj-d-movieapi
   REGION: us-central1
   ARTIFACT_REGISTRY: movieapi
-  IMAGE_NAME: app-mooovi-backend
+  IMAGE_NAME: img-mooovi-backend
   RUN_SERVICE_NAME: run-backend
 
 jobs:
